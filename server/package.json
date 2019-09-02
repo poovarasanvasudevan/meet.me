@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "meet.me server",
+  "main": "index.js",
+  "author": "Poovarasan Vasudevan",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "helmet": "^3.20.1",
+    "nodemon": "^1.19.1",
+    "parse-dashboard": "^1.4.3",
+    "parse-server": "^3.8.0"
+  }
+}
