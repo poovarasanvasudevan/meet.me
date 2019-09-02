@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  webclient:
+    build: ./client
+    volumes:
+      - ./client:/home/app/
+      - /home/app/node_modules
+    links:
+      - webserver
+    ports:
+      - 3000:3000
+      - 35729:35729
+
+  webserver:
+    build: ./server
+    volumes:
+      - ./server:/home/app/
+      - /home/app/node_modules
+    links:
+      - mongo-server
+    ports:
+      - 3002:3002
+
+  mongo-server:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
