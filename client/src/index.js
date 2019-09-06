@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Parse from 'parse';
+
+
+Parse.initialize('myAppId', 'jskey');
+//Parse.Cloud.useMasterKey();
+Parse.serverURL = 'http://localhost:3001/parse';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

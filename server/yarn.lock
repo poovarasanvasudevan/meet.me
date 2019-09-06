@@ -140,7 +140,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.4.tgz#a87b4b04e5ae14a88d48ebef15015f6b7d1f5677"
   integrity sha512-kBa+cDHOR9jpRJ+kcGMsysrls0leukrm68DmFQoMIWQcXdr2cZvyvypWuGYT7U+9kAExUE7+T7r6G3C3A6L8MQ==
 
-"@parse/fs-files-adapter@1.0.1":
+"@parse/fs-files-adapter@1.0.1", "@parse/fs-files-adapter@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@parse/fs-files-adapter/-/fs-files-adapter-1.0.1.tgz#768f784083e8f9673ef463e199a1be5f837b4165"
   integrity sha1-do94QIPo+Wc+9GPhmaG+X4N7QWU=
