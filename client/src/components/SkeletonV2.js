@@ -97,27 +97,27 @@ const MLink = styled(Link)`
 const ISwitcher = (props) => {
 
 
-    const [applications, setApplications] = React.useState([]);
+    const [channels, setChannels] = React.useState([]);
 
+    const {Parse} = React.useContext(AppContext);
     React.useEffect(() => {
-
-
+        const currentUser = Parse.User.current();
+        currentUser.get('channels').query().find({
+            success: function (list) {
+                setChannels(list);
+            }
+        });
     }, []);
 
     return (
         <SwitcherWrapper>
-
-            <If condition={applications.length > 0}>
+            <If condition={channels.length > 0}>
                 <Then>
-                    <Section sectionId="first-section" title="Applications">
-                        {applications.map((value, index) => (
-                            <MLink to={value.get('url')} key={value.id}>
-                                <SwitcherItem
-                                    icon={
-                                        <SwitcherIcon bgColor={value.get('color')}>
-                                        </SwitcherIcon>
-                                    }>
-                                    {value.get('title')}
+                    <Section sectionId="first-section" title="Channels">
+                        {channels.map((value, index) => (
+                            <MLink key={value.id}>
+                                <SwitcherItem>
+                                    {value.get('name')}
                                 </SwitcherItem>
                             </MLink>
                         ))}
@@ -127,7 +127,6 @@ const ISwitcher = (props) => {
                     <Skeleton/>
                 </Else>
             </If>
-            <ManageButton href="/some-href"/>
         </SwitcherWrapper>
     );
 
@@ -161,10 +160,11 @@ const IPeopleLoader = (props) => {
                                 <MLink key={value.id}>
                                     <SwitcherItem
                                         icon={
-                                            <Avatar name={value ? value.get('first_name') + ' ' + value.get('last_name') : 'User'}
-                                                    size="small"
-                                                    src={value ? value.get('profile').get('avatar').url() : null}
-                                                    presence="online"/>
+                                            <Avatar
+                                                name={value ? value.get('first_name') + ' ' + value.get('last_name') : 'User'}
+                                                size="small"
+                                                src={value ? value.get('profile').get('avatar').url() : null}
+                                                presence="online"/>
                                         }>
                                         {value.get('first_name')}
                                     </SwitcherItem>
