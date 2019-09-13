@@ -9,12 +9,13 @@ import Form, {
     FormFooter, Field,
     HelperMessage,
 } from '@atlaskit/form';
-import Textfield from '@atlaskit/textfield';
-
-import {ThemedButton, Color, AppButton,Divider} from "../../components/util";
-import {FaFacebookSquare, FaGoogle, FaGithub} from 'react-icons/fa';
+import {ThemedButton, AppButton} from "../../components/theme/button";
+import Color from "../../components/theme/color";
+import {FaFacebookSquare, FaGoogle, FaGithub, FaQrcode} from 'react-icons/fa';
 import InlineMessage from '@atlaskit/inline-message';
 import Icon from '@atlaskit/icon';
+import {AppTextField} from "../../components/theme/textfield";
+import {Link} from 'react-router-dom';
 
 const SocialButton = styled(ThemedButton)`
     
@@ -22,8 +23,8 @@ const SocialButton = styled(ThemedButton)`
     border: 1px solid #eaeaea;
     
     && {
-         ${props => props.bgColor && css`background-color : ${props => props.bgColor} !important;`}
-         ${props => props.fgColor && css`color : ${props => props.fgColor} !important;`}
+         ${props => props.bgcolor && css`background-color : ${props => props.bgcolor} !important;`}
+         ${props => props.fgcolor && css`color : ${props => props.fgcolor} !important;`}
          
          border-radius : 3px;
          font-size: 13px;
@@ -34,7 +35,7 @@ const SocialButton = styled(ThemedButton)`
     }
 `;
 
-const MTextBox = styled(Textfield)`
+const MTextBox = styled(AppTextField)`
    
 `;
 
@@ -84,7 +85,7 @@ const Login = (props) => {
 
     return (
         <Base>
-            <style dangerouslySetInnerHTML={{__html: `body { background-color: #053B8C`}}/>
+            <style dangerouslySetInnerHTML={{__html: `body { background-color: ${Color.primaryColor}`}}/>
             <Flex className='h100 flex-container' style={{marginTop: '10%'}}>
                 <Box width={3.5 / 10}/>
                 <Box width={3 / 10} p={2}>
@@ -112,7 +113,7 @@ const Login = (props) => {
                                                     type={'password'} {...fieldProps} />}
                                             </Field>
                                             <FormFooter>
-                                                <AppButton type="submit" primary={true}>
+                                                <AppButton type="submit" primary={'true'}>
                                                     Login
                                                 </AppButton>
                                             </FormFooter>
@@ -121,17 +122,23 @@ const Login = (props) => {
                                 </Form>
                                 <div style={{marginTop: '20px'}}>
                                     <center>
-                                        <SocialButton fgColor={'#fff'} bgColor={'#db3236'}
+                                        <SocialButton fgcolor={'#fff'} bgcolor={'#db3236'}
                                                       iconBefore={<Icon glyph={() => <FaGoogle/>}
                                                                         label="Custom icon"
                                                                         size="small"/>}>Google</SocialButton>
-                                        <SocialButton fgColor={'#fff'} bgColor={'#3b5998'}
+                                        <SocialButton fgcolor={'#fff'} bgcolor={'#3b5998'}
                                                       iconBefore={<Icon glyph={() => <FaFacebookSquare/>}
                                                                         label="Custom icon"
                                                                         size="small"/>}>Facebook</SocialButton>
+                                        <SocialButton iconBefore={<Icon glyph={() => <FaGithub/>} label="Custom icon"
+                                                                        size="small"/>}> Github</SocialButton>
                                         <SocialButton
-                                            iconBefore={<Icon glyph={() => <FaGithub/>} label="Custom icon"
-                                                              size="small"/>}> Github</SocialButton>
+                                            href={'/qr'}
+                                            fgcolor={'#fff'}
+                                            bgcolor={'green'}
+                                            iconBefore={<Icon glyph={() => <FaQrcode/>} label="Custom icon" size="small"/>}>
+                                            QrCode
+                                        </SocialButton>
                                     </center>
                                 </div>
                             </Box>

@@ -30,12 +30,18 @@ import SpeakerNotification from './speaker-notification';
 import styled from "styled-components";
 import {If, Then, Else} from 'react-if';
 import {Link} from "react-router-dom";
+
 import {IoIosAdd, IoIosSearch, IoIosHelpCircle, IoIosNotifications, IoIosApps, IoIosPeople} from 'react-icons/io';
+import {AppTextField} from './theme/textfield';
+import Form, {Field, FormFooter} from '@atlaskit/form';
+import {ObjectResult, ResultItemGroup, PersonResult} from '@atlaskit/quick-search';
+import Color from './theme/color';
+import NetworkMoniter from '../components/network-moniter';
 
 const customMode = modeGenerator({
     product: {
         text: colors.N0,
-        background: '#053B8C',
+        background: Color.primaryColor,
     },
 });
 
@@ -83,15 +89,8 @@ const ItemComponent = ({dropdownItems: DropdownItems, ...itemProps}) => {
 const SwitcherIcon = styled.div`
     padding: 6px;
     border-radius: 4px;
-    background : ${props => props.bgColor ? props.bgColor : '#3b5998'};
+    background : ${props => props.bgColor ? props.bgColor : Color.primaryColor};
     margin-right : 8px;
-`;
-
-const MLink = styled(Link)`
-    text-decoration: none;
-    &:focus, &:hover, &:visited, &:link, &:active {
-        text-decoration: none;
-    }
 `;
 
 const ISwitcher = (props) => {
@@ -102,26 +101,32 @@ const ISwitcher = (props) => {
     const {Parse} = React.useContext(AppContext);
     React.useEffect(() => {
         const currentUser = Parse.User.current();
-        currentUser.get('channels').query().find({
-            success: function (list) {
-                setChannels(list);
-            }
-        });
+        currentUser
+            .get('channels')
+            .query()
+            .find()
+            .then((data) => setChannels(data));
+
     }, []);
 
     return (
         <SwitcherWrapper>
             <If condition={channels.length > 0}>
                 <Then>
-                    <Section sectionId="first-section" title="Channels">
-                        {channels.map((value, index) => (
-                            <MLink key={value.id}>
-                                <SwitcherItem>
-                                    {value.get('name')}
-                                </SwitcherItem>
-                            </MLink>
-                        ))}
-                    </Section>
+                    <Box p={'8px'}>
+                        <ResultItemGroup title="Channels">
+                            {channels.map((value, index) => (
+                                <ObjectResult
+                                    key={value.id}
+                                    resultId={'channels'}
+                                    name={value.get('channel_name')}
+                                    avatarUrl={value.get('icon').url()}
+                                    isCompact={true}
+                                />
+                            ))}
+                        </ResultItemGroup>
+
+                    </Box>
                 </Then>
                 <Else>
                     <Skeleton/>
@@ -155,22 +160,18 @@ const IPeopleLoader = (props) => {
             <If condition={people.length > 0}>
                 <Then>
                     <Box p={'8px'}>
-                        <Section sectionId="first-section" title="Users">
+                        <ResultItemGroup title="Users">
                             {people.map((value, index) => (
-                                <MLink key={value.id}>
-                                    <SwitcherItem
-                                        icon={
-                                            <Avatar
-                                                name={value ? value.get('first_name') + ' ' + value.get('last_name') : 'User'}
-                                                size="small"
-                                                src={value ? value.get('profile').get('avatar').url() : null}
-                                                presence="online"/>
-                                        }>
-                                        {value.get('first_name')}
-                                    </SwitcherItem>
-                                </MLink>
+                                <PersonResult
+                                    resultId={'users'}
+                                    key={value.id}
+                                    avatarUrl={value ? value.get('profile').get('avatar').url() : null}
+                                    presenceMessage={'@' + value.get('first_name').toLowerCase()}
+                                    name={value ? value.get('first_name') + ' ' + value.get('last_name') : 'User'}
+                                    presenceState="online"
+                                />
                             ))}
-                        </Section>
+                        </ResultItemGroup>
                     </Box>
                 </Then>
                 <Else>
@@ -256,7 +257,6 @@ const GlobalNavWithModalsAndDrawers = (props) => {
                         tooltip: 'Notifications',
                         onClick: openNotification
                     },
-
                     {
                         dropdownItems: () => (
                             <DropdownItemGroup title="Heading">
@@ -325,7 +325,13 @@ const GlobalNavWithModalsAndDrawers = (props) => {
             </Drawer>
 
             <Drawer onClose={closeDrawer} isOpen={isDrawerOpen} width="wide">
-                <code>Drawer contents</code>
+                <Box pl={'8px'} pr={'40px'}>
+                    <div>
+                        <Field name="search_query" defaultValue="" label="Search for People, Events, Channels">
+                            {({fieldProps}) => <AppTextField {...fieldProps} />}
+                        </Field>
+                    </div>
+                </Box>
             </Drawer>
         </div>
     );
@@ -343,18 +349,9 @@ export default function (props) {
     };
 
     React.useEffect(() => {
-
-        async function fetchUser() {
-
-            var currentUser = Parse.User.current();
-            var profile = currentUser.get('profile');
-            await profile.fetch();
-
-            setUser(currentUser);
-        }
-
-        fetchUser();
-
+        const currentUser = Parse.User.current();
+        const profile = currentUser.get('profile');
+        profile.fetch().then((data) => setUser(currentUser));
     }, []);
 
     return (
@@ -370,6 +367,7 @@ export default function (props) {
                         containerNavigation={props.containerNavigation}>
                         <Flex className={'h100'}>
                             {props.children}
+                            <NetworkMoniter style={{position : 'absolute' , bottom:0}}/>
                         </Flex>
                     </LayoutManager>
                 </NavigationProvider>

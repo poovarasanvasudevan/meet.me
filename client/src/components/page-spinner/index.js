@@ -18,6 +18,6 @@ const ProgressDiv = styled.div`
 export default function (props) {
     return (
         <ProgressDiv>
-            <Spinner style={{alignSelf: 'center'}} size="large" />
+            <Spinner css={{alignSelf: 'center'}} size="large" />
         </ProgressDiv>);
 }
