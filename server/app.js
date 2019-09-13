@@ -1,30 +1,60 @@
 const express = require("express");
 const compression = require("compression");
 const helmet = require("helmet");
-const ParseServer = require('parse-server').ParseServer;
+const {default: ParseServer, ParseGraphQLServer} = require('parse-server');
 const ParseDashboard = require('parse-dashboard');
 var FSFilesAdapter = require('@parse/fs-files-adapter');
+const AvatarGenerator = require('avatar-generator');
+
 
 const app = express();
 app.use(compression());
 app.use(helmet());
 
+function getUserIP(request) {
+    var forwardedFor = request.headers['x-forwarded-for'];
+    if (forwardedFor.indexOf(',') > -1) {
+        return forwardedFor.split(',')[0];
+    } else {
+        return forwardedFor;
+    }
+}
+app.use(function(req, res, next) {
+    req.headers['x-real-ip'] = req.ip;
+    next();
+});
+
 var fsAdapter = new FSFilesAdapter({
     "filesSubDirectory": "./files" // optional
 });
 const api = new ParseServer({
-    databaseURI: 'postgres://postgres:poosan@localhost:5432/meet', // Connection string for your MongoDB database
+    databaseURI: 'mongodb://localhost:27017/meet', // Connection string for your MongoDB database
     cloud: './cloud/main.js', // Absolute path to your Cloud Code
     appId: 'myAppId',
     masterKey: 'myMasterKey', // Keep this key secret!
     fileKey: 'optionalFileKey',
     javascriptKey: 'jskey',
     filesAdapter: fsAdapter,
-    serverURL: 'http://localhost:3001/parse' // Don't forget to change to https if needed
+    serverURL: 'http://localhost:3001/parse',
+    accountLockout: {
+        duration: 5, // duration policy setting determines the number of minutes that a locked-out account remains locked out before automatically becoming unlocked. Set it to a value greater than 0 and less than 100000.
+        threshold: 3, // threshold policy setting determines the number of failed sign-in attempts that will cause a user account to be locked. Set it to an integer value greater than 0 and less than 1000.
+    },
+    passwordPolicy: {
+        maxPasswordAge: 90,
+        maxPasswordHistory: 5,
+    }
 });
 
 
-var options = { allowInsecureHTTP: true };
+const parseGraphQLServer = new ParseGraphQLServer(
+    api,
+    {
+        graphQLPath: '/graphql',
+        playgroundPath: '/playground'
+    }
+);
+var options = {allowInsecureHTTP: true};
 
 const dashboard = new ParseDashboard({
     "apps": [
@@ -33,16 +63,30 @@ const dashboard = new ParseDashboard({
             "appId": "myAppId",
             "masterKey": "myMasterKey",
             "appName": "MyApp",
-            "javascriptKey": "jskey"
+            "javascriptKey": "jskey",
+            "graphQLServerURL": "http://localhost:3001/graphql",
         }
     ]
-},options);
+}, options);
 
 // Serve the Parse API on the /parse URL prefix
-app.use('/parse', api);
+app.use('/parse', api.app);
 app.use('/dashboard', dashboard);
+parseGraphQLServer.applyGraphQL(app); // Mounts the GraphQL API
+parseGraphQLServer.applyPlayground(app); // (Optional) Mounts the GraphQL Playground - do NOT use in Production
 
+app.get('/avatar', async function (req, res) {
+    console.log(req.query.text);
 
+    const avatar = new AvatarGenerator({
+        imageExtension: '.png' // sprite file extension
+    });
+    const variant = 'male';
+    const image = await avatar.generate(req.query.text, variant);
+    image
+        .pipe(res);
+
+});
 app.get("/", function (req, res) {
     res.send("Hello");
 });

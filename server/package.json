@@ -10,9 +10,13 @@
   },
   "dependencies": {
     "@parse/fs-files-adapter": "^1.0.1",
+    "avatar-generator": "^2.0.2",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "helmet": "^3.20.1",
+    "iz": "^2.3.0",
+    "lodash": "^4.17.15",
+    "nodemailer": "^6.3.0",
     "nodemon": "^1.19.1",
     "parse-dashboard": "^1.4.3",
     "parse-server": "^3.8.0"
