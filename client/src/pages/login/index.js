@@ -86,10 +86,11 @@ const Login = (props) => {
     return (
         <Base>
             <style dangerouslySetInnerHTML={{__html: `body { background-color: ${Color.primaryColor}`}}/>
-            <Flex className='h100 flex-container' style={{marginTop: '10%'}}>
+            <div>
+                <Flex>
                 <Box width={3.5 / 10}/>
                 <Box width={3 / 10} p={2}>
-                    <Card elevation={1}>
+                    <Card elevation={1} style={{marginTop: '30%'}}>
                         <Flex>
                             <Box width={1.2 / 10}/>
                             <Box width={7.6 / 10} p={2}>
@@ -147,7 +148,8 @@ const Login = (props) => {
                     </Card>
                 </Box>
                 <Box width={3.5 / 10}/>
-            </Flex>
+                </Flex>
+            </div>
         </Base>
 
     );
