@@ -6,6 +6,8 @@ import logo from '../../img/logo_black.svg';
 import AppContext from '../../module/AppContext';
 import Color from "../../components/theme/color";
 import QR from 'qrcode.react';
+import {GooglePlayButton} from "../../components/util";
+import {MLink} from '../../components/theme/link';
 
 const Card = styled.div`
     background-color : white;
@@ -48,8 +50,9 @@ const QRCode = (props) => {
                             <Flex>
                                 <Box width={1.2 / 10}/>
                                 <Box width={7.6 / 10} p={2}>
-                                    <img src={logo} alt={'Logo'} height={50}/>
-
+                                    <MLink to={'/'}>
+                                        <img src={logo} alt={'Logo'} height={50}/>
+                                    </MLink>
                                     <center style={{marginTop: '20px'}}>
                                         <p><b>Scan from your mobile</b></p>
                                         <div>
@@ -64,6 +67,10 @@ const QRCode = (props) => {
                                             store</b> for android and <b>App store</b> for ios.
                                             And make sure your mobile device and computer are in same network
                                         </p>
+
+                                        <div>
+                                            <GooglePlayButton>Google Play</GooglePlayButton>
+                                        </div>
                                     </center>
                                 </Box>
                                 <Box width={1.2 / 10}/>

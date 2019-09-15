@@ -4,7 +4,7 @@ const helmet = require("helmet");
 const {default: ParseServer, ParseGraphQLServer} = require('parse-server');
 const ParseDashboard = require('parse-dashboard');
 var FSFilesAdapter = require('@parse/fs-files-adapter');
-const AvatarGenerator = require('avatar-generator');
+
 
 
 const app = express();
@@ -76,15 +76,15 @@ parseGraphQLServer.applyGraphQL(app); // Mounts the GraphQL API
 parseGraphQLServer.applyPlayground(app); // (Optional) Mounts the GraphQL Playground - do NOT use in Production
 
 app.get('/avatar', async function (req, res) {
-    console.log(req.query.text);
-
-    const avatar = new AvatarGenerator({
-        imageExtension: '.png' // sprite file extension
-    });
-    const variant = 'male';
-    const image = await avatar.generate(req.query.text, variant);
-    image
-        .pipe(res);
+    // console.log(req.query.text);
+    //
+    // const avatar = new AvatarGenerator({
+    //     imageExtension: '.png' // sprite file extension
+    // });
+    // const variant = 'male';
+    // const image = await avatar.generate(req.query.text, variant);
+    // image
+    //     .pipe(res);
 
 });
 app.get("/", function (req, res) {
