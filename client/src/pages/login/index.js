@@ -16,6 +16,9 @@ import InlineMessage from '@atlaskit/inline-message';
 import Icon from '@atlaskit/icon';
 import {AppTextField} from "../../components/theme/textfield";
 import {Link} from 'react-router-dom';
+import {MLink} from "../../components/theme/link";
+import {Divider, FormFieldWithProps, MTextBox} from "../../components/util";
+import {Button} from "@atlaskit/button/dist/cjs/components/Button";
 
 const SocialButton = styled(ThemedButton)`
     
@@ -35,9 +38,6 @@ const SocialButton = styled(ThemedButton)`
     }
 `;
 
-const MTextBox = styled(AppTextField)`
-   
-`;
 
 
 const Card = styled.div`
@@ -47,18 +47,7 @@ const Card = styled.div`
 `;
 
 
-const FormFieldWithProps = (props) => {
-    return (
-        <React.Fragment>
-            <MTextBox autoComplete={'off'} {...props.fieldProps} />
-            {!props.error && !props.valid && (
-                <HelperMessage>
-                    Should be more than 4 characters
-                </HelperMessage>
-            )}
-        </React.Fragment>
-    );
-};
+
 
 const Login = (props) => {
     const {Parse} = React.useContext(AppContext);
@@ -114,6 +103,10 @@ const Login = (props) => {
                                                     type={'password'} {...fieldProps} />}
                                             </Field>
                                             <FormFooter>
+                                                <MLink to={'/forget-password'}>
+                                                <Button appearance="subtle">Forget Password</Button>
+
+                                                </MLink>
                                                 <AppButton type="submit" primary={'true'}>
                                                     Login
                                                 </AppButton>
@@ -122,6 +115,7 @@ const Login = (props) => {
                                     )}
                                 </Form>
                                 <div style={{marginTop: '20px'}}>
+
                                     <center>
                                         <SocialButton fgcolor={'#fff'} bgcolor={'#db3236'}
                                                       iconBefore={<Icon glyph={() => <FaGoogle/>}
@@ -133,13 +127,14 @@ const Login = (props) => {
                                                                         size="small"/>}>Facebook</SocialButton>
                                         <SocialButton iconBefore={<Icon glyph={() => <FaGithub/>} label="Custom icon"
                                                                         size="small"/>}> Github</SocialButton>
+                                        <MLink to={'/qr'}>
                                         <SocialButton
-                                            href={'/qr'}
                                             fgcolor={'#fff'}
                                             bgcolor={'green'}
                                             iconBefore={<Icon glyph={() => <FaQrcode/>} label="Custom icon" size="small"/>}>
                                             QrCode
                                         </SocialButton>
+                                        </MLink>
                                     </center>
                                 </div>
                             </Box>
