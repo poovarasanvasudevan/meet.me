@@ -15,13 +15,26 @@ import Form, {
 import {FormFieldWithProps} from "../../components/util";
 import {AppButton} from "../../components/theme/button";
 
-
 const Card = styled.div`
     background-color : white;
     padding : 20px;
     border-radius : 3px;
 `;
-const QRCode = (props) => {
+
+const VCard  = styled.div`
+    padding : 5px;
+    font-size: 0.9em;
+    font-style: inherit;
+   
+    color: #6B778C;
+    font-weight: 600;
+    margin-top: 16px;
+    font-weight: normal;
+    
+    margin-top: 10px;
+    
+`
+const TwoStep = (props) => {
     const {Parse} = React.useContext(AppContext);
 
     const loginHandler = () => {
@@ -38,7 +51,7 @@ const QRCode = (props) => {
                         <Card elevation={1} style={{marginTop: '30%'}}>
                             <Flex>
                                 <Box width={1.2 / 10}/>
-                                <Box width={7.6 / 10} p={2}>
+                                <Box width={7.5 / 10} p={2}>
                                     <MLink to={'/'}>
                                         <img src={logo} alt={'Logo'} height={50}/>
                                     </MLink>
@@ -50,8 +63,12 @@ const QRCode = (props) => {
                                                 <Field label={'2-step Password'} name="2steppassword" defaultValue=""
                                                        isRequired
                                                        autoComplete={'off'}>
-                                                    {({fieldProps, error, valid}) => <FormFieldWithProps fieldProps={fieldProps} error={error} valid={valid} helper={'Enter the Authentication code generated from your mobile'} />}
+                                                    {({fieldProps, error, valid}) => <FormFieldWithProps fieldProps={fieldProps} error={error} valid={valid} helper={'Enter the Authentication code sent via email'} />}
                                                 </Field>
+
+                                                <VCard>
+                                                    We just sent your authentication code via email to <b>p******@gmail.com</b>. The code will expire at 7:29AM IST.
+                                                </VCard>
 
                                                 <FormFooter>
                                                     <AppButton type="submit" primary={'true'}>
@@ -75,4 +92,4 @@ const QRCode = (props) => {
     );
 };
 
-export default QRCode;
+export default TwoStep;

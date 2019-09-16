@@ -10,6 +10,7 @@ import Parse from 'parse';
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const Error = lazy(() => import('./pages/500'));
 const Login = lazy(() => import('./pages/login'));
+const BasePage = lazy(() => import('./pages/base-page'));
 const QrCode = lazy(() => import('./pages/qrcode'));
 const TwoStep = lazy(() => import('./pages/two-step'));
 const ForgetPassword = lazy(() => import('./pages/forget-password'));
@@ -57,7 +58,8 @@ function App() {
                 <IntlProvider locale="en">
                     <Router>
                         <Switch>
-                            <LoginRoute path='/' exact component={Login}/>
+                            <LoginRoute path='/' exact component={BasePage}/>
+                            <LoginRoute path='/login' component={Login}/>
                             <LoginRoute path='/qr' component={QrCode}/>
                             <LoginRoute path='/2-step' component={TwoStep}/>
                             <LoginRoute path='/forget-password' component={ForgetPassword}/>

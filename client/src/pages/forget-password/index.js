@@ -21,7 +21,7 @@ const Card = styled.div`
     padding : 20px;
     border-radius : 3px;
 `;
-const QRCode = (props) => {
+const ForgetPassword = (props) => {
     const {Parse} = React.useContext(AppContext);
 
     const loginHandler = () => {
@@ -75,4 +75,4 @@ const QRCode = (props) => {
     );
 };
 
-export default QRCode;
+export default ForgetPassword;

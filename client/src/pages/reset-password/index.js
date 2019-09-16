@@ -25,7 +25,7 @@ const Card = styled.div`
 const PasswordBox = styled.div`
     padding: 2px;
 `;
-const QRCode = (props) => {
+const ResetPassword = (props) => {
     const {Parse} = React.useContext(AppContext);
 
     const loginHandler = () => {
@@ -54,8 +54,7 @@ const QRCode = (props) => {
                                                 <Field label={'New Password'} name="new-password" defaultValue=""
                                                        isRequired
                                                        autoComplete={'off'}>
-                                                    {({fieldProps, error, valid}) => <MTextBox
-                                                        fieldProps={fieldProps}/>}
+                                                    {({fieldProps, error, valid}) => <MTextBox {...fieldProps} />}
                                                 </Field>
 
                                                 <Field label={'Re-enter Password'} name="reenter-new-password"
@@ -64,7 +63,7 @@ const QRCode = (props) => {
                                                        autoComplete={'off'}>
                                                     {({fieldProps, error, valid}) =>
                                                         <React.Fragment>
-                                                            <MTextBox fieldProps={fieldProps}/>
+                                                            <MTextBox {...fieldProps}/>
                                                             <PasswordBox>
                                                                 <ul>
                                                                     <li><HelperMessage>Must be between 8 to 16
@@ -106,4 +105,4 @@ const QRCode = (props) => {
     );
 };
 
-export default QRCode;
+export default ResetPassword;
