@@ -4,18 +4,13 @@ const helmet = require("helmet");
 const {default: ParseServer, ParseGraphQLServer} = require('parse-server');
 const ParseDashboard = require('parse-dashboard');
 const FSFilesAdapter = require('@parse/fs-files-adapter');
-var cookieParser = require('cookie-parser');
-var csrf = require('csurf');
-var bodyParser = require('body-parser');
+
+var http = require( 'http' );
 
 
 const app = express();
 app.use(compression());
 app.use(helmet());
-
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-//app.use(csrf({cookie: true}));
 
 function getUserIP(request) {
     var forwardedFor = request.headers['x-forwarded-for'];
@@ -104,6 +99,11 @@ app.get("/", function (req, res) {
     res.send("Hello");
 });
 
-app.listen(process.env.APP_PORT || 3001, function () {
+
+
+var server = http.createServer(app);
+
+
+server.listen(process.env.APP_PORT || 3001, function () {
     console.log("App server started");
 });

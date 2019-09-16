@@ -58,6 +58,7 @@ const QRCode = (props) => {
                                         <div>
                                             <QR value="http://facebook.github.io/react/"
                                                 size={256}
+
                                                 level={'H'}
                                             />
                                         </div>

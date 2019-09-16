@@ -48,6 +48,14 @@ const CircleIcon = (props) => {
     );
 };
 
+const SquareIcon = (props) => {
+    return (
+        <div style={{padding: 5, backgroundColor: props.bgcolor || '#000', ...props.style}}>
+            {props.children}
+        </div>
+    );
+};
+
 const GooglePlayButton = styled.a`
  color:#fff;
  margin:5px;
@@ -139,5 +147,6 @@ export {
     CircleIcon,
     GooglePlayButton,
     FormFieldWithProps,
-    MTextBox
+    MTextBox,
+    SquareIcon
 };
