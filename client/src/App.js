@@ -11,6 +11,9 @@ const Dashboard = lazy(() => import('./pages/dashboard'));
 const Error = lazy(() => import('./pages/500'));
 const Login = lazy(() => import('./pages/login'));
 const QrCode = lazy(() => import('./pages/qrcode'));
+const TwoStep = lazy(() => import('./pages/two-step'));
+const ForgetPassword = lazy(() => import('./pages/forget-password'));
+const ResetPassword = lazy(() => import('./pages/reset-password'));
 const NotFound = lazy(() => import('./pages/404'));
 
 
@@ -56,6 +59,9 @@ function App() {
                         <Switch>
                             <LoginRoute path='/' exact component={Login}/>
                             <LoginRoute path='/qr' component={QrCode}/>
+                            <LoginRoute path='/2-step' component={TwoStep}/>
+                            <LoginRoute path='/forget-password' component={ForgetPassword}/>
+                            <LoginRoute path='/reset-password' component={ResetPassword}/>
                             <PrivateRoute path='/home' component={Dashboard}/>
                             <PrivateRoute path='/500' component={Error}/>
 
