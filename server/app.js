@@ -3,13 +3,19 @@ const compression = require("compression");
 const helmet = require("helmet");
 const {default: ParseServer, ParseGraphQLServer} = require('parse-server');
 const ParseDashboard = require('parse-dashboard');
-var FSFilesAdapter = require('@parse/fs-files-adapter');
-
+const FSFilesAdapter = require('@parse/fs-files-adapter');
+var cookieParser = require('cookie-parser');
+var csrf = require('csurf');
+var bodyParser = require('body-parser');
 
 
 const app = express();
 app.use(compression());
 app.use(helmet());
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+//app.use(csrf({cookie: true}));
 
 function getUserIP(request) {
     var forwardedFor = request.headers['x-forwarded-for'];
@@ -19,10 +25,16 @@ function getUserIP(request) {
         return forwardedFor;
     }
 }
-app.use(function(req, res, next) {
+
+app.use(function (req, res, next) {
     req.headers['x-real-ip'] = req.ip;
     next();
 });
+
+// app.use(function (req, res, next) {
+//     res.cookie('XSRF-TOKEN', req.csrfToken());
+//     next();
+// });
 
 var fsAdapter = new FSFilesAdapter({
     "filesSubDirectory": "./files" // optional
@@ -74,6 +86,7 @@ app.use('/parse', api.app);
 app.use('/dashboard', dashboard);
 parseGraphQLServer.applyGraphQL(app); // Mounts the GraphQL API
 parseGraphQLServer.applyPlayground(app); // (Optional) Mounts the GraphQL Playground - do NOT use in Production
+
 
 app.get('/avatar', async function (req, res) {
     // console.log(req.query.text);
