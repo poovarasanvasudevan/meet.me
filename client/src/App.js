@@ -5,7 +5,7 @@ import Loading from './components/page-spinner';
 import {IntlProvider} from "react-intl";
 import AppContext from './module/AppContext';
 import Parse from 'parse';
-
+import SkeletonV2 from "./components/SkeletonV2";
 
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const Error = lazy(() => import('./pages/500'));
@@ -51,6 +51,20 @@ const URLConfig = {
     avatarUrl: 'http://localhost:3001/avatar'
 };
 
+const SkeletonComponent = (props) => {
+
+    return (
+        <SkeletonV2
+            containerNavigation={() => null}
+            productNavigation={() => null}
+            navWidth={0}
+        >
+            <PrivateRoute path='/home' component={Dashboard}/>
+        </SkeletonV2>
+    );
+};
+
+
 function App() {
     return (
         <AppContext.Provider value={{Parse: Parse, Logout: logoutNow, Config: URLConfig}}>
@@ -64,8 +78,10 @@ function App() {
                             <LoginRoute path='/2-step' component={TwoStep}/>
                             <LoginRoute path='/forget-password' component={ForgetPassword}/>
                             <LoginRoute path='/reset-password' component={ResetPassword}/>
-                            <PrivateRoute path='/home' component={Dashboard}/>
-                            <PrivateRoute path='/500' component={Error}/>
+                            <LoginRoute path='/500' component={Error}/>
+
+
+                            <Route path="/" component={SkeletonComponent}/>
 
                             {/*<Route*/}
                             {/*path="/kb"*/}

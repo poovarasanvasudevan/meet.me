@@ -61,72 +61,68 @@ export default function (props) {
     };
 
     return (
-        <SkeletonV2
-            containerNavigation={() => null}
-            productNavigation={() => null}
-            navWidth={0}
-        >
-            <Page className={"h100"}>
-                <div
-                    style={{display: "flex", flexDirection: "row"}}
-                    className={"h100"}
-                >
-                    <Box style={{flex: 1}}>
-                        <h1>Hello</h1>
+
+        <Page className={"h100"}>
+            <div
+                style={{display: "flex", flexDirection: "row"}}
+                className={"h100"}
+            >
+                <Box style={{flex: 1}}>
+                    <h1>Hello</h1>
+                </Box>
+                <Box p={"10px"} style={{borderLeft: "1px solid #eaeaea"}}>
+                    <Calendar
+                        innerProps={{
+                            style: {}
+                        }}
+                        onBlur={log("blur")}
+                        onChange={log("change")}
+                        onFocus={log("focus")}
+                        onSelect={onDateChange}
+                    />
+                    <Divider/>
+                    <Box p={"8px"}>
+                        <If condition={meetingLoading === true}>
+                            <Then>
+                                <Skeleton/>
+                            </Then>
+                            <Else>
+                                <ResultItemGroup title="Meetings">
+                                    <If condition={meetings.length === 0}>
+                                        <Then>
+                                            <p>No Meetings available</p>
+                                        </Then>
+                                        <Else>
+                                            {meetings.map((v, i) => (
+                                                <ObjectResult
+                                                    resultId={"meetings"}
+                                                    isCompact={true}
+                                                    key={v.id}
+                                                    containerName={
+                                                        v.get("description") ? v.get("description") : null
+                                                    }
+                                                    objectKey={
+                                                        v.get("start_time")
+                                                            ? moment(v.get("start_time")).format("h:mm a")
+                                                            : null
+                                                    }
+                                                    avatarUrl={
+                                                        v.get("avatar")
+                                                            ? v.get("avatar").url()
+                                                            : Config.avatarUrl + "?text=" + v.get("title")
+                                                    }
+                                                    name={v.get("title")}
+                                                />
+                                            ))}
+                                        </Else>
+                                    </If>
+                                </ResultItemGroup>
+                            </Else>
+                        </If>
                     </Box>
-                    <Box p={"10px"} style={{borderLeft: "1px solid #eaeaea"}}>
-                        <Calendar
-                            innerProps={{
-                                style: {}
-                            }}
-                            onBlur={log("blur")}
-                            onChange={log("change")}
-                            onFocus={log("focus")}
-                            onSelect={onDateChange}
-                        />
-                        <Divider/>
-                        <Box p={"8px"}>
-                            <If condition={meetingLoading === true}>
-                                <Then>
-                                    <Skeleton/>
-                                </Then>
-                                <Else>
-                                    <ResultItemGroup title="Meetings">
-                                        <If condition={meetings.length === 0}>
-                                            <Then>
-                                                <p>No Meetings available</p>
-                                            </Then>
-                                            <Else>
-                                                {meetings.map((v, i) => (
-                                                    <ObjectResult
-                                                        resultId={"meetings"}
-                                                        isCompact={true}
-                                                        key={v.id}
-                                                        containerName={
-                                                            v.get("description") ? v.get("description") : null
-                                                        }
-                                                        objectKey={
-                                                            v.get("start_time")
-                                                                ? moment(v.get("start_time")).format("h:mm a")
-                                                                : null
-                                                        }
-                                                        avatarUrl={
-                                                            v.get("avatar")
-                                                                ? v.get("avatar").url()
-                                                                : Config.avatarUrl + "?text=" + v.get("title")
-                                                        }
-                                                        name={v.get("title")}
-                                                    />
-                                                ))}
-                                            </Else>
-                                        </If>
-                                    </ResultItemGroup>
-                                </Else>
-                            </If>
-                        </Box>
-                    </Box>
-                </div>
-            </Page>
-        </SkeletonV2>
+                </Box>
+            </div>
+        </Page>
+
     );
 }

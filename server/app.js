@@ -41,7 +41,6 @@ const api = new ParseServer({
     masterKey: 'myMasterKey', // Keep this key secret!
     fileKey: 'optionalFileKey',
     javascriptKey: 'jskey',
-    filesAdapter: fsAdapter,
     serverURL: 'http://localhost:3001/parse',
     accountLockout: {
         duration: 5, // duration policy setting determines the number of minutes that a locked-out account remains locked out before automatically becoming unlocked. Set it to a value greater than 0 and less than 100000.

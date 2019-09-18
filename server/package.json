@@ -6,7 +6,9 @@
   "author": "Poovarasan Vasudevan",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "dbdump" : "mongodump -v --db meet --gzip --archive=db/dump.gz",
+    "dbrestore" : "mongorestore -v --gzip --archive=db/dump.gz --db meet"
   },
   "dependencies": {
     "@parse/fs-files-adapter": "^1.0.1",

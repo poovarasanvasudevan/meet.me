@@ -13,7 +13,7 @@ import {
 import AppContext from "../module/AppContext";
 import SpeakerLogo from "../img/speaker.png";
 import {DropdownItem, DropdownItemGroup, DropdownMenuStateless} from "@atlaskit/dropdown-menu";
-import Avatar from "@atlaskit/avatar";
+import Avatar, {AvatarItem} from "@atlaskit/avatar";
 import {
     SwitcherWrapper,
     SwitcherItem,
@@ -93,39 +93,39 @@ const SwitcherIcon = styled.div`
     margin-right : 8px;
 `;
 
-const ISwitcher = (props) => {
+const IApplicationLoader = (props) => {
 
 
-    const [channels, setChannels] = React.useState([]);
+    const [applications, setApplications] = React.useState([]);
 
     const {Parse} = React.useContext(AppContext);
     React.useEffect(() => {
         const currentUser = Parse.User.current();
         currentUser
-            .get('channels')
+            .get('application')
             .query()
             .find()
-            .then((data) => setChannels(data));
+            .then((data) => setApplications(data));
 
     }, []);
 
     return (
         <SwitcherWrapper>
-            <If condition={channels.length > 0}>
+            <If condition={applications.length > 0}>
                 <Then>
                     <Box p={'8px'}>
-                        <ResultItemGroup title="Channels">
-                            {channels.map((value, index) => (
-                                <ObjectResult
-                                    key={value.id}
-                                    resultId={'channels'}
-                                    name={value.get('channel_name')}
-                                    avatarUrl={value.get('icon').url()}
-                                    isCompact={true}
-                                />
-                            ))}
-                        </ResultItemGroup>
+                        <Section sectionId="application-section" title="Applications">
+                            {applications.map((value, index) => (
 
+                                <SwitcherItem
+                                    description={value.get('description')}
+                                    icon={<Avatar borderColor={'transparent'} size={'medium'}
+                                                  src={value.get('icon').url()}/>} key={value.id}>
+                                    {value.get('name')}
+                                </SwitcherItem>
+
+                            ))}
+                        </Section>
                     </Box>
                 </Then>
                 <Else>
@@ -186,6 +186,7 @@ const IPeopleLoader = (props) => {
 const GlobalNavWithModalsAndDrawers = (props) => {
 
     const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
     const [isSwitcherDrawerOpen, setIsSwitcherDrawerOpen] = React.useState(false);
     const [isPeopleDrawerOpen, setIsPeopleDrawerOpen] = React.useState(false);
@@ -195,12 +196,14 @@ const GlobalNavWithModalsAndDrawers = (props) => {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
+    const openLoginModal = () => setIsModalOpen(true);
+    const closeLoginModal = () => setIsModalOpen(false);
+
     const openDrawer = () => setIsDrawerOpen(true);
     const closeDrawer = () => setIsDrawerOpen(false);
 
     const openNotification = () => setIsNotificationOpen(true);
     const closeNotification = () => setIsNotificationOpen(false);
-
 
     const openSwitcherDrawer = () => setIsSwitcherDrawerOpen(true);
     const closeSwitcherDrawer = () => setIsSwitcherDrawerOpen(false);
@@ -211,7 +214,12 @@ const GlobalNavWithModalsAndDrawers = (props) => {
 
     const {user} = props;
 
-    const {Logout} = React.useContext(AppContext);
+    const {Parse, Logout} = React.useContext(AppContext);
+
+    React.useEffect(() => {
+        Parse.User.currentAsync()
+            .then((user) => console.log(user));
+    }, []);
 
 
     return (
@@ -305,6 +313,19 @@ const GlobalNavWithModalsAndDrawers = (props) => {
                 )}
             </ModalTransition>
 
+
+            <ModalTransition>
+                {isLoginModalOpen && (
+                    <Modal
+                        actions={[{text: 'Close', onClick: closeLoginModal}]}
+                        onClose={closeLoginModal}
+                        heading="Change Password"
+                    >
+                        Login Modal content
+                    </Modal>
+                )}
+            </ModalTransition>
+
             <SpeakerNotification
                 open={isNotificationOpen}
                 close={closeNotification}/>
@@ -313,15 +334,16 @@ const GlobalNavWithModalsAndDrawers = (props) => {
                 onClose={closePeopleDrawer}
                 isOpen={isPeopleDrawerOpen}>
                 <IPeopleLoader/>
-                {/*<ISwitcher/>*/}
+                {/*<IApplicationLoader/>*/}
             </Drawer>
 
 
             <Drawer
                 onClose={closeSwitcherDrawer}
+                width={'medium'}
                 isOpen={isSwitcherDrawerOpen}>
 
-                <ISwitcher/>
+                <IApplicationLoader/>
             </Drawer>
 
             <Drawer onClose={closeDrawer} isOpen={isDrawerOpen} width="wide">
@@ -367,7 +389,7 @@ export default function (props) {
                         containerNavigation={props.containerNavigation}>
                         <Flex className={'h100'}>
                             {props.children}
-                            <NetworkMoniter style={{position : 'absolute' , bottom:0}}/>
+                            <NetworkMoniter style={{position: 'absolute', bottom: 0}}/>
                         </Flex>
                     </LayoutManager>
                 </NavigationProvider>
