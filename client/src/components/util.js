@@ -56,6 +56,8 @@ const SquareIcon = (props) => {
     );
 };
 
+
+
 const GooglePlayButton = styled.a`
  color:#fff;
  margin:5px;
@@ -130,7 +132,7 @@ const FormFieldWithProps = (props) => {
     return (
         <React.Fragment>
             <MTextBox autoComplete={'off'} {...props.fieldProps} />
-            { props.helper  && (
+            {props.helper && (
                 <HelperMessage>
                     {props.helper}
                 </HelperMessage>

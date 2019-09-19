@@ -38,6 +38,10 @@ import {ObjectResult, ResultItemGroup, PersonResult} from '@atlaskit/quick-searc
 import Color from './theme/color';
 import NetworkMoniter from '../components/network-moniter';
 
+import {
+    withRouter
+} from 'react-router-dom';
+
 const customMode = modeGenerator({
     product: {
         text: colors.N0,
@@ -93,7 +97,7 @@ const SwitcherIcon = styled.div`
     margin-right : 8px;
 `;
 
-const IApplicationLoader = (props) => {
+const IApplicationLoader = withRouter((props) => {
 
 
     const [applications, setApplications] = React.useState([]);
@@ -118,6 +122,7 @@ const IApplicationLoader = (props) => {
                             {applications.map((value, index) => (
 
                                 <SwitcherItem
+                                    onClick={() => (value.get('url') && value.get('url') !== '') ? props.history.push(value.get('url')) : null}
                                     description={value.get('description')}
                                     icon={<Avatar borderColor={'transparent'} size={'medium'}
                                                   src={value.get('icon').url()}/>} key={value.id}>
@@ -135,7 +140,7 @@ const IApplicationLoader = (props) => {
         </SwitcherWrapper>
     );
 
-};
+});
 
 
 const IPeopleLoader = (props) => {
@@ -183,15 +188,13 @@ const IPeopleLoader = (props) => {
 
 };
 
-const GlobalNavWithModalsAndDrawers = (props) => {
+const GlobalNavWithModalsAndDrawers = withRouter((props) => {
 
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
     const [isSwitcherDrawerOpen, setIsSwitcherDrawerOpen] = React.useState(false);
     const [isPeopleDrawerOpen, setIsPeopleDrawerOpen] = React.useState(false);
-    const [isNotificationOpen, setIsNotificationOpen] = React.useState(false);
-
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -202,8 +205,7 @@ const GlobalNavWithModalsAndDrawers = (props) => {
     const openDrawer = () => setIsDrawerOpen(true);
     const closeDrawer = () => setIsDrawerOpen(false);
 
-    const openNotification = () => setIsNotificationOpen(true);
-    const closeNotification = () => setIsNotificationOpen(false);
+    const openNotification = () => props.history.push('/notifications');
 
     const openSwitcherDrawer = () => setIsSwitcherDrawerOpen(true);
     const closeSwitcherDrawer = () => setIsSwitcherDrawerOpen(false);
@@ -217,6 +219,7 @@ const GlobalNavWithModalsAndDrawers = (props) => {
     const {Parse, Logout} = React.useContext(AppContext);
 
     React.useEffect(() => {
+        console.log(props);
         Parse.User.currentAsync()
             .then((user) => console.log(user));
     }, []);
@@ -326,9 +329,6 @@ const GlobalNavWithModalsAndDrawers = (props) => {
                 )}
             </ModalTransition>
 
-            <SpeakerNotification
-                open={isNotificationOpen}
-                close={closeNotification}/>
 
             <Drawer
                 onClose={closePeopleDrawer}
@@ -358,7 +358,7 @@ const GlobalNavWithModalsAndDrawers = (props) => {
         </div>
     );
 
-};
+});
 
 export default function (props) {
 

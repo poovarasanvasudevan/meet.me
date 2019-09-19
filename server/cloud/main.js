@@ -3,6 +3,7 @@ const iz = require('iz');
 const are = require('iz/lib/are');
 const validators = require('iz/lib/validators');
 const _ = require('lodash');
+const {encrypt, decrypt} = require('./spec/crypto');
 
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 iz.register(validators);
@@ -77,8 +78,14 @@ Parse.Cloud.job("send-email", async function () {
 
 });
 
+Parse.Cloud.beforeFind('Application', (req) => {
+    let query = req.query;
+    query.ascending("name");
+    return query;
+});
+
 Parse.Cloud.define("requestInfo", (request) => {
-    var clientIP = request.headers['x-real-ip'];
+    const clientIP = request.headers['x-real-ip'];
 
     return [
         {
@@ -86,4 +93,25 @@ Parse.Cloud.define("requestInfo", (request) => {
             value: clientIP
         }
     ];
+});
+
+
+Parse.Cloud.define('generateQR', async (request) => {
+
+    const qinfo = {
+        ip: request.headers['x-real-ip'],
+        user_agent: request.headers['user-agent'],
+        time: new Date().toString()
+    };
+    const enc_text = encrypt(JSON.stringify(qinfo));
+    const QrLogin = Parse.Object.extend("QRLogin");
+    const qrLogin = new QrLogin();
+    qrLogin.set('code', enc_text);
+    qrLogin.set('expiry_date', new Date());
+    await qrLogin.save();
+
+    return {
+        qrcode: enc_text,
+        time: qinfo.time
+    };
 });

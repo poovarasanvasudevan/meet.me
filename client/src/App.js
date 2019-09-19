@@ -8,6 +8,13 @@ import Parse from 'parse';
 import SkeletonV2 from "./components/SkeletonV2";
 
 const Dashboard = lazy(() => import('./pages/dashboard'));
+const Notifications = lazy(() => import('./pages/notification'));
+
+
+const KB = lazy(() => import('./pages/knowledgebase'));
+const KBEditor = lazy(() => import('./pages/knowledgebase/editor'));
+
+
 const Error = lazy(() => import('./pages/500'));
 const Login = lazy(() => import('./pages/login'));
 const BasePage = lazy(() => import('./pages/base-page'));
@@ -57,9 +64,14 @@ const SkeletonComponent = (props) => {
         <SkeletonV2
             containerNavigation={() => null}
             productNavigation={() => null}
-            navWidth={0}
-        >
+            navWidth={0}>
+
             <PrivateRoute path='/home' component={Dashboard}/>
+            <PrivateRoute path='/notifications' component={Notifications}/>
+
+            <PrivateRoute exact path='/kb' component={KB}/>
+            <PrivateRoute path='/kb/editor' component={KBEditor}/>
+
         </SkeletonV2>
     );
 };
@@ -72,6 +84,7 @@ function App() {
                 <IntlProvider locale="en">
                     <Router>
                         <Switch>
+
                             <LoginRoute path='/' exact component={BasePage}/>
                             <LoginRoute path='/login' component={Login}/>
                             <LoginRoute path='/qr' component={QrCode}/>
@@ -79,7 +92,7 @@ function App() {
                             <LoginRoute path='/forget-password' component={ForgetPassword}/>
                             <LoginRoute path='/reset-password' component={ResetPassword}/>
                             <LoginRoute path='/500' component={Error}/>
-
+                            <LoginRoute path='/500' component={Error}/>
 
                             <Route path="/" component={SkeletonComponent}/>
 

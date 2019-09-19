@@ -1,5 +1,4 @@
 import React from "react";
-import SkeletonV2 from "../../components/SkeletonV2";
 import {Box} from "@rebass/grid";
 import Page from "@atlaskit/page";
 import Calendar from "@atlaskit/calendar";
@@ -61,7 +60,6 @@ export default function (props) {
     };
 
     return (
-
         <Page className={"h100"}>
             <div
                 style={{display: "flex", flexDirection: "row"}}
@@ -123,6 +121,5 @@ export default function (props) {
                 </Box>
             </div>
         </Page>
-
     );
 }

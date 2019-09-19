@@ -21,23 +21,17 @@ const QRCode = (props) => {
 
     const [loginError, setLoginError] = React.useState({status: false, error: ""});
     const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
+    const [qr, setQr] = React.useState(null);
 
     const loginHandler = async (data) => {
-        try {
-            const currentUser = await Parse.User.logIn(data.username, data.password);
-            localStorage.setItem('loggedUser', JSON.stringify(currentUser));
-            setRedirectToReferrer(true);
-        } catch (e) {
-            setLoginError({status: true, error: e.message});
-        }
+
     };
 
     React.useEffect(() => {
-        const {from} = props.location.state || {from: {pathname: '/home'}};
-        if (redirectToReferrer === true) {
-            window.location.href = from.pathname;
-        }
-    });
+        Parse.Cloud.run('generateQR', {})
+            .then((data) => setQr(data));
+
+    }, []);
 
     return (
         <Base>
@@ -56,11 +50,12 @@ const QRCode = (props) => {
                                     <center style={{marginTop: '20px'}}>
                                         <p><b>Scan from your mobile</b></p>
                                         <div>
-                                            <QR value="http://facebook.github.io/react/"
-                                                size={256}
-
-                                                level={'H'}
-                                            />
+                                            {qr &&
+                                                <QR value={qr.qrcode}
+                                                    size={256}
+                                                    level={'L'}
+                                                />
+                                            }
                                         </div>
 
                                         <p>
