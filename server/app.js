@@ -11,9 +11,11 @@ var http = require( 'http' );
 const app = express();
 app.use(compression());
 app.use(helmet());
+app.set('trust proxy', true);
 
 function getUserIP(request) {
-    var forwardedFor = request.headers['x-forwarded-for'];
+    var forwardedFor = req.header('x-forwarded-for') || req.connection.remoteAddress;
+
     if (forwardedFor.indexOf(',') > -1) {
         return forwardedFor.split(',')[0];
     } else {
@@ -103,6 +105,6 @@ app.get("/", function (req, res) {
 var server = http.createServer(app);
 
 
-server.listen(process.env.APP_PORT || 3001, function () {
+server.listen(process.env.APP_PORT || 3001, '0.0.0.0',function () {
     console.log("App server started");
 });

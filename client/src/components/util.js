@@ -83,7 +83,6 @@ const GooglePlayButton = styled.a`
  border-color:#000;
  padding:15px 16px 5px 40px;
  position:relative;
- font-family:fontfutura;
  font-weight:600;
  
  &:focus, &:hover, &:visited, &:link, &:active {

@@ -15,6 +15,9 @@ const KB = lazy(() => import('./pages/knowledgebase'));
 const KBEditor = lazy(() => import('./pages/knowledgebase/editor'));
 
 
+const Connect = lazy(() => import('./pages/connect'));
+
+
 const Error = lazy(() => import('./pages/500'));
 const Login = lazy(() => import('./pages/login'));
 const BasePage = lazy(() => import('./pages/base-page'));
@@ -71,6 +74,9 @@ const SkeletonComponent = (props) => {
 
             <PrivateRoute exact path='/kb' component={KB}/>
             <PrivateRoute path='/kb/editor' component={KBEditor}/>
+
+
+            <PrivateRoute path='/connect' component={Connect}/>
 
         </SkeletonV2>
     );
