@@ -26,13 +26,17 @@ const TwoStep = lazy(() => import('./pages/two-step'));
 const ForgetPassword = lazy(() => import('./pages/forget-password'));
 const ResetPassword = lazy(() => import('./pages/reset-password'));
 const NotFound = lazy(() => import('./pages/404'));
+const Help = lazy(() => import('./pages/help'));
 
 
 const PrivateRoute = ({component: Component, ...rest}) => {
     const currentUser = localStorage.getItem("loggedUser");
-    return (<Route {...rest} render={(props) => (
+    return (<SkeletonV2
+        containerNavigation={() => null}
+        productNavigation={() => null}
+        navWidth={0}><Route {...rest} render={(props) => (
         currentUser != null ? <Component {...props} /> : <Redirect to={{pathname: '/', state: {from: props.location}}}/>
-    )}/>);
+    )}/></SkeletonV2>);
 };
 
 const LoginRoute = ({component: Component, ...rest}) => {
@@ -61,27 +65,6 @@ const URLConfig = {
     avatarUrl: 'http://localhost:3001/avatar'
 };
 
-const SkeletonComponent = (props) => {
-
-    return (
-        <SkeletonV2
-            containerNavigation={() => null}
-            productNavigation={() => null}
-            navWidth={0}>
-
-            <PrivateRoute path='/home' component={Dashboard}/>
-            <PrivateRoute path='/notifications' component={Notifications}/>
-
-            <PrivateRoute exact path='/kb' component={KB}/>
-            <PrivateRoute path='/kb/editor' component={KBEditor}/>
-
-
-            <PrivateRoute path='/connect' component={Connect}/>
-
-        </SkeletonV2>
-    );
-};
-
 
 function App() {
     return (
@@ -98,26 +81,19 @@ function App() {
                             <LoginRoute path='/forget-password' component={ForgetPassword}/>
                             <LoginRoute path='/reset-password' component={ResetPassword}/>
                             <LoginRoute path='/500' component={Error}/>
-                            <LoginRoute path='/500' component={Error}/>
 
-                            <Route path="/" component={SkeletonComponent}/>
 
-                            {/*<Route*/}
-                            {/*path="/kb"*/}
-                            {/*render={({ match: { url } }) => (*/}
-                            {/*<>*/}
-                            {/*<Route path={`${url}/`} component={KBEditorPage} exact />*/}
-                            {/*<Route path={`${url}/new`} component={KBEditorNewPage} />*/}
-                            {/*</>*/}
-                            {/*)}*/}
-                            {/*/>*/}
+                            <Route path='/help' component={Help}/>
 
+
+                            <PrivateRoute path='/home' component={Dashboard}/>
+                            <PrivateRoute path='/notifications' component={Notifications}/>
+                            <PrivateRoute exact path='/kb' component={KB}/>
+                            <PrivateRoute path='/kb/editor' component={KBEditor}/>
+                            <PrivateRoute path='/connect' component={Connect}/>
 
                             <Route component={NotFound}/>
                         </Switch>
-                        {/*<PrivateRoute path='/database' component={DatabasePage}/>*/}
-                        {/*<PrivateRoute path='/home' component={IndexPage}/>*/}
-                        {/*<PrivateRoute path='/speaker' component={SpeakerPage}/>*/}
                     </Router>
                 </IntlProvider>
             </Suspense>

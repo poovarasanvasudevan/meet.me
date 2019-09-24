@@ -4,6 +4,10 @@ import {BreadcrumbsStateless, BreadcrumbsItem} from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import {Box} from "@rebass/grid";
 import {RouterLink} from "../../components/theme/link";
+import Button, {ButtonGroup} from "@atlaskit/button";
+import {FaPlus} from 'react-icons/fa';
+import {CreateIcon} from "../../components/util";
+import DropdownMenu, {DropdownItemGroup, DropdownItem} from '@atlaskit/dropdown-menu';
 
 const breadcrumbs = (
     <BreadcrumbsStateless onExpand={() => {
@@ -13,6 +17,26 @@ const breadcrumbs = (
     </BreadcrumbsStateless>
 );
 
+const actions = (
+    <ButtonGroup>
+
+
+        <DropdownMenu
+            trigger="Choices"
+            isCompact={true}
+            triggerType="button"
+            onOpenChange={e => console.log('dropdown opened', e)}
+        >
+            <DropdownItemGroup>
+                <DropdownItem>Sydney</DropdownItem>
+                <DropdownItem>Melbourne</DropdownItem>
+            </DropdownItemGroup>
+        </DropdownMenu>
+        <Button appearance={'subtle'}>New Article</Button>
+    </ButtonGroup>
+
+);
+
 export default function (props) {
     return (
         <Page className={"h100"}>
@@ -20,7 +44,7 @@ export default function (props) {
                 style={{display: "flex", flexDirection: "row"}}
                 className={"h100"}>
                 <Box style={{flex: 1}} p={'8px'}>
-                    <PageHeader breadcrumbs={breadcrumbs}>
+                    <PageHeader breadcrumbs={breadcrumbs} actions={actions}>
                         Knowledge Base
                     </PageHeader>
                 </Box>

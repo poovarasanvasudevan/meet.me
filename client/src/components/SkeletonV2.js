@@ -269,19 +269,13 @@ const GlobalNavWithModalsAndDrawers = withRouter((props) => {
                         onClick: openNotification
                     },
                     {
-                        dropdownItems: () => (
-                            <DropdownItemGroup title="Heading">
-                                <DropdownItem onClick={openModal}>
-                                    Open a modal
-                                </DropdownItem>
-                                <DropdownItem onClick={openDrawer}>
-                                    Open a drawer
-                                </DropdownItem>
-                            </DropdownItemGroup>
-                        ),
                         icon: () => <IoIosHelpCircle size={'1.6em'}/>,
                         id: 'help',
                         tooltip: 'Open dropdown',
+                        onClick: (event) => {
+                            event.preventDefault();
+                            window.open('/help','_blank');
+                        }
                     },
                     {
                         dropdownItems: () => (
