@@ -19,6 +19,7 @@ import {Link} from 'react-router-dom';
 import {MLink} from "../../components/theme/link";
 import {Divider, FormFieldWithProps, MTextBox} from "../../components/util";
 import {Button} from "@atlaskit/button/dist/cjs/components/Button";
+import SectionMessage from '@atlaskit/section-message';
 
 const SocialButton = styled(ThemedButton)`
     
@@ -39,14 +40,11 @@ const SocialButton = styled(ThemedButton)`
 `;
 
 
-
 const Card = styled.div`
     background-color : white;
     padding : 20px;
     border-radius : 3px;
 `;
-
-
 
 
 const Login = (props) => {
@@ -77,72 +75,74 @@ const Login = (props) => {
             <style dangerouslySetInnerHTML={{__html: `body { background-color: ${Color.primaryColor}`}}/>
             <div>
                 <Flex>
-                <Box width={3.5 / 10}/>
-                <Box width={3 / 10} p={2}>
-                    <Card elevation={1} style={{marginTop: '30%'}}>
-                        <Flex>
-                            <Box width={1.2 / 10}/>
-                            <Box width={7.6 / 10} p={2}>
+                    <Box width={3.5 / 10}/>
+                    <Box width={3 / 10} p={2}>
+                        <Card elevation={1} style={{marginTop: '30%'}}>
+                            <Flex>
+                                <Box width={1.2 / 10}/>
+                                <Box width={7.6 / 10} p={2}>
 
-                                <img src={logo} alt={'Logo'} height={50}/>
-                                {loginError.status ? <InlineMessage title={loginError.error} type="error"/> : null}
+                                    <img src={logo} alt={'Logo'} height={50}/>
+                                    {loginError.status ? <SectionMessage appearance="error">{loginError.error}</SectionMessage> : null}
 
-                                <Form onSubmit={loginHandler} style={{marginTop: '30px'}}>
+                                    <Form onSubmit={loginHandler} style={{marginTop: '30px'}}>
 
-                                    {({formProps}) => (
-                                        <form {...formProps}>
+                                        {({formProps}) => (
+                                            <form {...formProps}>
 
-                                            <Field label={'Username'} name="username" defaultValue="" isRequired
-                                                   autoComplete={'off'}>
-                                                {({fieldProps, error, valid}) => <FormFieldWithProps
-                                                    fieldProps={fieldProps} error={error} valid={valid}/>}
-                                            </Field>
+                                                <Field label={'Username'} name="username" defaultValue="" isRequired
+                                                       autoComplete={'off'}>
+                                                    {({fieldProps, error, valid}) => <FormFieldWithProps
+                                                        fieldProps={fieldProps} error={error} valid={valid}/>}
+                                                </Field>
 
-                                            <Field label={'Password'} name="password" defaultValue="" isRequired>
-                                                {({fieldProps, error, valid}) => <MTextBox
-                                                    type={'password'} {...fieldProps} />}
-                                            </Field>
-                                            <FormFooter>
-                                                <MLink to={'/forget-password'}>
-                                                <Button appearance="subtle">Forget Password</Button>
+                                                <Field label={'Password'} name="password" defaultValue="" isRequired>
+                                                    {({fieldProps, error, valid}) => <MTextBox
+                                                        type={'password'} {...fieldProps} />}
+                                                </Field>
+                                                <FormFooter>
+                                                    <MLink to={'/forget-password'}>
+                                                        <Button appearance="subtle">Forget Password</Button>
 
-                                                </MLink>
-                                                <AppButton type="submit" primary={'true'}>
-                                                    Login
-                                                </AppButton>
-                                            </FormFooter>
-                                        </form>
-                                    )}
-                                </Form>
-                                <div style={{marginTop: '20px'}}>
+                                                    </MLink>
+                                                    <AppButton type="submit" primary={'true'}>
+                                                        Login
+                                                    </AppButton>
+                                                </FormFooter>
+                                            </form>
+                                        )}
+                                    </Form>
+                                    <div style={{marginTop: '20px'}}>
 
-                                    <center>
-                                        <SocialButton fgcolor={'#fff'} bgcolor={'#db3236'}
-                                                      iconBefore={<Icon glyph={() => <FaGoogle/>}
-                                                                        label="Custom icon"
-                                                                        size="small"/>}>Google</SocialButton>
-                                        <SocialButton fgcolor={'#fff'} bgcolor={'#3b5998'}
-                                                      iconBefore={<Icon glyph={() => <FaFacebookSquare/>}
-                                                                        label="Custom icon"
-                                                                        size="small"/>}>Facebook</SocialButton>
-                                        <SocialButton iconBefore={<Icon glyph={() => <FaGithub/>} label="Custom icon"
-                                                                        size="small"/>}> Github</SocialButton>
-                                        <MLink to={'/qr'}>
-                                        <SocialButton
-                                            fgcolor={'#fff'}
-                                            bgcolor={'green'}
-                                            iconBefore={<Icon glyph={() => <FaQrcode/>} label="Custom icon" size="small"/>}>
-                                            QrCode
-                                        </SocialButton>
-                                        </MLink>
-                                    </center>
-                                </div>
-                            </Box>
-                            <Box width={1.2 / 10}/>
-                        </Flex>
-                    </Card>
-                </Box>
-                <Box width={3.5 / 10}/>
+                                        <center>
+                                            <SocialButton fgcolor={'#fff'} bgcolor={'#db3236'}
+                                                          iconBefore={<Icon glyph={() => <FaGoogle/>}
+                                                                            label="Custom icon"
+                                                                            size="small"/>}>Google</SocialButton>
+                                            <SocialButton fgcolor={'#fff'} bgcolor={'#3b5998'}
+                                                          iconBefore={<Icon glyph={() => <FaFacebookSquare/>}
+                                                                            label="Custom icon"
+                                                                            size="small"/>}>Facebook</SocialButton>
+                                            <SocialButton
+                                                iconBefore={<Icon glyph={() => <FaGithub/>} label="Custom icon"
+                                                                  size="small"/>}> Github</SocialButton>
+                                            <MLink to={'/qr'}>
+                                                <SocialButton
+                                                    fgcolor={'#fff'}
+                                                    bgcolor={'green'}
+                                                    iconBefore={<Icon glyph={() => <FaQrcode/>} label="Custom icon"
+                                                                      size="small"/>}>
+                                                    QrCode
+                                                </SocialButton>
+                                            </MLink>
+                                        </center>
+                                    </div>
+                                </Box>
+                                <Box width={1.2 / 10}/>
+                            </Flex>
+                        </Card>
+                    </Box>
+                    <Box width={3.5 / 10}/>
                 </Flex>
             </div>
         </Base>

@@ -6,16 +6,16 @@ import ModalDialog, {ModalFooter, ModalTransition} from '@atlaskit/modal-dialog'
 import styled from "styled-components";
 import Textfield from "@atlaskit/textfield";
 import Select from "@atlaskit/select";
-import {Button} from "@blueprintjs/core";
+import Button from "@atlaskit/button";
 import Form from '@atlaskit/form';
 import FieldTextArea from '@atlaskit/field-text-area';
 
 
 const MTextField = styled(Textfield)`
-    height: 2.5em !important;
+
 `;
 const MSelectField = styled(Select)`
-    height: 2.2em !important;
+
 `;
 export default function (props) {
 

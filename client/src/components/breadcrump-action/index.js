@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {Icon, Button, ButtonGroup} from '@blueprintjs/core';
-import {AppToaster} from "../util";
+import Button,{ ButtonGroup} from '@atlaskit/button'
+
 
 const BreadcrumbWrapper = styled.div`
   flex: 1 1 80%;
@@ -31,11 +31,11 @@ export default function BreadcrumbsMiscActions(props) {
 
     const lockToggle = () => {
         setIsLocked(!isLocked);
-        isLocked ? AppToaster.show({
-            intent: 'warning',
-            icon: 'thumbs-up',
-            message: 'Locked'
-        }) : AppToaster.show({intent: 'warning', icon: 'thumbs-up', message: 'Unlocked'});
+        // isLocked ? AppToaster.show({
+        //     intent: 'warning',
+        //     icon: 'thumbs-up',
+        //     message: 'Locked'
+        // }) : AppToaster.show({intent: 'warning', icon: 'thumbs-up', message: 'Unlocked'});
     };
 
 

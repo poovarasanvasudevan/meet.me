@@ -1,0 +1,8 @@
+div.akEditor > div:first-child {
+    height : 50px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+div.fabric-editor-popup-scroll-parent > div > div {
+    padding-top: 20px;
+}

@@ -6,13 +6,11 @@ var nbc = Classifier();
 var nlp = require('wink-nlp-utils');
 // Configure preparation tasks
 nbc.definePrepTasks([
-    // Simple tokenizer
     nlp.string.tokenize0,
-    // Common Stop Words Remover
     nlp.tokens.removeWords,
-    // Stemmer to obtain base word
     nlp.tokens.stem,
 ]);
+
 // Configure behavior
 nbc.defineConfig({considerOnlyPresence: true, smoothingFactor: 0.5});
 var files = fs.readFileSync('./model.json');
