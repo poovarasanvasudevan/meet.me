@@ -6,10 +6,11 @@ import ModalDialog, {ModalFooter, ModalTransition} from '@atlaskit/modal-dialog'
 import styled from "styled-components";
 import Textfield from "@atlaskit/textfield";
 import Select from "@atlaskit/select";
-import Form from '@atlaskit/form';
+import Form, {CheckboxField, Fieldset} from '@atlaskit/form';
 import FieldTextArea from '@atlaskit/field-text-area';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
-
+import {Checkbox} from '@atlaskit/checkbox';
+import {useStateValue} from "../../pages/blog/new/util/context";
 
 const MTextField = styled(Textfield)`
 
@@ -19,25 +20,19 @@ const MSelectField = styled(Select)`
 `;
 export default function (props) {
 
-    const [open, setOpen] = React.useState(false);
-    const [title, setTitle] = React.useState(null);
+    const [{appearence, title, settings}, dispatch] = useStateValue();
 
-    React.useEffect(() => {
-        setOpen(props.open);
-    }, [props.open]);
-
-    React.useEffect(() => {
-        setTitle(props.title);
-    }, [props.title]);
 
     const close = () => {
-        setOpen(false);
-        props.close();
+        dispatch({
+            type: 'settings',
+            settings: false
+        });
     };
 
     const footer = (props) => (
         <Flex>
-            <Box p={1} width={12 / 12}>
+            <Box p={'1px'} width={12 / 12}>
                 <ModalFooter showKeyline={props.showKeyline}>
                     <span/>
                     <div>
@@ -67,21 +62,27 @@ export default function (props) {
         {label: 'Sydney', value: 'sydney'},
     ];
     const onFormSubmit = (data) => {
+
+        dispatch({
+            type: 'savearticle',
+            formValues: data
+        });
+        dispatch({
+            type: 'settings',
+            settings: false
+        });
         console.log(JSON.stringify(data));
-        if (props.formSubmit) {
-            props.formSubmit(data);
-        }
     };
 
 
     return (
         <ModalTransition>
-            {open && (
+            {settings && (
                 <ModalDialog
                     width={'large'}
                     scrollBehavior={'outside'}
                     autoFocus={false}
-                    heading="Article Information"
+                    heading="Blog Post Information"
                     onClose={close || null}
                     shouldCloseOnOverlayClick={false}
                     components={{
@@ -97,16 +98,16 @@ export default function (props) {
                         Footer: footer,
                     }}>
                     <Flex flexWrap='wrap'>
-                        <Box p={1} width={12 / 12}>
-                            <Field label="Article Title" name="article_title" defaultValue={title || ""} isRequired={true}>
+                        <Box p={'1px'} width={12 / 12}>
+                            <Field label="Post Title" name="post_title" defaultValue={title || ""} isRequired={true}>
                                 {({fieldProps}) => (
                                     <MTextField autoComplete={'off'}
                                                 placeholder="Super doper article" {...fieldProps} />
                                 )}
                             </Field>
                         </Box>
-                        <Box p={1} width={4 / 12}>
-                            <Field label="Article Status" name="article_status" isRequired={true}>
+                        <Box p={'1px'} width={4 / 12}>
+                            <Field label="Post Status" name="post_status" isRequired={true}>
                                 {({fieldProps}) => (
                                     <MSelectField
                                         menuPortalTarget={document.body}
@@ -120,13 +121,13 @@ export default function (props) {
                                             {label: 'Published', value: 'canberra'},
                                             {label: 'Reteried', value: 'darwin'},
                                         ]}
-                                        placeholder="Article Status"
+                                        placeholder="Status"
                                     />
                                 )}
                             </Field>
                         </Box>
-                        <Box p={1} width={4 / 12}>
-                            <Field label="Article Version" name="article_version" defaultValue={"1"}>
+                        <Box p={'1px'} width={4 / 12}>
+                            <Field label="Post Version" name="post_version" defaultValue={"1"}>
                                 {({fieldProps}) => (
                                     <MTextField
                                         autoComplete="off"
@@ -136,7 +137,7 @@ export default function (props) {
                                 )}
                             </Field>
                         </Box>
-                        <Box p={1} width={4 / 12}>
+                        <Box p={'1px'} width={4 / 12}>
                             <Field label="Categories" name="categories" isRequired={true}>
                                 {({fieldProps}) => (
                                     <MSelectField
@@ -156,7 +157,7 @@ export default function (props) {
                                 )}
                             </Field>
                         </Box>
-                        <Box p={1} width={12 / 12}>
+                        <Box p={'1px'} width={12 / 12}>
                             <Field label="Keywords" name="keywords">
                                 {({fieldProps}) => (
                                     <CreatableSelect
@@ -168,7 +169,7 @@ export default function (props) {
                                 )}
                             </Field>
                         </Box>
-                        <Box p={1} width={12 / 12}>
+                        <Box p={'1px'} width={12 / 12}>
 
                             <FieldTextArea
                                 label="Comments"
@@ -177,6 +178,34 @@ export default function (props) {
                                 shouldFitContainer={true}
                             />
 
+                        </Box>
+
+
+                        <Box p={'1px'} width={12 / 12}>
+                            <Fieldset legend="Post Settings / Privacy">
+
+                                <Flex>
+                                    <Box width={6 / 12}>
+                                        <CheckboxField name="settings" value="visibility" defaultIsChecked={true}>
+                                            {({fieldProps}) => <Checkbox {...fieldProps}
+                                                                         label="Article Visible to Public"/>}
+                                        </CheckboxField>
+
+                                        <CheckboxField name="settings" value="allow_comments"
+                                                       defaultIsChecked={true}>
+                                            {({fieldProps}) => <Checkbox {...fieldProps}
+
+                                                                         label="Allow Comments from users"/>}
+                                        </CheckboxField>
+                                    </Box>
+                                    <Box width={6 / 12}>
+                                        <CheckboxField name="settings" value="comments" defaultIsChecked={true}>
+                                            {({fieldProps}) => <Checkbox {...fieldProps}
+                                                                         label="Subscribe likes/comments via email"/>}
+                                        </CheckboxField>
+                                    </Box>
+                                </Flex>
+                            </Fieldset>
                         </Box>
                     </Flex>
                 </ModalDialog>

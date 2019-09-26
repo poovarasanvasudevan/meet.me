@@ -9,6 +9,10 @@ import SkeletonV2 from "./components/SkeletonV2";
 import {loadTheme} from 'office-ui-fabric-react/lib/Styling';
 import Color from './components/theme/color';
 
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+
+initializeIcons(/* optional base url */);
+
 loadTheme({
     palette: {
         themePrimary: Color.primaryColor,

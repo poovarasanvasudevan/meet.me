@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Button,{ ButtonGroup} from '@atlaskit/button'
-
+import Button, {ButtonGroup} from '@atlaskit/button';
+import {IconButton, IIconProps} from 'office-ui-fabric-react';
+import {useStateValue} from "../../pages/blog/new/util/context";
 
 const BreadcrumbWrapper = styled.div`
   flex: 1 1 80%;
@@ -22,15 +23,14 @@ const MiscActionsWrapper = styled.div`
 
 export default function BreadcrumbsMiscActions(props) {
 
-    const [isLocked, setIsLocked] = React.useState(false);
-    const [title, setTitle] = React.useState(null);
+    const [{locked,title}, dispatch] = useStateValue();
 
-    React.useEffect(()=> {
-        setTitle(props.title)
-    } , [props.title])
 
     const lockToggle = () => {
-        setIsLocked(!isLocked);
+        dispatch({
+            type: 'lock',
+            locked: !locked
+        });
         // isLocked ? AppToaster.show({
         //     intent: 'warning',
         //     icon: 'thumbs-up',
@@ -38,6 +38,19 @@ export default function BreadcrumbsMiscActions(props) {
         // }) : AppToaster.show({intent: 'warning', icon: 'thumbs-up', message: 'Unlocked'});
     };
 
+    const setAppearence = () => {
+        dispatch({
+            type: 'appearence'
+        });
+    };
+
+
+    const openSetting = () => {
+        dispatch({
+            type: 'settings',
+            settings: true
+        });
+    };
 
     return (
         <>
@@ -45,13 +58,13 @@ export default function BreadcrumbsMiscActions(props) {
                 <BreadcrumbWrapper>KBArticles / {title ? title : '...'}</BreadcrumbWrapper>
                 <MiscActionsWrapper>
                     <ButtonGroup minimal={true}>
-                        <Button icon="tag"/>
-                        <Button icon={isLocked ? 'lock' : 'unlock'} onClick={lockToggle}
-                                color="#de350b"/>
+                        <IconButton iconProps={{iconName: 'Tag'}} onClick={openSetting}/>
+                        <IconButton iconProps={{iconName: locked ? 'Lock' : 'Unlock'}} onClick={lockToggle}
+                                    color="#de350b"/>
+                        <IconButton iconProps={{iconName: 'BackToWindow'}} onClick={setAppearence}/>
                     </ButtonGroup>
                 </MiscActionsWrapper>
             </Wrapper>
-
         </>
     );
 
