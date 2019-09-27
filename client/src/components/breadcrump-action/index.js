@@ -59,6 +59,7 @@ export default function BreadcrumbsMiscActions(props) {
                 <MiscActionsWrapper>
                     <ButtonGroup minimal={true}>
                         <IconButton iconProps={{iconName: 'Tag'}} onClick={openSetting}/>
+                        <IconButton iconProps={{iconName: 'RedEye'}} />
                         <IconButton iconProps={{iconName: locked ? 'Lock' : 'Unlock'}} onClick={lockToggle}
                                     color="#de350b"/>
                         <IconButton iconProps={{iconName: 'BackToWindow'}} onClick={setAppearence}/>
