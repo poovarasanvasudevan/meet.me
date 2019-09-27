@@ -11,6 +11,7 @@ import FieldTextArea from '@atlaskit/field-text-area';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
 import {Checkbox} from '@atlaskit/checkbox';
 import {useStateValue} from "../../pages/blog/new/util/context";
+import AppContext from "../../module/AppContext";
 
 const MTextField = styled(Textfield)`
 
@@ -21,7 +22,9 @@ const MSelectField = styled(Select)`
 export default function (props) {
 
     const [{appearence, title, settings}, dispatch] = useStateValue();
-
+    const {Parse} = React.useContext(AppContext);
+    const [status, setStatus] = React.useState([]);
+    const [category, setCategory] = React.useState([]);
 
     const close = () => {
         dispatch({
@@ -29,6 +32,26 @@ export default function (props) {
             settings: false
         });
     };
+
+
+    React.useEffect(() => {
+        const ListValues = Parse.Object.extend("ListValues");
+        const listQuery = new Parse.Query(ListValues);
+        listQuery.equalTo("group", 'BLOG_STATUS');
+        listQuery.find().then((data) => setStatus(data.map((data) => ({
+            label: data.get('value'),
+            value: data.get('key')
+        }))));
+
+        const categoryQuery = new Parse.Query(ListValues);
+        categoryQuery.equalTo("group", 'BLOG_CATEGORY');
+        categoryQuery.find().then((data) => setCategory(data.map((data) => ({
+            label: data.get('value'),
+            value: data.get('key')
+        }))));
+
+    }, []);
+
 
     const footer = (props) => (
         <Flex>
@@ -115,12 +138,7 @@ export default function (props) {
                                         className="single-select"
                                         styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                         classNamePrefix="react-select"
-                                        options={[
-                                            {label: 'New', value: 'adelaide'},
-                                            {label: 'Draft', value: 'brisbane'},
-                                            {label: 'Published', value: 'canberra'},
-                                            {label: 'Reteried', value: 'darwin'},
-                                        ]}
+                                        options={status}
                                         placeholder="Status"
                                     />
                                 )}
@@ -146,12 +164,7 @@ export default function (props) {
                                         className="single-select"
                                         styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                         classNamePrefix="react-select"
-                                        options={[
-                                            {label: 'New', value: 'adelaide'},
-                                            {label: 'Draft', value: 'brisbane'},
-                                            {label: 'Published', value: 'canberra'},
-                                            {label: 'Reteried', value: 'darwin'},
-                                        ]}
+                                        options={category}
                                         placeholder="Categories"
                                     />
                                 )}

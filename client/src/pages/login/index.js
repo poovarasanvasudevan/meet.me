@@ -20,6 +20,7 @@ import {MLink} from "../../components/theme/link";
 import {Divider, FormFieldWithProps, MTextBox} from "../../components/util";
 import {Button} from "@atlaskit/button/dist/cjs/components/Button";
 import SectionMessage from '@atlaskit/section-message';
+import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
 
 const SocialButton = styled(ThemedButton)`
     
@@ -83,7 +84,8 @@ const Login = (props) => {
                                 <Box width={7.6 / 10} p={2}>
 
                                     <img src={logo} alt={'Logo'} height={50}/>
-                                    {loginError.status ? <SectionMessage appearance="error">{loginError.error}</SectionMessage> : null}
+                                    {loginError.status ?
+                                        <SectionMessage appearance="error">{loginError.error}</SectionMessage> : null}
 
                                     <Form onSubmit={loginHandler} style={{marginTop: '30px'}}>
 
@@ -105,9 +107,9 @@ const Login = (props) => {
                                                         <Button appearance="subtle">Forget Password</Button>
 
                                                     </MLink>
-                                                    <AppButton type="submit" primary={'true'}>
-                                                        Login
-                                                    </AppButton>
+
+
+                                                    <PrimaryButton type={'submit'}>Login</PrimaryButton>
                                                 </FormFooter>
                                             </form>
                                         )}

@@ -2,7 +2,6 @@ import React from 'react';
 import {Editor, WithEditorActions} from "@atlaskit/editor-core";
 import BreadcrumbsMiscActions from "../../../../components/breadcrump-action";
 import {TitleInput} from "../../../../components/title-input";
-import {Box} from "@rebass/grid";
 import {useStateValue} from "../util/context";
 import {ButtonGroup} from "@atlaskit/button";
 import {DefaultButton, PrimaryButton} from "office-ui-fabric-react";
@@ -10,7 +9,7 @@ import {MLink} from "../../../../components/theme/link";
 
 export default function (props) {
 
-    const [{appearence, title, settings}, dispatch] = useStateValue();
+    const [{appearence, title}, dispatch] = useStateValue();
 
     const saveArticle = (props) => {
         if (!props.editorActions) {
@@ -18,7 +17,11 @@ export default function (props) {
         }
 
         props.editorActions.getValue().then(value => {
-            console.log(value);
+
+            dispatch({
+                type: 'saveblog',
+                post: value
+            });
         });
     };
 

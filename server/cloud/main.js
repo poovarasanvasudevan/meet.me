@@ -78,6 +78,12 @@ Parse.Cloud.job("send-email", async function () {
 
 });
 
+Parse.Cloud.beforeFind('ListValues', (req) => {
+    let query = req.query;
+    query.equalTo('is_active', true);
+    return query;
+});
+
 Parse.Cloud.beforeFind('Application', (req) => {
     let query = req.query;
     query.ascending("name");
