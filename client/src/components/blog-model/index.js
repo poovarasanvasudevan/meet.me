@@ -21,7 +21,7 @@ const MSelectField = styled(Select)`
 `;
 export default function (props) {
 
-    const [{appearence, title, settings}, dispatch] = useStateValue();
+    const [{appearence, title, settings, formValues}, dispatch] = useStateValue();
     const {Parse} = React.useContext(AppContext);
     const [status, setStatus] = React.useState([]);
     const [category, setCategory] = React.useState([]);
@@ -69,11 +69,6 @@ export default function (props) {
         </Flex>
     );
 
-    const radioItems = [
-        {name: 'color', value: 'red', label: 'Red'},
-        {name: 'color', value: 'blue', label: 'Blue'},
-        {name: 'color', value: 'yellow', label: 'Yellow'},
-    ];
     const mpOpetion = [
         {label: 'Adelaide', value: 'adelaide'},
         {label: 'Brisbane', value: 'brisbane'},
@@ -86,15 +81,42 @@ export default function (props) {
     ];
     const onFormSubmit = (data) => {
 
-        dispatch({
-            type: 'savearticle',
-            formValues: data
-        });
-        dispatch({
-            type: 'settings',
-            settings: false
-        });
-        console.log(JSON.stringify(data));
+        /**
+         * {"post_title":"hello","post_status":{"label":"New","value":"NEW"},"post_version":"1",
+         * "categories":{"label":"Programming","value":"PROGRAMMING"},
+         * "keywords":[{"label":"Melbourne","value":"melbourne"},{"label":"Brisbane","value":"brisbane"}],
+         * "settings":["visibility","allow_comments","comments"]}
+         * */
+        var blogPost = null;
+        if (formValues == null) {
+            const BlogPost = Parse.Object.extend("BlogPost");
+            blogPost = new BlogPost();
+        } else {
+            blogPost = formValues;
+        }
+        blogPost.set('title', data.post_title);
+        blogPost.set('status', data.post_status.value);
+        blogPost.set('version', parseInt(data.post_version));
+        blogPost.set('categories', data.categories.value);
+        blogPost.set('keywords', data.keywords.map((keyword) => keyword.value));
+        blogPost.set('user', Parse.User.current());
+        blogPost.set('description', data.comments || '');
+
+        blogPost.save()
+            .then((savedData) => {
+                dispatch({
+                    type: 'savearticle',
+                    formValues: savedData
+                });
+                dispatch({
+                    type: 'settings',
+                    settings: false
+                });
+
+                console.log(JSON.stringify(savedData));
+            });
+
+
     };
 
 

@@ -6,7 +6,7 @@ import {useBaseStateValue} from "../context";
 
 export default function (props) {
 
-    const [{model}, dispatch] = useBaseStateValue();
+    const [{model, modelData}, dispatch] = useBaseStateValue();
 
     const closeModel = () => {
         dispatch({
@@ -21,11 +21,11 @@ export default function (props) {
             onDismiss={closeModel}
             dialogContentProps={{
                 type: DialogType.normal,
-                title: 'Missing Subject',
-                subText: 'Do you want to send this message without a subject?'
+                title: modelData.title || '',
+                subText: modelData.description || ''
             }}
             modalProps={{
-                isBlocking: true,
+                isBlocking: modelData.block || false,
                 styles: {main: {maxWidth: 450}}
             }}
         >

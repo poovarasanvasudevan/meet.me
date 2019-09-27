@@ -1,13 +1,13 @@
 import React from 'react';
 import {BreadcrumbsItem, BreadcrumbsStateless} from "@atlaskit/breadcrumbs";
 import {RouterLink} from "../../components/theme/link";
-import Page from "@atlaskit/page";
-import {Box} from "@rebass/grid";
 import PageHeader from '@atlaskit/page-header';
 import Button, {ButtonGroup} from "@atlaskit/button";
 import {MLink} from "../../components/theme/link";
-import {PrimaryButton} from 'office-ui-fabric-react';
+import {PrimaryButton, DefaultButton} from 'office-ui-fabric-react';
 import {IconButton, IIconProps} from 'office-ui-fabric-react';
+
+import {ShimmeredDetailsList} from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
 
 import {
     DetailsList,
@@ -18,6 +18,8 @@ import {
 import {mergeStyleSets} from 'office-ui-fabric-react/lib/Styling';
 import styled from "styled-components";
 import {useBaseStateValue} from "../../components/context";
+import AppContext from "../../module/AppContext";
+import moment from 'moment';
 
 const FullPage = styled.div`
     display : flex;
@@ -63,19 +65,11 @@ const breadcrumbs = (
 );
 
 
-const actions = (
-    <ButtonGroup>
-        <MLink to={'/blog/new'}>
-            <PrimaryButton text="New Post"/>
-        </MLink>
-    </ButtonGroup>
-
-);
-
 const classNames = mergeStyleSets({
     defaultCell: {
         display: 'flex !important',
         alignItems: 'center',
+        fontSize: '14px',
         '&:before': {
             display: 'flex',
         }
@@ -110,28 +104,56 @@ const classNames = mergeStyleSets({
 export default function (props) {
 
     const [{model}, dispatch] = useBaseStateValue();
+    const [blogPost, setBlogPost] = React.useState([]);
+    const [blogPostLoader, setBlogPostLoader] = React.useState(true);
+    const {Parse} = React.useContext(AppContext);
 
-    const deleteBlogPost = () => {
-        dispatch({type: 'model', model: true});
+    React.useEffect(() => {
+        reloadGrid();
+    }, []);
+
+
+    const reloadGrid = () => {
+        setBlogPostLoader(true);
+        const BlogPost = Parse.Object.extend("BlogPost");
+        const blogPostQuery = new Parse.Query(BlogPost);
+        blogPostQuery.equalTo('user', Parse.User.current());
+        blogPostQuery.find()
+            .then((data) => {
+                setBlogPost(JSON.parse(JSON.stringify(data)));
+                setBlogPostLoader(false);
+            });
     };
 
-    const columns = [
-        {
-            key: 'column1',
-            name: 'File Type',
-            className: classNames.defaultCell,
-            iconClassName: classNames.fileIconHeaderIcon,
-            ariaLabel: 'Column operations for File type, Press to sort on File type',
-            iconName: 'Page',
-            isIconOnly: true,
-            fieldName: 'name',
-            minWidth: 16,
-            maxWidth: 16,
-
-            onRender: (item) => {
-                return <img src={item.iconName} className={classNames.fileIconImg} alt={item.fileType + ' file icon'}/>;
+    const deleteBlogPost = () => {
+        dispatch({
+            type: 'model',
+            model: true,
+            modelData: {
+                title: 'Are you sure',
+                description: "You want to delete the article"
             }
-        },
+        });
+    };
+
+    const formatDate = (date) => {
+        return moment(date).format('DD MMM YYYY');
+    };
+
+    const actions = (
+        <ButtonGroup>
+            <DefaultButton iconProps={{
+                iconName: 'Refresh'
+            }} text={'Refresh'} onClick={reloadGrid}/>
+            <MLink to={'/blog/new'}>
+                <PrimaryButton text="New Post"/>
+
+            </MLink>
+        </ButtonGroup>
+    );
+
+
+    const columns = [
         {
             key: 'column2',
             name: 'Post Title',
@@ -139,12 +161,14 @@ export default function (props) {
             minWidth: 210,
             maxWidth: 350,
             className: classNames.defaultCell,
-            isRowHeader: true,
             isResizable: true,
             isSorted: true,
             isSortedDescending: false,
             data: 'string',
-            isPadded: true
+            isPadded: true,
+            onRender: (item) => {
+                return <span>{item.title}</span>;
+            },
         },
         {
             key: 'column3',
@@ -157,12 +181,12 @@ export default function (props) {
 
             data: 'number',
             onRender: (item) => {
-                return <span>{item.dateModified}</span>;
+                return <span>{formatDate(item.createdAt)}</span>;
             },
             isPadded: true
         },
         {
-            key: 'column3',
+            key: 'column4',
             name: 'Date Published',
             fieldName: 'dateModifiedValue',
             className: classNames.defaultCell,
@@ -172,12 +196,12 @@ export default function (props) {
 
             data: 'number',
             onRender: (item) => {
-                return <span>{item.dateModified}</span>;
+                return <span>{formatDate(item.published_date) || ''}</span>;
             },
             isPadded: true
         },
         {
-            key: 'column3',
+            key: 'column5',
             name: 'Date Modified',
             fieldName: 'dateModifiedValue',
             className: classNames.defaultCell,
@@ -187,12 +211,12 @@ export default function (props) {
 
             data: 'number',
             onRender: (item) => {
-                return <span>{item.dateModified}</span>;
+                return <span>{formatDate(item.updatedAt) || ''}</span>;
             },
             isPadded: true
         },
         {
-            key: 'column3',
+            key: 'column6',
             name: 'Likes / Reaction',
             fieldName: 'dateModifiedValue',
             className: classNames.defaultCell,
@@ -202,12 +226,12 @@ export default function (props) {
 
             data: 'number',
             onRender: (item) => {
-                return <span>{item.dateModified}</span>;
+                return <span>0</span>;
             },
             isPadded: true
         },
         {
-            key: 'column3',
+            key: 'column7',
             name: 'Comments',
             fieldName: 'dateModifiedValue',
             className: classNames.defaultCell,
@@ -217,28 +241,28 @@ export default function (props) {
 
             data: 'number',
             onRender: (item) => {
-                return <span>{item.dateModified}</span>;
+                return <span>{item.description || ''}</span>;
             },
             isPadded: true
         },
         {
-            key: 'column4',
+            key: 'column8',
             name: 'Modified By',
             fieldName: 'modifiedBy',
             className: classNames.defaultCell,
             minWidth: 70,
-            maxWidth: 90,
+            maxWidth: 130,
             isResizable: true,
             isCollapsible: true,
             data: 'string',
 
             onRender: (item) => {
-                return <span>{item.modifiedBy}</span>;
+                return <span>{item.user.first_name + ' ' + item.user.last_name}</span>;
             },
             isPadded: true
         },
         {
-            key: 'column5',
+            key: 'column9',
             name: 'Total Read / Views',
             fieldName: 'fileSizeRaw',
             className: classNames.defaultCell,
@@ -249,11 +273,11 @@ export default function (props) {
             data: 'number',
 
             onRender: (item) => {
-                return <span>{item.fileSize}</span>;
+                return <span>0</span>;
             }
         },
         {
-            key: 'column5',
+            key: 'column10',
             name: 'Action',
             fieldName: 'fileSizeRaw',
             minWidth: 70,
@@ -278,84 +302,10 @@ export default function (props) {
 
 
     const _getKey = (item, index) => {
-        return item.key;
+        return item.objectId || new Date().valueOf();
     };
 
 
-    function _generateDocuments() {
-        const items = [];
-        for (let i = 0; i < 10; i++) {
-            const randomDate = _randomDate(new Date(2012, 0, 1), new Date());
-            const randomFileSize = _randomFileSize();
-            const randomFileType = _randomFileIcon();
-            let fileName = "test";
-            fileName = fileName.charAt(0).toUpperCase() + fileName.slice(1).concat(`.${randomFileType.docType}`);
-            let userName = "test users";
-            userName = userName
-                .split(' ')
-                .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
-                .join(' ');
-            items.push({
-                key: i.toString(),
-                name: fileName,
-                value: fileName,
-                iconName: randomFileType.url,
-                fileType: randomFileType.docType,
-                modifiedBy: userName,
-                dateModified: randomDate.dateFormatted,
-                dateModifiedValue: randomDate.value,
-                fileSize: randomFileSize.value,
-                fileSizeRaw: randomFileSize.rawSize
-            });
-        }
-        return items;
-    }
-
-    function _randomDate(start, end) {
-        const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-        return {
-            value: date.valueOf(),
-            dateFormatted: date.toLocaleDateString()
-        };
-    }
-
-    const FILE_ICONS = [
-        {name: 'accdb'},
-        {name: 'csv'},
-        {name: 'docx'},
-        {name: 'dotx'},
-        {name: 'mpt'},
-        {name: 'odt'},
-        {name: 'one'},
-        {name: 'onepkg'},
-        {name: 'onetoc'},
-        {name: 'pptx'},
-        {name: 'pub'},
-        {name: 'vsdx'},
-        {name: 'xls'},
-        {name: 'xlsx'},
-        {name: 'xsn'}
-    ];
-
-    function _randomFileIcon() {
-        const docType = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
-        return {
-            docType,
-            url: `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${docType}_16x1.svg`
-        };
-    }
-
-    function _randomFileSize() {
-        const fileSize = Math.floor(Math.random() * 100) + 30;
-        return {
-            value: `${fileSize} KB`,
-            rawSize: fileSize
-        };
-    }
-
-    const items = _generateDocuments();
-
-    console.log(items);
     return (
         <FullPage>
             <Header>
@@ -364,16 +314,14 @@ export default function (props) {
                 </PageHeader>
             </Header>
             <Body>
-            <DetailsList
-                items={items}
+            <ShimmeredDetailsList
+                items={blogPost}
                 compact={true}
                 columns={columns}
                 selectionMode={SelectionMode.none}
-                getKey={_getKey}
-                setKey="none"
-                usePageCache={true}
-                layoutMode={DetailsListLayoutMode.justified}
-                isHeaderVisible={true}
+                setKey={'items'}
+                listProps={{ renderedWindowsAhead: 0, renderedWindowsBehind: 0 }}
+                enableShimmer={blogPostLoader}
             />
             </Body>
         </FullPage>

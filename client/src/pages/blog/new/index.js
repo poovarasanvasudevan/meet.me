@@ -1,12 +1,7 @@
 import React from 'react';
 import {Box} from "@rebass/grid";
-import {Editor, WithEditorActions} from '@atlaskit/editor-core';
-import Button, {ButtonGroup} from "@atlaskit/button";
 import BlogModel from '../../../components/blog-model';
-import {TitleInput} from '../../../components/title-input';
-import BreadcrumbsMiscActions from '../../../components/breadcrump-action';
 import './index.css';
-import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
 import {EditorProvider, useStateValue} from "./util/context";
 import CEditor from './component/editor';
 
@@ -18,7 +13,7 @@ export default function (props) {
         title: '',
         appearence: 'full-width',
         settings: false,
-        formValues: {},
+        formValues: null,
         locked: false
     };
 

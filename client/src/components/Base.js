@@ -12,9 +12,7 @@ const Theme = createTheme(defaultButtonTheme);
 
 const initialState = {
     model: false,
-    modelType: null,
-    modelTitle: '',
-    modelContent: ''
+    modelData: {}
 };
 
 const reducer = (state, action) => {
