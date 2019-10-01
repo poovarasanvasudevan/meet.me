@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@atlaskit/adf-schema": "^4.0.0",
     "@atlaskit/atlassian-navigation": "^0.4.6",
     "@atlaskit/atlassian-switcher": "^3.24.0",
     "@atlaskit/breadcrumbs": "^9.0.7",
@@ -11,6 +12,7 @@
     "@atlaskit/checkbox": "^9.0.4",
     "@atlaskit/drawer": "^5.0.3",
     "@atlaskit/dropdown-menu": "^8.0.12",
+    "@atlaskit/editor-common": "^41.0.0",
     "@atlaskit/editor-core": "^112.39.10",
     "@atlaskit/empty-state": "^6.0.4",
     "@atlaskit/field-radio-group": "^6.0.5",
@@ -18,6 +20,7 @@
     "@atlaskit/form": "^6.1.5",
     "@atlaskit/inline-dialog": "^12.0.15",
     "@atlaskit/inline-message": "^10.0.14",
+    "@atlaskit/locale": "^1.0.0",
     "@atlaskit/media-core": "^30.0.14",
     "@atlaskit/mention": "^18.15.1",
     "@atlaskit/modal-dialog": "^10.1.1",
@@ -25,6 +28,7 @@
     "@atlaskit/page-header": "^9.0.7",
     "@atlaskit/quick-search": "^7.7.1",
     "@atlaskit/refinement-bar": "^1.1.0",
+    "@atlaskit/renderer": "^51.1.0",
     "@atlaskit/section-message": "^4.0.12",
     "@atlaskit/select": "^10.0.1",
     "@atlaskit/smart-card": "^12.4.1",
@@ -38,8 +42,10 @@
     "parse": "^2.7.0",
     "pigeon-maps": "^0.14.0",
     "qrcode.react": "^0.9.3",
+    "query-string": "^6.8.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-helmet": "^5.2.1",
     "react-icons": "^3.7.0",
     "react-if": "^3.4.3",
     "react-inlinesvg": "^1.1.6",
@@ -62,12 +68,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "ie >= 9"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "ie >= 9"
     ]
   }
 }

@@ -80,6 +80,7 @@ const Help = lazy(() => import('./pages/help'));
 const Docs = lazy(() => import('./pages/docs'));
 const Blog = lazy(() => import('./pages/blog'));
 const BlogNew = lazy(() => import('./pages/blog/new'));
+const BlogPreview = lazy(() => import('./pages/blog/preview'));
 
 
 const PrivateRoute = ({component: Component, ...rest}) => {
@@ -143,15 +144,24 @@ function App() {
                             <Route path='/docs' component={Docs}/>
 
 
+
+
+
                             <PrivateRoute path='/home' component={Dashboard}/>
                             <PrivateRoute path='/notifications' component={Notifications}/>
+
+
                             <PrivateRoute exact path='/kb' component={KB}/>
                             <PrivateRoute path='/kb/editor' component={KBEditor}/>
+
+
+
                             <PrivateRoute path='/connect' component={Connect}/>
 
 
                             <PrivateRoute path='/blog' exact component={Blog}/>
                             <PrivateRoute path='/blog/new' exact component={BlogNew}/>
+                            <Route path='/blog/preview/:kb' component={BlogPreview}/>
 
                             <Route component={NotFound}/>
                         </Switch>

@@ -9,20 +9,35 @@ import {MLink} from "../../../../components/theme/link";
 
 export default function (props) {
 
-    const [{appearence, title}, dispatch] = useStateValue();
+    const [{appearence, title, formValues}, dispatch] = useStateValue();
 
     const saveArticle = (props) => {
         if (!props.editorActions) {
             return;
         }
 
-        props.editorActions.getValue().then(value => {
+        if (formValues == null) {
+
+            props.editorActions.getValue().then(value => {
+                console.log(value)
+                dispatch({
+                    type: 'saveblog',
+                    post: value
+                });
+            });
 
             dispatch({
-                type: 'saveblog',
-                post: value
+                type: 'settings',
+                settings: true
             });
-        });
+        } else {
+            props.editorActions.getValue().then(value => {
+                dispatch({
+                    type: 'saveblog',
+                    post: value
+                });
+            });
+        }
     };
 
     const SaveAndCancelButtons = (props) => (
@@ -37,7 +52,7 @@ export default function (props) {
         </ButtonGroup>
     );
 
-    return (<div>
+    return (
         <Editor
             allowTextColor={true}
             allowTables={{
@@ -96,6 +111,5 @@ export default function (props) {
                 />,
             ]}
             appearance={appearence}
-        />
-    </div>);
+        />);
 }

@@ -21,7 +21,7 @@ const MSelectField = styled(Select)`
 `;
 export default function (props) {
 
-    const [{appearence, title, settings, formValues}, dispatch] = useStateValue();
+    const [{appearence, title, settings, formValues,post}, dispatch] = useStateValue();
     const {Parse} = React.useContext(AppContext);
     const [status, setStatus] = React.useState([]);
     const [category, setCategory] = React.useState([]);
@@ -100,6 +100,7 @@ export default function (props) {
         blogPost.set('categories', data.categories.value);
         blogPost.set('keywords', data.keywords.map((keyword) => keyword.value));
         blogPost.set('user', Parse.User.current());
+        blogPost.set('content', post);
         blogPost.set('description', data.comments || '');
 
         blogPost.save()

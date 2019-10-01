@@ -8,13 +8,13 @@ import CEditor from './component/editor';
 export default function (props) {
 
 
-
     const initialState = {
         title: '',
         appearence: 'full-width',
         settings: false,
         formValues: null,
-        locked: false
+        locked: false,
+        post: null
     };
 
     const reducer = (state, action) => {
@@ -45,6 +45,11 @@ export default function (props) {
                 return {
                     ...state,
                     locked: action.locked
+                };
+            case 'saveblog':
+                return {
+                    ...state,
+                    post: action.post
                 };
             default:
                 return state;

@@ -290,7 +290,12 @@ export default function (props) {
             onRender: (item) => {
                 return (
                     <span>
-                        <IconButton iconProps={{iconName: 'Edit'}} title="Edit"/>
+                        <MLink to={'/blog/preview/' + item.objectId}>
+                            <IconButton iconProps={{iconName: 'Edit'}} title="Edit"/>
+                        </MLink>
+                       <MLink to={'/blog/preview/' + item.objectId} target={'_blank'}>
+                            <IconButton iconProps={{iconName: 'RedEye'}} title="Lock"/>
+                       </MLink>
                         <IconButton iconProps={{iconName: 'Lock'}} title="Lock"/>
                         <IconButton iconProps={{iconName: 'Delete'}} color={'red'} title="Delete"
                                     onClick={deleteBlogPost}/>
@@ -320,7 +325,7 @@ export default function (props) {
                 columns={columns}
                 selectionMode={SelectionMode.none}
                 setKey={'items'}
-                listProps={{ renderedWindowsAhead: 0, renderedWindowsBehind: 0 }}
+                listProps={{renderedWindowsAhead: 0, renderedWindowsBehind: 0}}
                 enableShimmer={blogPostLoader}
             />
             </Body>

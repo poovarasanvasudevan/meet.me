@@ -354,6 +354,28 @@ const GlobalNavWithModalsAndDrawers = withRouter((props) => {
 
 });
 
+const StyleScroller = styled(Flex) `
+
+    overflow-y: auto;
+    
+    &::-webkit-scrollbar-track
+    {
+        background-color: #F5F5F5;
+    }
+        
+    &::-webkit-scrollbar
+    {
+        width: 13px;
+        background-color: #F5F5F5;
+        border: 1px solid #000;
+    }
+        
+    &::-webkit-scrollbar-thumb
+    {
+        background-color: #cccccc;
+    }
+`
+
 export default function (props) {
 
     const [user, setUser] = React.useState(null);
@@ -381,10 +403,10 @@ export default function (props) {
                         )}
                         productNavigation={props.productNavigation}
                         containerNavigation={props.containerNavigation}>
-                        <Flex className={'h100'}>
+                        <StyleScroller className={'h100'}>
                             {props.children}
-                            <NetworkMoniter style={{position: 'absolute', bottom: 0}}/>
-                        </Flex>
+                            {/*<NetworkMoniter style={{position: 'absolute', bottom: 0}}/>*/}
+                        </StyleScroller>
                     </LayoutManager>
                 </NavigationProvider>
             </ThemeProvider>

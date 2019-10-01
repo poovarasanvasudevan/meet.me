@@ -15,7 +15,7 @@ const MainBar = styled.div`
     padding-top: 6px;
     padding-bottom: 6px;
     background : ${Color.primaryColor};
-   //box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     height: 40px;
 `;
 

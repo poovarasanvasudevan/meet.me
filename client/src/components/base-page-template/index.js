@@ -1,7 +1,6 @@
-import React from 'react';
-import TopBar from '../../components/top-bar';
-import {CompoundButton, Stack, IStackTokens} from 'office-ui-fabric-react';
+import React from 'react'
 import styled from 'styled-components';
+import TopBar from '../top-bar'
 
 const FullPage = styled.div`
     display : flex;
@@ -24,7 +23,7 @@ const Body = styled.div`
         
     &::-webkit-scrollbar
     {
-        width: 10px;
+        width: 13px;
         background-color: #F5F5F5;
         border: 1px solid #000;
     }
@@ -43,7 +42,7 @@ export default function (props) {
                 <TopBar/>
             </Header>
             <Body>
-
+            {props.children}
             </Body>
         </FullPage>
     );
