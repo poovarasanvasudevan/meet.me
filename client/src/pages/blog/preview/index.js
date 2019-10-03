@@ -10,6 +10,15 @@ import DocumentRender from '../../../components/document-render';
 import queryString from 'query-string';
 import BasePageTemplate from '../../../components/base-page-template';
 import SkeletonV2 from "../../../components/SkeletonV2";
+import {CommentLayout} from '@atlaskit/comment';
+import {Editor} from '@atlaskit/editor-core';
+import styled from 'styled-components';
+import {Divider} from "../../../components/util";
+import PageSpinner from '../../../components/page-spinner';
+
+const CommentLayoutDiv = styled.div`
+    margin-top : 40px;
+`;
 
 export default function (props) {
 
@@ -17,7 +26,8 @@ export default function (props) {
     const [blogPost, setBlogPost] = React.useState(null);
     const [template, setTemplate] = React.useState('');
     const [user, setUser] = React.useState(null);
-    const [commentsEnabled, setCommentsEnabled] = React.useState(true );
+    const [commentsEnabled, setCommentsEnabled] = React.useState("YES");
+    const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
 
@@ -25,19 +35,34 @@ export default function (props) {
         if (params['__t']) {
             setTemplate(params['__t']);
         }
+        if (params['__c']) {
+            setCommentsEnabled(params['__c']);
+        }
 
-        setUser(Parse.User.current());
+        setLoading(true);
+        var cuser = Parse.User.current();
+        if (cuser != null) {
+            const profile = cuser.get('profile');
+            profile.fetch().then((data) => setUser(cuser));
+        }
+
 
         var kbId = props.match.params.kb;
         const BlogPost = Parse.Object.extend("BlogPost");
         const blogPostQuery = new Parse.Query(BlogPost);
         blogPostQuery.include('user');
         blogPostQuery.include('user.profile');
-        blogPostQuery.get(kbId).then((data) => {
-            //data.get('user').get('profile').fetch();
-            setBlogPost(data);
-            console.log(JSON.stringify(data));
-        });
+        blogPostQuery
+            .get(kbId)
+            .then((data) => {
+                //data.get('user').get('profile').fetch();
+                setLoading(false);
+                setBlogPost(data);
+                //console.log(JSON.stringify(data));
+            })
+            .catch((error) => {
+                setLoading(false);
+            });
 
         console.log(props);
     }, []);
@@ -54,7 +79,15 @@ export default function (props) {
         return (<Grid layout={'fixed'} spacing={"comfortable"}>
             <If condition={!blogPost}>
                 <Then>
-                    No Article Found
+                    <If condition={loading}>
+                        <Then>
+                            <PageSpinner/>
+                        </Then>
+                        <Else>
+                            No Article Found
+                        </Else>
+                    </If>
+
                 </Then>
                 <Else>
                     <Helmet>
@@ -75,11 +108,13 @@ export default function (props) {
                     />
 
                     <div style={{marginTop: '32px'}}>
-                        <If condition={blogPost && blogPost.get('content')}>
+                        <If condition={blogPost != null && blogPost.get('content') != null}>
                             <Then>
                                 <DocumentRender
                                     doc={blogPost && blogPost.get('content')}
                                 />
+
+                                <CommentEditor/>
                             </Then>
                             <Else>
                                 <DocumentRender
@@ -89,12 +124,32 @@ export default function (props) {
                                         content: [],
                                     }}
                                 />
+                                <CommentEditor/>
                             </Else>
                         </If>
                     </div>
                 </Else>
             </If>
         </Grid>);
+    };
+
+
+    const CommentEditor = () => {
+        return (
+            <If condition={user != null && commentsEnabled === 'YES'}>
+                <Then>
+                    <CommentLayoutDiv className={'comment-layout'}>
+                        <Divider/>
+                        <CommentLayout
+                            avatar={<Avatar src={user.get('profile').get('avatar').url()}
+                                            label="User avatar"
+                                            size="medium"/>}
+                            content={<Editor appearance="comment"/>}
+                        />
+                    </CommentLayoutDiv>
+                </Then>
+            </If>
+        );
     };
 
     return (
