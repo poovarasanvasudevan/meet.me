@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {colors, themed} from '@atlaskit/theme';
 import {useStateValue} from "../../pages/blog/editor/util/context";
 
+
 const TitleArea = styled.textarea`
   border: none;
   outline: none;
@@ -24,6 +25,7 @@ const TitleArea = styled.textarea`
 TitleArea.displayName = 'TitleArea';
 
 
+
 export default function (props) {
 
     const [{title}, dispatch] = useStateValue();
@@ -43,7 +45,7 @@ export default function (props) {
             id="editor-title"
             placeholder={props.placeholder || 'Give this page a title...'}
             rows="1"
-            value={props.value}
+            value={title}
             onChange={handleUpdate}
             innerRef={props.innerRef}
             onFocus={props.onFocus}

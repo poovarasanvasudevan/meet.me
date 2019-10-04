@@ -6,6 +6,7 @@ const ParseDashboard = require('parse-dashboard');
 const FSFilesAdapter = require('@parse/fs-files-adapter');
 const ioServer = require('socket.io');
 const RTCMultiConnectionServer = require('rtcmulticonnection-server');
+var ParseSwagger = require('parse-server-swagger');
 
 var http = require('http');
 
@@ -85,6 +86,15 @@ app.use('/dashboard', dashboard);
 parseGraphQLServer.applyGraphQL(app); // Mounts the GraphQL API
 parseGraphQLServer.applyPlayground(app); // (Optional) Mounts the GraphQL Playground - do NOT use in Production
 
+
+var parseSwagger = new ParseSwagger({
+    host: 'http://localhost:3001',
+    apiRoot: '/parse',
+    appId: 'myAppId',
+    masterKey: 'myMasterKey',
+});
+
+app.use(parseSwagger);
 
 app.get('/avatar', async function (req, res) {
     // console.log(req.query.text);
