@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {colors, themed} from '@atlaskit/theme';
+import {useStateValue} from "../../pages/blog/editor/util/context";
 
 const TitleArea = styled.textarea`
   border: none;
@@ -23,39 +24,32 @@ const TitleArea = styled.textarea`
 TitleArea.displayName = 'TitleArea';
 
 
-export class TitleInput extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            handleUpdate: (e) => {
-                this.handleTitleResize(e);
-                if (props.onChange) {
-                    props.onChange(e);
-                }
-            },
-            placeholder: props.placeholder || 'Give this page a title...',
-        };
-    }
+export default function (props) {
 
-    render() {
-        return (
-            <TitleArea
-                id="editor-title"
-                placeholder={this.state.placeholder}
-                rows="1"
-                value={this.props.value}
-                onChange={this.state.handleUpdate}
-                innerRef={this.props.innerRef}
-                onFocus={this.props.onFocus}
-                onBlur={this.props.onBlur}
-                onKeyDown={this.props.onKeyDown}
-            />
-        );
-    }
-
-    handleTitleResize = (e) => {
+    const [{title}, dispatch] = useStateValue();
+    const handleTitleResize = (e) => {
         const elem = e.target;
         elem.style.height = 'inherit';
         elem.style.height = `${elem.scrollHeight}px`;
     };
+
+    const handleUpdate = (e) => {
+        handleTitleResize(e);
+        dispatch({type: 'title', title: e.target.value})
+    };
+
+    return (
+        <TitleArea
+            id="editor-title"
+            placeholder={props.placeholder || 'Give this page a title...'}
+            rows="1"
+            value={props.value}
+            onChange={handleUpdate}
+            innerRef={props.innerRef}
+            onFocus={props.onFocus}
+            onBlur={props.onBlur}
+            onKeyDown={props.onKeyDown}
+        />
+    );
+
 }
