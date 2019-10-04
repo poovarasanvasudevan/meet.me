@@ -10,7 +10,7 @@ import Form, {CheckboxField, Fieldset} from '@atlaskit/form';
 import FieldTextArea from '@atlaskit/field-text-area';
 import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
 import {Checkbox} from '@atlaskit/checkbox';
-import {useStateValue} from "../../pages/blog/new/util/context";
+import {useStateValue} from "../../pages/blog/editor/util/context";
 import AppContext from "../../module/AppContext";
 
 const MTextField = styled(Textfield)`
@@ -21,7 +21,8 @@ const MSelectField = styled(Select)`
 `;
 export default function (props) {
 
-    const [{appearence, title, settings, formValues,post}, dispatch] = useStateValue();
+    const [{appearence, title, settings, formValues, post}, dispatch] = useStateValue();
+
     const {Parse} = React.useContext(AppContext);
     const [status, setStatus] = React.useState([]);
     const [category, setCategory] = React.useState([]);
@@ -88,34 +89,59 @@ export default function (props) {
          * "settings":["visibility","allow_comments","comments"]}
          * */
         var blogPost = null;
+        console.log("POST");
+        console.log(formValues);
         if (formValues == null) {
             const BlogPost = Parse.Object.extend("BlogPost");
             blogPost = new BlogPost();
+            blogPost.set('title', data.post_title);
+            blogPost.set('status', data.post_status.value);
+            blogPost.set('version', parseInt(data.post_version));
+            blogPost.set('categories', data.categories.value);
+            blogPost.set('keywords', data.keywords.map((keyword) => keyword.value));
+            blogPost.set('user', Parse.User.current());
+            blogPost.set('content', post);
+            blogPost.set('description', data.comments || '');
+
+            blogPost.save()
+                .then((savedData) => {
+                    dispatch({
+                        type: 'savearticle',
+                        formValues: savedData
+                    });
+                    dispatch({
+                        type: 'settings',
+                        settings: false
+                    });
+
+                    console.log(JSON.stringify(savedData));
+                });
+
         } else {
-            blogPost = formValues;
+            formValues.set('title', data.post_title);
+            formValues.set('status', data.post_status.value);
+            formValues.set('version', parseInt(data.post_version));
+            formValues.set('categories', data.categories.value);
+            formValues.set('keywords', data.keywords.map((keyword) => keyword.value));
+            formValues.set('user', Parse.User.current());
+            formValues.set('content', post);
+            formValues.set('description', data.comments || '');
+
+            formValues.save()
+                .then((savedData) => {
+                    dispatch({
+                        type: 'savearticle',
+                        formValues: savedData
+                    });
+                    dispatch({
+                        type: 'settings',
+                        settings: false
+                    });
+
+                    console.log(JSON.stringify(savedData));
+                });
+
         }
-        blogPost.set('title', data.post_title);
-        blogPost.set('status', data.post_status.value);
-        blogPost.set('version', parseInt(data.post_version));
-        blogPost.set('categories', data.categories.value);
-        blogPost.set('keywords', data.keywords.map((keyword) => keyword.value));
-        blogPost.set('user', Parse.User.current());
-        blogPost.set('content', post);
-        blogPost.set('description', data.comments || '');
-
-        blogPost.save()
-            .then((savedData) => {
-                dispatch({
-                    type: 'savearticle',
-                    formValues: savedData
-                });
-                dispatch({
-                    type: 'settings',
-                    settings: false
-                });
-
-                console.log(JSON.stringify(savedData));
-            });
 
 
     };
@@ -153,7 +179,8 @@ export default function (props) {
                             </Field>
                         </Box>
                         <Box p={'1px'} width={4 / 12}>
-                            <Field label="Post Status" name="post_status" isRequired={true}>
+                            <Field label="Post Status" name="post_status" isRequired={true}
+                                   defaultValue={formValues ? formValues.get('status') : null}>
                                 {({fieldProps}) => (
                                     <MSelectField
                                         menuPortalTarget={document.body}

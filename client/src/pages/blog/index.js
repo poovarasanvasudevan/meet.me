@@ -290,7 +290,7 @@ export default function (props) {
             onRender: (item) => {
                 return (
                     <span>
-                        <MLink to={'/blog/preview/' + item.objectId}>
+                        <MLink to={'/blog/edit/' + item.objectId}>
                             <IconButton iconProps={{iconName: 'Edit'}} title="Edit"/>
                         </MLink>
                        <MLink to={'/blog/preview/' + item.objectId +"?__c=No&__t=admin"} target={'_blank'}>

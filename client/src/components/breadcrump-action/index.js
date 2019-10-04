@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Button, {ButtonGroup} from '@atlaskit/button';
 import {IconButton, IIconProps} from 'office-ui-fabric-react';
-import {useStateValue} from "../../pages/blog/new/util/context";
+import {useStateValue} from "../../pages/blog/editor/util/context";
 
 const BreadcrumbWrapper = styled.div`
   flex: 1 1 80%;

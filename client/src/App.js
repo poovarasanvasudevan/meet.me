@@ -79,7 +79,7 @@ const NotFound = lazy(() => import('./pages/404'));
 const Help = lazy(() => import('./pages/help'));
 const Docs = lazy(() => import('./pages/docs'));
 const Blog = lazy(() => import('./pages/blog'));
-const BlogNew = lazy(() => import('./pages/blog/new'));
+const BlogNew = lazy(() => import('./pages/blog/editor'));
 const BlogPreview = lazy(() => import('./pages/blog/preview'));
 
 
@@ -161,6 +161,9 @@ function App() {
 
                             <PrivateRoute path='/blog' exact component={Blog}/>
                             <PrivateRoute path='/blog/new' exact component={BlogNew}/>
+                            <PrivateRoute path='/blog/edit/:kb' exact component={BlogNew}/>
+
+
                             <Route path='/blog/preview/:kb' component={BlogPreview}/>
 
                             <Route component={NotFound}/>

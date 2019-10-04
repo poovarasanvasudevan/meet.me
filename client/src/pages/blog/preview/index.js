@@ -55,10 +55,8 @@ export default function (props) {
         blogPostQuery
             .get(kbId)
             .then((data) => {
-                //data.get('user').get('profile').fetch();
                 setLoading(false);
                 setBlogPost(data);
-                //console.log(JSON.stringify(data));
             })
             .catch((error) => {
                 setLoading(false);
@@ -141,9 +139,11 @@ export default function (props) {
                     <CommentLayoutDiv className={'comment-layout'}>
                         <Divider/>
                         <CommentLayout
-                            avatar={<Avatar src={user.get('profile').get('avatar').url()}
-                                            label="User avatar"
-                                            size="medium"/>}
+                            avatar={
+                                <Avatar src={user.get('profile').get('avatar').url()}
+                                        label="User avatar"
+                                        size="medium"/>
+                            }
                             content={<Editor appearance="comment"/>}
                         />
                     </CommentLayoutDiv>

@@ -4,6 +4,9 @@ import BlogModel from '../../../components/blog-model';
 import './index.css';
 import {EditorProvider, useStateValue} from "./util/context";
 import CEditor from './component/editor';
+import AppContext from "../../../module/AppContext";
+import queryString from 'query-string';
+import Embed from './component/embed';
 
 export default function (props) {
 
@@ -16,6 +19,7 @@ export default function (props) {
         locked: false,
         post: null
     };
+
 
     const reducer = (state, action) => {
         switch (action.type) {
@@ -51,6 +55,15 @@ export default function (props) {
                     ...state,
                     post: action.post
                 };
+            case 'editload':
+                console.log(action);
+                return {
+                    ...state,
+                    post: action.post,
+                    title: action.title,
+                    appearence: 'full-page',
+                    formValues: action.formValues
+                };
             default:
                 return state;
         }
@@ -58,13 +71,12 @@ export default function (props) {
 
     return (
         <EditorProvider initialState={initialState} reducer={reducer}>
-            <Box width={12 / 12}>
-
-                <CEditor/>
-
-                <BlogModel/>
-
-            </Box>
+            <Embed state={props}>
+                <Box width={12 / 12}>
+                    <CEditor/>
+                    <BlogModel/>
+                </Box>
+            </Embed>
         </EditorProvider>
 
     );
