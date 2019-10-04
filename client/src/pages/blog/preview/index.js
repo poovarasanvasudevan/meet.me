@@ -105,7 +105,7 @@ export default function (props) {
                         secondaryText={blogPost && '@' + blogPost.get('user').get('username')}
                     />
 
-                    <div style={{marginTop: '32px'}}>
+                    <div style={{marginTop: '10px'}}>
                         <If condition={blogPost != null && blogPost.get('content') != null}>
                             <Then>
                                 <DocumentRender
