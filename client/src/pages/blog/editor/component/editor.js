@@ -1,7 +1,7 @@
 import React from 'react';
 import {Editor, WithEditorActions, EditorContext} from "@atlaskit/editor-core";
 import BreadcrumbsMiscActions from "../../../../components/breadcrump-action";
-import TitleInput from "../../../../components/title-input";
+import {TitleInput} from "../../../../components/title-input";
 import {useStateValue} from "../util/context";
 import {ButtonGroup} from "@atlaskit/button";
 import {DefaultButton, PrimaryButton} from "office-ui-fabric-react";
