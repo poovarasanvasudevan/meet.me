@@ -48,80 +48,76 @@ export default function (props) {
         </ButtonGroup>
     );
 
-    const EditorWrapper = ({action}) => {
+    const EditorWrapper = () => {
         return (
-            <Editor
-                allowBlockTypes={{ exclude: ["codeBlocks"] }}
-                allowTextColor={true}
-                allowTables={{
-                    advanced: true,
-                    allowMergeCells: true,
-                    allowControls: true,
-                    allowColumnResizing: true,
-                    allowBackgroundColor: true
-                }}
-                //allowCodeBlocks={true}
-                allowBreakout={true}
-                allowPanel={true}
-                allowExtension={{
-                    allowBreakout: true,
-                }}
-                allowRule={true}
-                allowDate={true}
-                //allowLists={true}
-                allowLayouts={{
-                    allowBreakout: true,
-                    UNSAFE_addSidebarLayouts: true,
-                }}
-                allowTextAlignment={true}
-                allowIndentation={true}
-                defaultValue={post !== null ? post : undefined}
-
-                allowDynamicTextSizing={true}
-                allowTemplatePlaceholders={{allowInserting: true}}
-                allowStatus={true}
-                placeholder="Use markdown shortcuts to format your page as you type, like * for lists, # for headers, and *** for a horizontal rule."
-                shouldFocus={false}
-               // allowHelpDialog
-                media={{
-                    allowMediaSingle: true,
-                    allowResizing: true,
-                    allowAnnotation: true,
-                    allowLinking: true,
-                }}
-                contentComponents={
-                    <WithEditorActions
-                        render={actions => {
-                            return (
-                                <>
-                                    <BreadcrumbsMiscActions title={title}/>
-                                    <TitleInput onChange={(e) => {
-                                        dispatch({type: 'title', title: e.target.value});
-                                    }} placeholder={'Give this post a title...'}/>
-                                </>);
-                        }}
-                    />
-                }
-                secondaryToolbarComponents={<SaveAndCancelButtons/>}
-                primaryToolbarComponents={[
-                    <WithEditorActions
-                        key={1}
-                        render={actions => (
-                            <SaveAndCancelButtons editorActions={actions}/>
-                        )}
-                    />,
-                ]}
-
-                appearance={appearence}
-            />
+           <div></div>
         );
     };
 
     return (
-        <EditorContext>
-            <WithEditorActions
-                render={actions => <EditorWrapper action={actions}/>}
-            />
-        </EditorContext>
+        <Editor
+            allowBlockTypes={{ exclude: ["codeBlocks"] }}
+            allowTextColor={true}
+            allowTables={{
+                advanced: true,
+                allowMergeCells: true,
+                allowControls: true,
+                allowColumnResizing: true,
+                allowBackgroundColor: true
+            }}
+            allowCodeBlocks={true}
+            allowBreakout={true}
+            allowPanel={true}
+            allowExtension={{
+                allowBreakout: true,
+            }}
+            allowRule={true}
+            allowDate={true}
+            allowLists={true}
+            allowLayouts={{
+                allowBreakout: true,
+                UNSAFE_addSidebarLayouts: true,
+            }}
+            allowTextAlignment={true}
+            allowIndentation={true}
+            defaultValue={post !== null ? post : undefined}
+
+            allowDynamicTextSizing={true}
+            allowTemplatePlaceholders={{allowInserting: true}}
+            allowStatus={true}
+            placeholder="Use markdown shortcuts to format your page as you type, like * for lists, # for headers, and *** for a horizontal rule."
+            shouldFocus={false}
+            // allowHelpDialog
+            media={{
+                allowMediaSingle: true,
+                allowResizing: true,
+                allowAnnotation: true,
+                allowLinking: true,
+            }}
+            contentComponents={
+                <WithEditorActions
+                    render={actions => {
+                        return (
+                            <>
+                                <BreadcrumbsMiscActions />
+                                <TitleInput onChange={(e) => {
+                                    dispatch({type: 'title', title: e.target.value});
+                                }} placeholder={'Give this post a title...'}/>
+                            </>);
+                    }}
+                />
+            }
+            secondaryToolbarComponents={<SaveAndCancelButtons/>}
+            primaryToolbarComponents={[
+                <WithEditorActions
+                    key={1}
+                    render={actions => (
+                        <SaveAndCancelButtons editorActions={actions}/>
+                    )}
+                />,
+            ]}
+
+            appearance={appearence}
+        />
     );
 }
