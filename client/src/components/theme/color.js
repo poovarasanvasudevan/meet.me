@@ -13,6 +13,7 @@ const Color = {
     desire: '#eb3b5a',
     livid: '#6a89cc',
     reg: '#00cec9',
+    mreg: '#764ABC',
 };
 
 export default Color;

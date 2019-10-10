@@ -2,13 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import MainBar from './topbar'
 
-const AppBar = styled.div`
-    background: rgba(255,255,255,.97);
-    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
-    padding: 10px;
-    transition: top 0.2s ease-in-out
-`;
-
 const FullPage = styled.div`
     display : flex;
     flex-direction : column;

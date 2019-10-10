@@ -1,50 +1,49 @@
 import React from 'react';
 import styled from 'styled-components';
 import Color from '../../../theme/color';
-import logo from '../../../../img/logo_blue.svg';
+import Logo from '../../../logo/new-logo';
 import AppContext from "../../../../module/AppContext";
-import Avatar, {AvatarItem} from '@atlaskit/avatar';
+import Avatar from '@atlaskit/avatar';
 import {If, Then, Else} from 'react-if';
 import {Search} from '@atlaskit/atlassian-navigation';
 import {Flex, Box} from "@rebass/grid";
-import {IoMdHelpCircleOutline} from 'react-icons/io';
+import {IoMdHelpCircleOutline, IoMdApps} from 'react-icons/io';
+import InlineDialog from '@atlaskit/inline-dialog';
+import {
+    SwitcherItem
+} from '@atlaskit/atlassian-switcher/dist/cjs/primitives';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 
 const MainBar = styled.div`
     padding-left: 12px;
     padding-right: 12px;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 8px;
+    padding-bottom: 4px;
    
     background: rgba(255,255,255,.97);
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
-
-    transition: top 0.2s ease-in-out
     
+    transition: top 0.2s ease-in-out    
     min-height: 35px;
 `;
 
 const MainBarAvatar = styled.div`
     float:right;
-    padding: 4px;
+    padding: 6px;
 `;
 
 const MainAvatarOuter = styled.div`
     padding : 1px;
 `;
 
-const DefaultSearch = styled.input`
-    border-radius: 6px;
-    box-sizing: border-box;
+const DefaultSearch = styled(SearchBox)`
     height: 32px;
     width: 220px;
-    border: 1px solid #dadada;
     outline: none;
     background-color: white;
     color: #FFFFFF;
     margin-left : 10px;
     margin-right: 10px;
-    padding-left : 8px;
-    
 `;
 
 const TempBox = styled.div`
@@ -59,46 +58,122 @@ const TempBox = styled.div`
     }
    
 `;
+
+const CustomLogo = () => (
+    <span>
+        <Logo
+            width={172}
+            style={{paddingRight: 10, borderRight: "1px solid #eaeaea"}}
+            color={Color.primaryColor}
+        />
+    </span>
+);
 export default function (props) {
 
     const [user, setUser] = React.useState(null);
+    const [applications, setApplications] = React.useState(null);
+    const [appsOpen, setAppsOpen] = React.useState(false);
     const {Parse} = React.useContext(AppContext);
+
 
     React.useEffect(() => {
         const currentUser = Parse.User.current();
 
         if (currentUser != null) {
             const profile = currentUser.get('profile');
-            profile
-                .fetch()
-                .then((data) => {
-                    setUser(currentUser);
-                    console.log(currentUser);
-                });
+            profile.fetch().then((data) => {
+                setUser(currentUser);
+            });
+
+
+            currentUser
+                .get('application').query().find()
+                .then((data) => setApplications(data));
         }
 
     }, []);
 
+    const toggleApps = () => setAppsOpen(!appsOpen);
 
+    const scrollContainer = {
+        maxHeight: 'inherit',
+        maxWidth: 'inherit',
+        overflow: 'auto',
+    };
+
+
+    const oversizedStyles = {
+        width: '280px',
+    };
+    const content = (
+        <div style={scrollContainer} className={'scrl'}>
+            <div style={oversizedStyles}>
+
+                {applications && applications.map((value, index) => (
+
+                    <SwitcherItem
+                        onClick={() => (value.get('url') && value.get('url') !== '') ? props.history.push(value.get('url')) : null}
+                        description={value.get('description')}
+                        icon={<Avatar borderColor={'transparent'} size={'medium'}
+                                      src={value.get('icon').url()}/>} key={value.id}>
+                        {value.get('name')}
+                    </SwitcherItem>
+
+                ))}
+
+
+            </div>
+        </div>
+    );
     return (
         <MainBar>
-            <img alt={'Logo'} src={logo} height={40}/>
-
+            <CustomLogo/>
 
             <MainBarAvatar>
                 <Flex>
 
-                    <TempBox>
-                        <IoMdHelpCircleOutline size={24} color={'#fff'}/>
-                    </TempBox>
+                    <TempBox><IoMdHelpCircleOutline size={24} color={'#333'}/></TempBox>
+                    <If condition={user !== null}>
+                        <Then>
+                            <TempBox>
 
-                    <DefaultSearch placeholder={'Search...'}/>
+                                <InlineDialog
+                                    onClose={() => {
+                                        setAppsOpen(false);
+                                    }}
+                                    placement={'bottom'}
+                                    content={content}
+                                    isOpen={appsOpen}
+                                >
+                                    <IoMdApps size={24} color={'#333'} onClick={toggleApps}/>
+                                </InlineDialog>
+
+                            </TempBox>
+                        </Then>
+                    </If>
+
+                    <DefaultSearch
+                        styles={{ root: { width: 220 , border:'1px solid #eaeaea' } }}
+                        placeholder="Search..."
+                        onEscape={ev => {
+                            console.log('Custom onEscape Called');
+                        }}
+                        onClear={ev => {
+                            console.log('Custom onClear Called');
+                        }}
+                        onChange={(_, newValue) => console.log('SearchBox onChange fired: ' + newValue)}
+                        onSearch={newValue => console.log('SearchBox onSearch fired: ' + newValue)}
+                        onFocus={() => console.log('onFocus called')}
+                        onBlur={() => console.log('onBlur called')}
+                    />
+
 
                     <If condition={user !== null}>
                         <Then>
                             <MainAvatarOuter>
                                 <Avatar name={user ? user.get('first_name') + ' ' + user.get('last_name') : 'User'}
                                         size="small"
+
                                         src={user ? user.get('profile').get('avatar').url() : null}
                                 />
                             </MainAvatarOuter>
