@@ -1,7 +1,7 @@
 const Color = {
-    primaryColor: '#053B8C',
-    primaryColorDark: '#042D79',
-    primaryColorActive: '#01195C',
+    primaryColor: '#043B8D',
+    primaryColorDark: '#032D7A',
+    primaryColorActive: '#01195D',
 
 
     blue: '#3183FC',

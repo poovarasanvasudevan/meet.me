@@ -293,7 +293,7 @@ export default function (props) {
                         <MLink to={'/blog/edit/' + item.objectId}>
                             <IconButton iconProps={{iconName: 'Edit'}} title="Edit"/>
                         </MLink>
-                       <MLink to={'/blog/preview/' + item.objectId +"?__c=No&__t=admin"} target={'_blank'}>
+                       <MLink to={'/blog/preview/' + item.objectId +"?__c=No&__t=admin&mode=rchange"} target={'_blank'}>
                             <IconButton iconProps={{iconName: 'RedEye'}} title="Lock"/>
                        </MLink>
                         <IconButton iconProps={{iconName: 'Lock'}} title="Lock"/>

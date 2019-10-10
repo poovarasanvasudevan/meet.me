@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
-import TopBar from '../top-bar'
+import TopBar from '../../top-bar'
 
 const FullPage = styled.div`
     display : flex;
