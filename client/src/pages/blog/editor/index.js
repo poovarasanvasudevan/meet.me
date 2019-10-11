@@ -2,14 +2,16 @@ import React from 'react';
 import {Box} from "@rebass/grid";
 import BlogModel from '../../../components/blog-model';
 import './index.css';
-import {EditorProvider, useStateValue} from "./util/context";
+import {EditorProvider} from "./util/context";
 import CEditor from './component/editor';
-import AppContext from "../../../module/AppContext";
-import queryString from 'query-string';
 import Embed from './component/embed';
+
+import TemplateRendering from '../../../components/template-rendering';
+import {useBaseStateValue} from "../../../components/context";
 
 export default function (props) {
 
+    const [{template}, dispatch] = useBaseStateValue();
 
     const initialState = {
         title: '',
@@ -70,14 +72,16 @@ export default function (props) {
     };
 
     return (
-        <EditorProvider initialState={initialState} reducer={reducer}>
-            <Embed state={props}>
-                <Box width={12 / 12}>
-                    <CEditor/>
-                    <BlogModel/>
-                </Box>
-            </Embed>
-        </EditorProvider>
+        <TemplateRendering template={template}>
+            <EditorProvider initialState={initialState} reducer={reducer}>
+                <Embed state={props}>
+                    <Box width={12 / 12}>
+                        <CEditor/>
+                        <BlogModel/>
+                    </Box>
+                </Embed>
+            </EditorProvider>
+        </TemplateRendering>
 
     );
 }

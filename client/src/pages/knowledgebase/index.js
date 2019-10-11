@@ -7,6 +7,9 @@ import {RouterLink} from "../../components/theme/link";
 import Button, {ButtonGroup} from "@atlaskit/button";
 import DropdownMenu, {DropdownItemGroup, DropdownItem} from '@atlaskit/dropdown-menu';
 
+import TemplateRendering from '../../components/template-rendering';
+import {useBaseStateValue} from "../../components/context";
+
 const breadcrumbs = (
     <BreadcrumbsStateless onExpand={() => {
     }}>
@@ -36,17 +39,20 @@ const actions = (
 );
 
 export default function (props) {
+    const [{template}, dispatch] = useBaseStateValue();
     return (
-        <Page className={"h100"}>
-            <div
-                style={{display: "flex", flexDirection: "row"}}
-                className={"h100"}>
-                <Box style={{flex: 1}} p={'8px'}>
-                    <PageHeader breadcrumbs={breadcrumbs} actions={actions}>
-                        Knowledge Base
-                    </PageHeader>
-                </Box>
-            </div>
-        </Page>
+        <TemplateRendering template={template}>
+            <Page className={"h100"}>
+                <div
+                    style={{display: "flex", flexDirection: "row"}}
+                    className={"h100"}>
+                    <Box style={{flex: 1}} p={'8px'}>
+                        <PageHeader breadcrumbs={breadcrumbs} actions={actions}>
+                            Knowledge Base
+                        </PageHeader>
+                    </Box>
+                </div>
+            </Page>
+        </TemplateRendering>
     );
 }

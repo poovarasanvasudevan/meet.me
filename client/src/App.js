@@ -10,7 +10,7 @@ import {loadTheme} from 'office-ui-fabric-react/lib/Styling';
 import Color from './components/theme/color';
 
 import {initializeIcons} from 'office-ui-fabric-react/lib/Icons';
-import Base from "./components/Base";
+import Base from './components/Base'
 
 initializeIcons(/* optional base url */);
 
@@ -87,13 +87,9 @@ const BlogPreview = lazy(() => import('./pages/blog/preview'));
 const PrivateRoute = ({component: Component, ...rest}) => {
     const currentUser = localStorage.getItem("loggedUser");
     return (<Route {...rest} render={(props) => (
-        currentUser != null ?
-            <SkeletonV2
-                containerNavigation={() => null}
-                productNavigation={() => null}
-                navWidth={0}><Component {...props} />
-            </SkeletonV2>
-            : <Redirect to={{pathname: '/login', state: {from: props.location}}}/>
+        currentUser != null ? <Base>
+            <Component {...props} />
+        </Base> : <Redirect to={{pathname: '/login', state: {from: props.location}}}/>
     )}/>);
 };
 
@@ -107,9 +103,7 @@ const LoginRoute = ({component: Component, ...rest}) => {
 const BaseRoute = ({component: Component, ...rest}) => {
     return (
         <Route {...rest} render={(props) => (
-            <Base>
-                <Component {...props} />
-            </Base>
+            <Base><Component {...props} /></Base>
         )}/>
     );
 };

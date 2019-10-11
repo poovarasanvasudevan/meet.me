@@ -48,7 +48,8 @@ const Base = (props) => {
         model: false,
         modelData: {},
         UserAvatarDropDown: UserAvatarDropDown,
-        CurrentUser: null
+        CurrentUser: null,
+        template: "white"
     };
 
     const reducer = (state, action) => {
@@ -62,6 +63,11 @@ const Base = (props) => {
                 return {
                     ...state,
                     CurrentUser: action.user
+                };
+            case 'template':
+                return {
+                    ...state,
+                    template: action.template
                 };
             default:
                 return state;

@@ -10,16 +10,17 @@ import {IconButton, IIconProps} from 'office-ui-fabric-react';
 import {ShimmeredDetailsList} from 'office-ui-fabric-react/lib/ShimmeredDetailsList';
 
 import {
-    DetailsList,
-    DetailsListLayoutMode,
     SelectionMode,
 } from 'office-ui-fabric-react/lib/DetailsList';
 
 import {mergeStyleSets} from 'office-ui-fabric-react/lib/Styling';
 import styled from "styled-components";
-import {useBaseStateValue} from "../../components/context";
+
 import AppContext from "../../module/AppContext";
 import moment from 'moment';
+
+import TemplateRendering from '../../components/template-rendering';
+import {useBaseStateValue} from "../../components/context";
 
 const FullPage = styled.div`
     display : flex;
@@ -103,21 +104,21 @@ const classNames = mergeStyleSets({
 
 export default function (props) {
 
-    const [{model}, dispatch] = useBaseStateValue();
+    const [{model, CurrentUser, template}, dispatch] = useBaseStateValue();
     const [blogPost, setBlogPost] = React.useState([]);
     const [blogPostLoader, setBlogPostLoader] = React.useState(true);
     const {Parse} = React.useContext(AppContext);
 
     React.useEffect(() => {
         reloadGrid();
-    }, []);
+    }, [CurrentUser]);
 
 
     const reloadGrid = () => {
         setBlogPostLoader(true);
         const BlogPost = Parse.Object.extend("BlogPost");
         const blogPostQuery = new Parse.Query(BlogPost);
-        blogPostQuery.equalTo('user', Parse.User.current());
+        blogPostQuery.equalTo('user', CurrentUser);
         blogPostQuery.find()
             .then((data) => {
                 setBlogPost(JSON.parse(JSON.stringify(data)));
@@ -293,7 +294,8 @@ export default function (props) {
                         <MLink to={'/blog/edit/' + item.objectId}>
                             <IconButton iconProps={{iconName: 'Edit'}} title="Edit"/>
                         </MLink>
-                       <MLink to={'/blog/preview/' + item.objectId +"?__c=No&__t=admin&mode=rchange"} target={'_blank'}>
+                       <MLink to={'/blog/preview/' + item.objectId + "?__c=No&__t=admin&mode=rchange"}
+                              target={'_blank'}>
                             <IconButton iconProps={{iconName: 'RedEye'}} title="Lock"/>
                        </MLink>
                         <IconButton iconProps={{iconName: 'Lock'}} title="Lock"/>
@@ -312,23 +314,25 @@ export default function (props) {
 
 
     return (
-        <FullPage>
-            <Header>
-                <PageHeader breadcrumbs={breadcrumbs} actions={actions}>
-                    Blog , Comments and Likes
-                </PageHeader>
-            </Header>
-            <Body>
-            <ShimmeredDetailsList
-                items={blogPost}
-                compact={true}
-                columns={columns}
-                selectionMode={SelectionMode.none}
-                setKey={'items'}
-                listProps={{renderedWindowsAhead: 0, renderedWindowsBehind: 0}}
-                enableShimmer={blogPostLoader}
-            />
-            </Body>
-        </FullPage>
+        <TemplateRendering template={template}>
+            <FullPage>
+                <Header>
+                    <PageHeader breadcrumbs={breadcrumbs} actions={actions}>
+                        Blog , Comments and Likes
+                    </PageHeader>
+                </Header>
+                <Body>
+                <ShimmeredDetailsList
+                    items={blogPost}
+                    compact={true}
+                    columns={columns}
+                    selectionMode={SelectionMode.none}
+                    setKey={'items'}
+                    listProps={{renderedWindowsAhead: 0, renderedWindowsBehind: 0}}
+                    enableShimmer={blogPostLoader}
+                />
+                </Body>
+            </FullPage>
+        </TemplateRendering>
     );
 }

@@ -1,7 +1,10 @@
 import React from 'react';
 import TopBar from '../../components/theme/base-page-template/top-bar';
-import {CompoundButton, Stack, IStackTokens} from 'office-ui-fabric-react';
 import styled from 'styled-components';
+
+
+import TemplateRendering from '../../components/template-rendering';
+import {useBaseStateValue} from "../../components/context";
 
 const FullPage = styled.div`
     display : flex;
@@ -37,14 +40,17 @@ const Body = styled.div`
 
 
 export default function (props) {
+    const [{template} , dispatch] = useBaseStateValue();
     return (
-        <FullPage>
-            <Header>
-                <TopBar/>
-            </Header>
-            <Body>
+        <TemplateRendering template={template}>
+            <FullPage>
+                <Header>
+                    <TopBar/>
+                </Header>
+                <Body>
 
-            </Body>
-        </FullPage>
+                </Body>
+            </FullPage>
+        </TemplateRendering>
     );
 }

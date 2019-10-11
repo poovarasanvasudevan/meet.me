@@ -14,6 +14,9 @@ import {SearchBox} from 'office-ui-fabric-react/lib/SearchBox';
 import {useBaseStateValue} from "../../../context";
 
 import Dropdown, {DropdownItemGroup, DropdownItem} from '@atlaskit/dropdown-menu';
+import {
+    withRouter
+} from 'react-router-dom';
 
 const MainBar = styled.div`
     padding-left: 12px;
@@ -69,7 +72,7 @@ const CustomLogo = () => (
         />
     </span>
 );
-export default function (props) {
+const AppBar = withRouter( (props) =>  {
 
     const [applications, setApplications] = React.useState(null);
     const [appsOpen, setAppsOpen] = React.useState(false);
@@ -195,4 +198,6 @@ export default function (props) {
 
         </MainBar>
     );
-}
+} );
+
+export default AppBar;

@@ -4,52 +4,51 @@ import SkeletonV2 from "../theme/skeleton/SkeletonV2";
 import BasePageTemplate from '../theme/base-page-template';
 import WhiteTheme from '../theme/white-theme';
 import AppContext from "../../module/AppContext";
-
+import {useBaseStateValue} from "../context";
+import Base from '../Base';
 
 export default function (props) {
 
-    const [cuser, setUser] = React.useState(null);
+    const [{CurrentUser}, dispatch] = useBaseStateValue();
     const {Parse} = React.useContext(AppContext);
-    React.useEffect(() => {
-        var cuser = Parse.User.current();
-        setUser(cuser)
-    }, []);
 
 
     return (
-        <Switch>
-            <Case condition={props.template === 'admin'}>
-                <If condition={cuser !== null}>
-                    <Then>
-                        <SkeletonV2
-                            containerNavigation={() => null}
-                            productNavigation={() => null}
-                            navWidth={0}>
+        <Base>
+            <Switch>
+                <Case condition={props.template === 'admin'}>
+                    <If condition={CurrentUser !== null}>
+                        <Then>
+                            <SkeletonV2
+                                containerNavigation={() => null}
+                                productNavigation={() => null}
+                                navWidth={0}>
 
+                                {props.children}
+
+                            </SkeletonV2>
+
+                        </Then>
+                        <Else>
                             {props.children}
-
-                        </SkeletonV2>
-
-                    </Then>
-                    <Else>
+                        </Else>
+                    </If>
+                </Case>
+                <Case condition={props.template === 'base'}>
+                    <BasePageTemplate>
                         {props.children}
-                    </Else>
-                </If>
-            </Case>
-            <Case condition={props.template === 'base'}>
-                <BasePageTemplate>
-                    {props.children}
-                </BasePageTemplate>
-            </Case>
+                    </BasePageTemplate>
+                </Case>
 
-            <Case condition={props.template === 'white'}>
-                <WhiteTheme>
+                <Case condition={props.template === 'white'}>
+                    <WhiteTheme>
+                        {props.children}
+                    </WhiteTheme>
+                </Case>
+                <Default>
                     {props.children}
-                </WhiteTheme>
-            </Case>
-            <Default>
-                {props.children}
-            </Default>
-        </Switch>
+                </Default>
+            </Switch>
+        </Base>
     );
 }

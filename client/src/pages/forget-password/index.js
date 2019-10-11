@@ -71,7 +71,6 @@ const ForgetPassword = (props) => {
                 </Flex>
             </div>
         </Base>
-
     );
 };
 

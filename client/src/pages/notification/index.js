@@ -5,7 +5,8 @@ import PageHeader from '@atlaskit/page-header';
 import {RouterLink} from "../../components/theme/link";
 
 import {Box} from "@rebass/grid";
-
+import TemplateRendering from '../../components/template-rendering';
+import {useBaseStateValue} from "../../components/context";
 
 const breadcrumbs = (
     <BreadcrumbsStateless onExpand={() => {
@@ -16,18 +17,21 @@ const breadcrumbs = (
 );
 
 export default function (props) {
+    const [{template}, dispatch] = useBaseStateValue();
     return (
-        <Page className={"h100"}>
-            <div
-                style={{display: "flex", flexDirection: "row"}}
-                className={"h100"}
-            >
-                <Box style={{flex: 1}} p={'8px'}>
-                    <PageHeader breadcrumbs={breadcrumbs}>
-                        Notifications
-                    </PageHeader>
-                </Box>
-            </div>
-        </Page>
+        <TemplateRendering template={template}>
+            <Page className={"h100"}>
+                <div
+                    style={{display: "flex", flexDirection: "row"}}
+                    className={"h100"}
+                >
+                    <Box style={{flex: 1}} p={'8px'}>
+                        <PageHeader breadcrumbs={breadcrumbs}>
+                            Notifications
+                        </PageHeader>
+                    </Box>
+                </div>
+            </Page>
+        </TemplateRendering>
     );
 }
