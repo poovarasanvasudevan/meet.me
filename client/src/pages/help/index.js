@@ -2,7 +2,7 @@ import React from 'react';
 import {LayoutManagerWithViewController, NavigationProvider} from '@atlaskit/navigation-next';
 import {Search, Profile, Help, AtlassianNavigation} from '@atlaskit/atlassian-navigation';
 import Avatar from '@atlaskit/avatar';
-import TopBar from '../../components/top-bar'
+import TopBar from '../../components/theme/base-page-template/top-bar'
 const DefaultSearch = () => (
     <Search text="Search..." tooltip="Search"/>
 );

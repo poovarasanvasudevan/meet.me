@@ -5,13 +5,15 @@ import Logo from '../../../logo/new-logo';
 import Avatar from '@atlaskit/avatar';
 import {If, Then, Else} from 'react-if';
 import {Flex, Box} from "@rebass/grid";
-import {IoMdHelpCircleOutline, IoMdApps} from 'react-icons/io';
+import {IoMdHelpCircleOutline, IoMdApps,IoMdNotifications} from 'react-icons/io';
 import InlineDialog from '@atlaskit/inline-dialog';
 import {
     SwitcherItem
 } from '@atlaskit/atlassian-switcher/dist/cjs/primitives';
 import {SearchBox} from 'office-ui-fabric-react/lib/SearchBox';
 import {useBaseStateValue} from "../../../context";
+
+import Dropdown, {DropdownItemGroup, DropdownItem} from '@atlaskit/dropdown-menu';
 
 const MainBar = styled.div`
     padding-left: 12px;
@@ -71,17 +73,17 @@ export default function (props) {
 
     const [applications, setApplications] = React.useState(null);
     const [appsOpen, setAppsOpen] = React.useState(false);
-    const [{CurrentUser}, dispatch] = useBaseStateValue();
+    const [{CurrentUser, UserAvatarDropDown}, dispatch] = useBaseStateValue();
 
     React.useEffect(() => {
-        console.log("hell")
+        console.log("hell");
         if (CurrentUser != null) {
 
             CurrentUser
                 .get('application').query().find()
                 .then((data) => {
-                    console.log(data)
-                    setApplications(data)
+                    console.log(data);
+                    setApplications(data);
                 });
         }
 
@@ -99,6 +101,15 @@ export default function (props) {
     const oversizedStyles = {
         width: '280px',
     };
+
+
+    const UserDropDownData = () => (
+        <DropdownItemGroup>
+            {UserAvatarDropDown && UserAvatarDropDown.map((value, index) => (
+                <DropdownItem onClick={value.onClick ? value.onClick : null}>{value.label}</DropdownItem>
+            ))}
+        </DropdownItemGroup>
+    );
     const content = (
         <div style={scrollContainer} className={'scrl'}>
             <div style={oversizedStyles}>
@@ -123,9 +134,10 @@ export default function (props) {
             <MainBarAvatar>
                 <Flex>
 
-                    <TempBox><IoMdHelpCircleOutline size={24} color={'#333'}/></TempBox>
+                    <TempBox><IoMdHelpCircleOutline size={24} color={Color.primaryColor}/></TempBox>
                     <If condition={CurrentUser !== null}>
                         <Then>
+                            <TempBox><IoMdNotifications size={24} color={Color.primaryColor}/></TempBox>
                             <TempBox>
 
                                 <InlineDialog
@@ -136,7 +148,7 @@ export default function (props) {
                                     content={content}
                                     isOpen={appsOpen}
                                 >
-                                    <IoMdApps size={24} color={'#333'} onClick={toggleApps}/>
+                                    <IoMdApps size={24} color={Color.primaryColor} onClick={toggleApps}/>
                                 </InlineDialog>
 
                             </TempBox>
@@ -161,13 +173,20 @@ export default function (props) {
 
                     <If condition={CurrentUser !== null}>
                         <Then>
-                            <MainAvatarOuter>
-                                <Avatar
-                                    name={CurrentUser ? CurrentUser.get('first_name') + ' ' + CurrentUser.get('last_name') : 'User'}
-                                    size="small"
-                                    src={CurrentUser ? CurrentUser.get('profile').get('avatar').url() : null}
-                                />
-                            </MainAvatarOuter>
+                            <Dropdown position={'bottom right'} trigger={
+                                <span tabIndex="0">{
+                                    <MainAvatarOuter>
+                                        <Avatar
+                                            name={CurrentUser ? CurrentUser.get('first_name') + ' ' + CurrentUser.get('last_name') : 'User'}
+                                            size="small"
+                                            src={CurrentUser ? CurrentUser.get('profile').get('avatar').url() : null}
+                                        />
+                                    </MainAvatarOuter>
+                                }</span>
+                            }>
+                                {UserDropDownData()}
+                            </Dropdown>
+
                         </Then>
                     </If>
                 </Flex>

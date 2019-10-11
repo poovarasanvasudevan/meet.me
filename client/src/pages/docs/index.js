@@ -1,5 +1,5 @@
 import React from 'react';
-import TopBar from '../../components/top-bar';
+import TopBar from '../../components/theme/base-page-template/top-bar';
 import {CompoundButton, Stack, IStackTokens} from 'office-ui-fabric-react';
 import styled from 'styled-components';
 

@@ -21,6 +21,7 @@ import {IconButton} from 'office-ui-fabric-react';
 
 import Button, {ButtonGroup} from '@atlaskit/button';
 import TemplateRendering from '../../../components/template-rendering';
+import {useBaseStateValue} from "../../../components/context";
 
 const CommentLayoutDiv = styled.div`
     margin-top : 40px;
@@ -36,6 +37,8 @@ export default function (props) {
     const [loading, setLoading] = React.useState(false);
     const [rChange, setRChange] = React.useState(false);
     const [layout, setLayout] = React.useState("fixed");
+
+    const [{CurrentUser} , dispatch] = useBaseStateValue()
 
     React.useEffect(() => {
 
@@ -54,12 +57,6 @@ export default function (props) {
         }
         setLoading(true);
 
-
-        var cuser = Parse.User.current();
-        if (cuser != null) {
-            const profile = cuser.get('profile');
-            profile.fetch().then((data) => setUser(cuser));
-        }
 
 
         var kbId = props.match.params.kb;
@@ -208,13 +205,13 @@ export default function (props) {
 
     const CommentEditor = () => {
         return (
-            <If condition={user != null && commentsEnabled === 'YES'}>
+            <If condition={CurrentUser != null && commentsEnabled === 'YES'}>
                 <Then>
                     <CommentLayoutDiv className={'comment-layout'}>
                         <Divider/>
                         <CommentLayout
                             avatar={
-                                <Avatar src={user.get('profile').get('avatar').url()}
+                                <Avatar src={CurrentUser !=null ? CurrentUser.get('profile').get('avatar').url() : null}
                                         label="User avatar"
                                         size="medium"/>
                             }

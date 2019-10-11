@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import Color from '../theme/color';
-import logo from '../../img/logo.svg';
-import AppContext from "../../module/AppContext";
+import Color from '../../color';
+import logo from '../../../../img/logo.svg';
+import AppContext from "../../../../module/AppContext";
 import Avatar, {AvatarItem} from '@atlaskit/avatar';
 import {If, Then, Else} from 'react-if';
 import {Search} from '@atlaskit/atlassian-navigation';
 import {Flex, Box} from "@rebass/grid";
 import {IoMdHelpCircleOutline} from 'react-icons/io';
-import {useBaseStateValue} from "../context";
+import {useBaseStateValue} from "../../../context";
 
 const MainBar = styled.div`
     padding-left: 12px;
@@ -63,7 +63,7 @@ export default function (props) {
     return (
         <MainBar>
             <img alt={'Logo'} src={logo} height={40}/>
-            
+
             <MainBarAvatar>
                 <Flex>
 

@@ -177,7 +177,7 @@ const IPeopleLoader = (props) => {
 
 const GlobalNavWithModalsAndDrawers = withRouter((props) => {
 
-    const [{CurrentUser}, dispatch] = useBaseStateValue();
+    const [{CurrentUser, UserAvatarDropDown}, dispatch] = useBaseStateValue();
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
@@ -259,12 +259,10 @@ const GlobalNavWithModalsAndDrawers = withRouter((props) => {
                     {
                         dropdownItems: () => (
                             <DropdownItemGroup>
-                                <DropdownItem>Account Settings</DropdownItem>
-                                <DropdownItem>Notification</DropdownItem>
-                                <DropdownItem>Status</DropdownItem>
-                                <DropdownItem>Input/Output device Settings</DropdownItem>
-                                <DropdownItem>About</DropdownItem>
-                                <DropdownItem onClick={Logout}>Logout</DropdownItem>
+                                {UserAvatarDropDown && UserAvatarDropDown.map((value, index) => (
+                                    <DropdownItem key={'ud' + index}
+                                                  onClick={value.onClick ? value.onClick : null}>{value.label}</DropdownItem>
+                                ))}
                             </DropdownItemGroup>
                         ),
                         icon: () => <Avatar name={user ? user.get('first_name') + ' ' + user.get('last_name') : 'User'}
@@ -370,7 +368,7 @@ export default function (props) {
                     <LayoutManager
                         shouldHideGlobalNavShadow={true}
                         globalNavigation={() => (
-                            <GlobalNavWithModalsAndDrawers />
+                            <GlobalNavWithModalsAndDrawers/>
                         )}
                         productNavigation={props.productNavigation}
                         containerNavigation={props.containerNavigation}>

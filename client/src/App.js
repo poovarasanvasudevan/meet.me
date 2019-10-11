@@ -10,6 +10,7 @@ import {loadTheme} from 'office-ui-fabric-react/lib/Styling';
 import Color from './components/theme/color';
 
 import {initializeIcons} from 'office-ui-fabric-react/lib/Icons';
+import Base from "./components/Base";
 
 initializeIcons(/* optional base url */);
 
@@ -103,6 +104,16 @@ const LoginRoute = ({component: Component, ...rest}) => {
     )}/>);
 };
 
+const BaseRoute = ({component: Component, ...rest}) => {
+    return (
+        <Route {...rest} render={(props) => (
+            <Base>
+                <Component {...props} />
+            </Base>
+        )}/>
+    );
+};
+
 const logoutNow = async () => {
 
     try {
@@ -140,8 +151,8 @@ function App() {
                             <LoginRoute path='/500' component={Error}/>
 
 
-                            <Route path='/help' component={Help}/>
-                            <Route path='/docs' component={Docs}/>
+                            <BaseRoute path='/help' component={Help}/>
+                            <BaseRoute path='/docs' component={Docs}/>
 
 
                             <PrivateRoute path='/home' component={Dashboard}/>
@@ -160,14 +171,13 @@ function App() {
                             <PrivateRoute path='/blog/edit/:kb' exact component={BlogNew}/>
 
 
-                            <Route path='/blog/preview/:kb' component={BlogPreview}/>
+                            <BaseRoute path='/blog/preview/:kb' component={BlogPreview}/>
 
-                            <Route component={NotFound}/>
+                            <BaseRoute component={NotFound}/>
                         </Switch>
                     </Router>
                 </IntlProvider>
             </Suspense>
-
         </AppContext.Provider>
     );
 }
