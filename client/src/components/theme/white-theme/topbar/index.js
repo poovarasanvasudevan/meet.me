@@ -2,17 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import Color from '../../../theme/color';
 import Logo from '../../../logo/new-logo';
-import AppContext from "../../../../module/AppContext";
 import Avatar from '@atlaskit/avatar';
 import {If, Then, Else} from 'react-if';
-import {Search} from '@atlaskit/atlassian-navigation';
 import {Flex, Box} from "@rebass/grid";
 import {IoMdHelpCircleOutline, IoMdApps} from 'react-icons/io';
 import InlineDialog from '@atlaskit/inline-dialog';
 import {
     SwitcherItem
 } from '@atlaskit/atlassian-switcher/dist/cjs/primitives';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import {SearchBox} from 'office-ui-fabric-react/lib/SearchBox';
+import {useBaseStateValue} from "../../../context";
 
 const MainBar = styled.div`
     padding-left: 12px;
@@ -70,28 +69,23 @@ const CustomLogo = () => (
 );
 export default function (props) {
 
-    const [user, setUser] = React.useState(null);
     const [applications, setApplications] = React.useState(null);
     const [appsOpen, setAppsOpen] = React.useState(false);
-    const {Parse} = React.useContext(AppContext);
-
+    const [{CurrentUser}, dispatch] = useBaseStateValue();
 
     React.useEffect(() => {
-        const currentUser = Parse.User.current();
+        console.log("hell")
+        if (CurrentUser != null) {
 
-        if (currentUser != null) {
-            const profile = currentUser.get('profile');
-            profile.fetch().then((data) => {
-                setUser(currentUser);
-            });
-
-
-            currentUser
+            CurrentUser
                 .get('application').query().find()
-                .then((data) => setApplications(data));
+                .then((data) => {
+                    console.log(data)
+                    setApplications(data)
+                });
         }
 
-    }, []);
+    }, [CurrentUser]);
 
     const toggleApps = () => setAppsOpen(!appsOpen);
 
@@ -108,7 +102,6 @@ export default function (props) {
     const content = (
         <div style={scrollContainer} className={'scrl'}>
             <div style={oversizedStyles}>
-
                 {applications && applications.map((value, index) => (
 
                     <SwitcherItem
@@ -120,8 +113,6 @@ export default function (props) {
                     </SwitcherItem>
 
                 ))}
-
-
             </div>
         </div>
     );
@@ -133,7 +124,7 @@ export default function (props) {
                 <Flex>
 
                     <TempBox><IoMdHelpCircleOutline size={24} color={'#333'}/></TempBox>
-                    <If condition={user !== null}>
+                    <If condition={CurrentUser !== null}>
                         <Then>
                             <TempBox>
 
@@ -153,7 +144,7 @@ export default function (props) {
                     </If>
 
                     <DefaultSearch
-                        styles={{ root: { width: 220 , border:'1px solid #eaeaea' } }}
+                        styles={{root: {width: 220, border: '1px solid #eaeaea'}}}
                         placeholder="Search..."
                         onEscape={ev => {
                             console.log('Custom onEscape Called');
@@ -168,13 +159,13 @@ export default function (props) {
                     />
 
 
-                    <If condition={user !== null}>
+                    <If condition={CurrentUser !== null}>
                         <Then>
                             <MainAvatarOuter>
-                                <Avatar name={user ? user.get('first_name') + ' ' + user.get('last_name') : 'User'}
-                                        size="small"
-
-                                        src={user ? user.get('profile').get('avatar').url() : null}
+                                <Avatar
+                                    name={CurrentUser ? CurrentUser.get('first_name') + ' ' + CurrentUser.get('last_name') : 'User'}
+                                    size="small"
+                                    src={CurrentUser ? CurrentUser.get('profile').get('avatar').url() : null}
                                 />
                             </MainAvatarOuter>
                         </Then>

@@ -5,11 +5,11 @@ import Loading from './components/page-spinner';
 import {IntlProvider} from "react-intl";
 import AppContext from './module/AppContext';
 import Parse from 'parse';
-import SkeletonV2 from "./components/SkeletonV2";
+import SkeletonV2 from "./components/theme/skeleton/SkeletonV2";
 import {loadTheme} from 'office-ui-fabric-react/lib/Styling';
 import Color from './components/theme/color';
 
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import {initializeIcons} from 'office-ui-fabric-react/lib/Icons';
 
 initializeIcons(/* optional base url */);
 
@@ -126,11 +126,11 @@ const URLConfig = {
 function App() {
     return (
         <AppContext.Provider value={{Parse: Parse, Logout: logoutNow, Config: URLConfig}}>
+
             <Suspense fallback={<Loading/>}>
                 <IntlProvider locale="en">
                     <Router>
                         <Switch>
-
                             <LoginRoute path='/' exact component={BasePage}/>
                             <LoginRoute path='/login' component={Login}/>
                             <LoginRoute path='/qr' component={QrCode}/>
@@ -144,16 +144,12 @@ function App() {
                             <Route path='/docs' component={Docs}/>
 
 
-
-
-
                             <PrivateRoute path='/home' component={Dashboard}/>
                             <PrivateRoute path='/notifications' component={Notifications}/>
 
 
                             <PrivateRoute exact path='/kb' component={KB}/>
                             <PrivateRoute path='/kb/editor' component={KBEditor}/>
-
 
 
                             <PrivateRoute path='/connect' component={Connect}/>
@@ -171,6 +167,7 @@ function App() {
                     </Router>
                 </IntlProvider>
             </Suspense>
+
         </AppContext.Provider>
     );
 }

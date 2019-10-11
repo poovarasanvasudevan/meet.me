@@ -2,6 +2,7 @@ import React from "react";
 import {createTheme} from '@atlaskit/theme';
 import {BaseContextProvider} from './context';
 import Dialog from './dialog';
+import UserContext from './user-context';
 
 const defaultButtonTheme = props => ({
     backgroundColor: props.hover ? '#ddd' : '#eee',
@@ -12,7 +13,8 @@ const Theme = createTheme(defaultButtonTheme);
 
 const initialState = {
     model: false,
-    modelData: {}
+    modelData: {},
+    CurrentUser: null
 };
 
 const reducer = (state, action) => {
@@ -22,6 +24,11 @@ const reducer = (state, action) => {
                 ...state,
                 ...action
             };
+        case 'setuser':
+            return {
+                ...state,
+                CurrentUser: action.user
+            };
         default:
             return state;
     }
@@ -29,11 +36,13 @@ const reducer = (state, action) => {
 
 const Base = props => (
     <BaseContextProvider initialState={initialState} reducer={reducer}>
-        <Theme.Provider>
-            {props.children}
-        </Theme.Provider>
+        <UserContext>
+            <Theme.Provider>
+                {props.children}
+            </Theme.Provider>
 
-        <Dialog/>
+            <Dialog/>
+        </UserContext>
     </BaseContextProvider>
 );
 

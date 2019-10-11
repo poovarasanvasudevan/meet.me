@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
-import TopBar from '../../top-bar'
+import TopBar from '../../top-bar';
+import Base from '../../Base';
 
 const FullPage = styled.div`
     display : flex;
@@ -37,13 +38,15 @@ const Body = styled.div`
 
 export default function (props) {
     return (
-        <FullPage>
-            <Header>
-                <TopBar/>
-            </Header>
-            <Body>
-            {props.children}
-            </Body>
-        </FullPage>
+        <Base>
+            <FullPage>
+                <Header>
+                    <TopBar/>
+                </Header>
+                <Body>
+                {props.children}
+                </Body>
+            </FullPage>
+        </Base>
     );
 }

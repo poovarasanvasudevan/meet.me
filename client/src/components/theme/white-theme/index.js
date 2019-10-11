@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import MainBar from './topbar'
-
+import Base from '../../Base'
 const FullPage = styled.div`
     display : flex;
     flex-direction : column;
@@ -37,6 +37,7 @@ const Body = styled.div`
 
 export default function (props) {
     return (
+        <Base>
         <FullPage>
             <Header>
                 <MainBar />
@@ -45,5 +46,6 @@ export default function (props) {
             {props.children}
             </Body>
         </FullPage>
+        </Base>
     );
 }

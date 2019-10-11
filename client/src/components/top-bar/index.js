@@ -8,6 +8,7 @@ import {If, Then, Else} from 'react-if';
 import {Search} from '@atlaskit/atlassian-navigation';
 import {Flex, Box} from "@rebass/grid";
 import {IoMdHelpCircleOutline} from 'react-icons/io';
+import {useBaseStateValue} from "../context";
 
 const MainBar = styled.div`
     padding-left: 12px;
@@ -57,29 +58,12 @@ const TempBox = styled.div`
 export default function (props) {
 
     const [user, setUser] = React.useState(null);
-    const {Parse} = React.useContext(AppContext);
-
-    React.useEffect(() => {
-        const currentUser = Parse.User.current();
-
-        if (currentUser != null) {
-            const profile = currentUser.get('profile');
-            profile
-                .fetch()
-                .then((data) => {
-                    setUser(currentUser);
-                    console.log(currentUser);
-                });
-        }
-
-    }, []);
-
+    const [{CurrentUser}, dispatch] = useBaseStateValue();
 
     return (
         <MainBar>
             <img alt={'Logo'} src={logo} height={40}/>
-
-
+            
             <MainBarAvatar>
                 <Flex>
 
@@ -89,12 +73,13 @@ export default function (props) {
 
                     <DefaultSearch placeholder={'Search...'}/>
 
-                    <If condition={user !== null}>
+                    <If condition={CurrentUser !== null}>
                         <Then>
                             <MainAvatarOuter>
-                                <Avatar name={user ? user.get('first_name') + ' ' + user.get('last_name') : 'User'}
-                                        size="small"
-                                        src={user ? user.get('profile').get('avatar').url() : null}
+                                <Avatar
+                                    name={CurrentUser ? CurrentUser.get('first_name') + ' ' + CurrentUser.get('last_name') : 'User'}
+                                    size="small"
+                                    src={CurrentUser ? CurrentUser.get('profile').get('avatar').url() : null}
                                 />
                             </MainAvatarOuter>
                         </Then>

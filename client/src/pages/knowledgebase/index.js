@@ -5,8 +5,6 @@ import PageHeader from '@atlaskit/page-header';
 import {Box} from "@rebass/grid";
 import {RouterLink} from "../../components/theme/link";
 import Button, {ButtonGroup} from "@atlaskit/button";
-import {FaPlus} from 'react-icons/fa';
-import {CreateIcon} from "../../components/util";
 import DropdownMenu, {DropdownItemGroup, DropdownItem} from '@atlaskit/dropdown-menu';
 
 const breadcrumbs = (

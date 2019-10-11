@@ -1,5 +1,5 @@
 import React from 'react';
-import Base from './Base';
+import Base from '../../Base';
 import {colors} from "@atlaskit/theme";
 import {
     GlobalItem,
@@ -8,39 +8,35 @@ import {
     modeGenerator,
     NavigationProvider,
     ThemeProvider,
-    Item
 } from '@atlaskit/navigation-next';
-import AppContext from "../module/AppContext";
-import SpeakerLogo from "../img/speaker.png";
+import AppContext from "../../../module/AppContext";
+import SpeakerLogo from "../../../img/speaker.png";
 import {DropdownItem, DropdownItemGroup, DropdownMenuStateless} from "@atlaskit/dropdown-menu";
-import Avatar, {AvatarItem} from "@atlaskit/avatar";
+import Avatar from "@atlaskit/avatar";
 import {
     SwitcherWrapper,
     SwitcherItem,
     Section,
-    ManageButton,
     Skeleton,
 } from '@atlaskit/atlassian-switcher/dist/cjs/primitives';
-import {MentionItem} from '@atlaskit/mention/item';
 
 import {Flex, Box} from "@rebass/grid";
 import Modal, {ModalTransition} from '@atlaskit/modal-dialog';
 import Drawer from '@atlaskit/drawer';
-import SpeakerNotification from './speaker-notification';
 import styled from "styled-components";
 import {If, Then, Else} from 'react-if';
-import {Link} from "react-router-dom";
 
 import {IoIosAdd, IoIosSearch, IoIosHelpCircle, IoIosNotifications, IoIosApps, IoIosPeople} from 'react-icons/io';
-import {AppTextField} from './theme/textfield';
-import Form, {Field, FormFooter} from '@atlaskit/form';
-import {ObjectResult, ResultItemGroup, PersonResult} from '@atlaskit/quick-search';
-import Color from './theme/color';
-import NetworkMoniter from '../components/network-moniter';
+import {AppTextField} from '../textfield';
+import {Field,} from '@atlaskit/form';
+import {ResultItemGroup, PersonResult} from '@atlaskit/quick-search';
+import Color from '../color';
+
 
 import {
     withRouter
 } from 'react-router-dom';
+import {useBaseStateValue} from "../../context";
 
 const customMode = modeGenerator({
     product: {
@@ -90,28 +86,22 @@ const ItemComponent = ({dropdownItems: DropdownItems, ...itemProps}) => {
 };
 
 
-const SwitcherIcon = styled.div`
-    padding: 6px;
-    border-radius: 4px;
-    background : ${props => props.bgColor ? props.bgColor : Color.primaryColor};
-    margin-right : 8px;
-`;
-
 const IApplicationLoader = withRouter((props) => {
 
-
+    const [{CurrentUser}, dispatch] = useBaseStateValue();
     const [applications, setApplications] = React.useState([]);
 
-    const {Parse} = React.useContext(AppContext);
     React.useEffect(() => {
-        const currentUser = Parse.User.current();
-        currentUser
-            .get('application')
-            .query()
-            .find()
-            .then((data) => setApplications(data));
+        if (CurrentUser != null) {
 
-    }, []);
+            CurrentUser
+                .get('application')
+                .query()
+                .find()
+                .then((data) => setApplications(data));
+        }
+
+    }, [CurrentUser]);
 
     return (
         <SwitcherWrapper>
@@ -144,10 +134,7 @@ const IApplicationLoader = withRouter((props) => {
 
 
 const IPeopleLoader = (props) => {
-
-
     const {Parse} = React.useContext(AppContext);
-
     const [people, setPeople] = React.useState([]);
 
     React.useEffect(() => {
@@ -190,6 +177,7 @@ const IPeopleLoader = (props) => {
 
 const GlobalNavWithModalsAndDrawers = withRouter((props) => {
 
+    const [{CurrentUser}, dispatch] = useBaseStateValue();
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
@@ -212,17 +200,8 @@ const GlobalNavWithModalsAndDrawers = withRouter((props) => {
 
     const openPeopleDrawer = () => setIsPeopleDrawerOpen(true);
     const closePeopleDrawer = () => setIsPeopleDrawerOpen(false);
-
-
-    const {user} = props;
-
-    const {Parse, Logout} = React.useContext(AppContext);
-
-    React.useEffect(() => {
-        console.log(props);
-        Parse.User.currentAsync()
-            .then((user) => console.log(user));
-    }, []);
+    const user = CurrentUser;
+    const {Logout} = React.useContext(AppContext);
 
 
     return (
@@ -274,7 +253,7 @@ const GlobalNavWithModalsAndDrawers = withRouter((props) => {
                         tooltip: 'Open dropdown',
                         onClick: (event) => {
                             event.preventDefault();
-                            window.open('/help','_blank');
+                            window.open('/help', '_blank');
                         }
                     },
                     {
@@ -354,7 +333,7 @@ const GlobalNavWithModalsAndDrawers = withRouter((props) => {
 
 });
 
-const StyleScroller = styled(Flex) `
+const StyleScroller = styled(Flex)`
 
     overflow-y: auto;
     
@@ -374,23 +353,15 @@ const StyleScroller = styled(Flex) `
     {
         background-color: #cccccc;
     }
-`
+`;
 
 export default function (props) {
-
-    const [user, setUser] = React.useState(null);
-    const {Parse} = React.useContext(AppContext);
 
     const navProps = {
         isResizeDisabled: true,
         productNavWidth: props.navWidth === undefined ? 300 : props.navWidth
     };
 
-    React.useEffect(() => {
-        const currentUser = Parse.User.current();
-        const profile = currentUser.get('profile');
-        profile.fetch().then((data) => setUser(currentUser));
-    }, []);
 
     return (
         <Base>
@@ -399,7 +370,7 @@ export default function (props) {
                     <LayoutManager
                         shouldHideGlobalNavShadow={true}
                         globalNavigation={() => (
-                            <GlobalNavWithModalsAndDrawers user={user}/>
+                            <GlobalNavWithModalsAndDrawers />
                         )}
                         productNavigation={props.productNavigation}
                         containerNavigation={props.containerNavigation}>

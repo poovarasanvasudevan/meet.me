@@ -1,6 +1,6 @@
 import React from 'react';
 import {Case, Default, Else, If, Switch, Then} from "react-if";
-import SkeletonV2 from "../SkeletonV2";
+import SkeletonV2 from "../theme/skeleton/SkeletonV2";
 import BasePageTemplate from '../theme/base-page-template';
 import WhiteTheme from '../theme/white-theme';
 import AppContext from "../../module/AppContext";
