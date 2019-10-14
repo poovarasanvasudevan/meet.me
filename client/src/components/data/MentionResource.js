@@ -75,18 +75,16 @@ export class MMentionResource extends AbstractMentionResource
 
             if (query !== '') {
                 //
-                // const userNameQ = new this.Parse.Query(Users);
-                // userNameQ.fullText('username', String(query));
+                const userNameQ = new this.Parse.Query(Users);
+                userNameQ.contains('username', query);
 
+                const first_name = new this.Parse.Query(Users);
+                first_name.contains('first_name', query);
 
-                querys = new this.Parse.Query(Users);
-                querys.fullText('first_name', String(query));
+                const last_name = new this.Parse.Query(Users);
+                last_name.contains('last_name', query);
 
-                // const last_name = new this.Parse.Query(Users);
-                // last_name.fullText('last_name', String(query));
-
-               // querys = Parse.Query.or(userNameQ, first_name, last_name);
-              //  querys = new this.Parse.Query(Users);
+                querys = this.Parse.Query.or(userNameQ, first_name, last_name);
             } else {
                 querys = new this.Parse.Query(Users);
             }
