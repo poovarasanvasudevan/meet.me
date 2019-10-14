@@ -88,7 +88,6 @@ const TwoStep = (props) => {
                 </Flex>
             </div>
         </Base>
-
     );
 };
 

@@ -75,7 +75,7 @@ export default function (props) {
         <TemplateRendering template={template}>
             <EditorProvider initialState={initialState} reducer={reducer}>
                 <Embed state={props}>
-                    <Box width={12 / 12}>
+                    <Box width={12 / 12} className={'h100'}>
                         <CEditor/>
                         <BlogModel/>
                     </Box>

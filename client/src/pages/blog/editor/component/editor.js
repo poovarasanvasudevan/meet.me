@@ -7,10 +7,16 @@ import {ButtonGroup} from "@atlaskit/button";
 import {DefaultButton, PrimaryButton} from "office-ui-fabric-react";
 import {MLink} from "../../../../components/theme/link";
 
+import {resourceProvider} from '../../../../components/data/MentionResource'
+import {macroProvider} from '../../../../components/data/Macro'
+import {extensionHandlers} from '../../../../components/data/Extension'
+import {customInsertMenuItems} from '../../../../components/data/MenuItems'
+import AppContext from "../../../../module/AppContext";
+
 export default function (props) {
 
     const [{appearence, formValues, post,title}, dispatch] = useStateValue();
-
+    const {Parse} = React.useContext(AppContext)
     React.useEffect(() => {
 
     }, [post]);
@@ -54,10 +60,17 @@ export default function (props) {
         );
     };
 
+
+    const providers = {
+        mentionProvider: Promise.resolve(resourceProvider(Parse)),
+        macroProvider: Promise.resolve(macroProvider),
+    };
+
     return (
         <Editor
-            allowBlockTypes={{ exclude: ["codeBlocks"] }}
+            allowAnalyticsGASV3={true}
             allowTextColor={true}
+            allowCodeBlocks={{ enableKeybindingsForIDE: true }}
             allowTables={{
                 advanced: true,
                 allowMergeCells: true,
@@ -65,7 +78,7 @@ export default function (props) {
                 allowColumnResizing: true,
                 allowBackgroundColor: true
             }}
-            allowCodeBlocks={true}
+            allowUnsupportedContent={true}
             allowBreakout={true}
             allowPanel={true}
             allowExtension={{
@@ -87,7 +100,7 @@ export default function (props) {
             allowStatus={true}
             placeholder="Use markdown shortcuts to format your page as you type, like * for lists, # for headers, and *** for a horizontal rule."
             shouldFocus={false}
-            // allowHelpDialog
+            allowHelpDialog
             media={{
                 allowMediaSingle: true,
                 allowResizing: true,
@@ -116,6 +129,9 @@ export default function (props) {
                     )}
                 />,
             ]}
+            {...providers}
+            extensionHandlers={extensionHandlers}
+            insertMenuItems={customInsertMenuItems}
             appearance={appearence}
         />
     );
