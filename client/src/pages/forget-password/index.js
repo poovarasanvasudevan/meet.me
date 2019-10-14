@@ -13,8 +13,7 @@ import Form, {
     HelperMessage,
 } from '@atlaskit/form';
 import {FormFieldWithProps} from "../../components/util";
-import {AppButton} from "../../components/theme/button";
-
+import { PrimaryButton} from 'office-ui-fabric-react';
 
 const Card = styled.div`
     background-color : white;
@@ -54,9 +53,9 @@ const ForgetPassword = (props) => {
                                                 </Field>
 
                                                 <FormFooter>
-                                                    <AppButton type="submit" primary={'true'}>
+                                                    <PrimaryButton type="submit">
                                                         Submit
-                                                    </AppButton>
+                                                    </PrimaryButton>
                                                 </FormFooter>
                                             </form>
                                         )}

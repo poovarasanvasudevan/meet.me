@@ -7,13 +7,13 @@ import AppContext from '../../module/AppContext';
 import Color from "../../components/theme/color";
 import {MLink} from '../../components/theme/link';
 
+import { PrimaryButton} from 'office-ui-fabric-react';
 
 import Form, {
     FormFooter, Field,
     HelperMessage,
 } from '@atlaskit/form';
-import {FormFieldWithProps, MTextBox} from "../../components/util";
-import {AppButton} from "../../components/theme/button";
+import {MTextBox} from "../../components/util";
 
 
 const Card = styled.div`
@@ -84,9 +84,9 @@ const ResetPassword = (props) => {
                                                 </Field>
 
                                                 <FormFooter>
-                                                    <AppButton type="submit" primary={'true'}>
+                                                    <PrimaryButton type="submit">
                                                         Submit
-                                                    </AppButton>
+                                                    </PrimaryButton>
                                                 </FormFooter>
                                             </form>
                                         )}

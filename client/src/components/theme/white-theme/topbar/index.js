@@ -72,6 +72,10 @@ const CustomLogo = () => (
         />
     </span>
 );
+
+const DInline = styled(InlineDialog)`
+    z-index : 503
+`;
 const AppBar = withRouter( (props) =>  {
 
     const [applications, setApplications] = React.useState(null);
@@ -98,6 +102,7 @@ const AppBar = withRouter( (props) =>  {
         maxHeight: 'inherit',
         maxWidth: 'inherit',
         overflow: 'auto',
+        zIndex: 501,
     };
 
 
@@ -143,16 +148,17 @@ const AppBar = withRouter( (props) =>  {
                             <TempBox><IoMdNotifications size={24} color={Color.primaryColor}/></TempBox>
                             <TempBox>
 
-                                <InlineDialog
+                                <DInline
                                     onClose={() => {
                                         setAppsOpen(false);
                                     }}
                                     placement={'bottom'}
                                     content={content}
                                     isOpen={appsOpen}
+                                    style={{zIndex : 503}}
                                 >
                                     <IoMdApps size={24} color={Color.primaryColor} onClick={toggleApps}/>
-                                </InlineDialog>
+                                </DInline>
 
                             </TempBox>
                         </Then>

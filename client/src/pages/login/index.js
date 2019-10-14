@@ -4,23 +4,21 @@ import styled, {css} from 'styled-components';
 import Base from '../../components/Base';
 import logo from '../../img/logo_black.svg';
 import AppContext from '../../module/AppContext';
+import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import Form, {
     FormFooter, Field,
     HelperMessage,
 } from '@atlaskit/form';
-import {ThemedButton, AppButton} from "../../components/theme/button";
+import {ThemedButton} from "../../components/theme/button";
 import Color from "../../components/theme/color";
 import {FaFacebookSquare, FaGoogle, FaGithub, FaQrcode} from 'react-icons/fa';
-import InlineMessage from '@atlaskit/inline-message';
 import Icon from '@atlaskit/icon';
-import {AppTextField} from "../../components/theme/textfield";
-import {Link} from 'react-router-dom';
 import {MLink} from "../../components/theme/link";
-import {Divider, FormFieldWithProps, MTextBox} from "../../components/util";
+import { FormFieldWithProps, MTextBox} from "../../components/util";
 import {Button} from "@atlaskit/button/dist/cjs/components/Button";
 import SectionMessage from '@atlaskit/section-message';
-import {DefaultButton, PrimaryButton} from 'office-ui-fabric-react';
+import { PrimaryButton} from 'office-ui-fabric-react';
 
 const SocialButton = styled(ThemedButton)`
     
@@ -80,8 +78,8 @@ const Login = (props) => {
                     <Box width={3 / 10} p={2}>
                         <Card elevation={1} style={{marginTop: '30%'}}>
                             <Flex>
-                                <Box width={1.2 / 10}/>
-                                <Box width={7.6 / 10} p={2}>
+                                <Box width={1.1 / 10}/>
+                                <Box width={7.8 / 10} p={2}>
 
                                     <img src={logo} alt={'Logo'} height={50}/>
                                     {loginError.status ?
@@ -114,8 +112,10 @@ const Login = (props) => {
                                             </form>
                                         )}
                                     </Form>
-                                    <div style={{marginTop: '20px'}}>
-
+                                    <Separator>
+                                        <h3>Or</h3>
+                                    </Separator>
+                                    <div>
                                         <center>
                                             <SocialButton fgcolor={'#fff'} bgcolor={'#db3236'}
                                                           iconBefore={<Icon glyph={() => <FaGoogle/>}
@@ -140,7 +140,7 @@ const Login = (props) => {
                                         </center>
                                     </div>
                                 </Box>
-                                <Box width={1.2 / 10}/>
+                                <Box width={1.1 / 10}/>
                             </Flex>
                         </Card>
                     </Box>

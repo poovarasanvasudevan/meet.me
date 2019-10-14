@@ -7,13 +7,13 @@ import AppContext from '../../module/AppContext';
 import Color from "../../components/theme/color";
 import {MLink} from '../../components/theme/link';
 
+import { PrimaryButton} from 'office-ui-fabric-react';
 
 import Form, {
     FormFooter, Field,
     HelperMessage,
 } from '@atlaskit/form';
 import {FormFieldWithProps} from "../../components/util";
-import {AppButton} from "../../components/theme/button";
 
 const Card = styled.div`
     background-color : white;
@@ -71,9 +71,9 @@ const TwoStep = (props) => {
                                                 </VCard>
 
                                                 <FormFooter>
-                                                    <AppButton type="submit" primary={'true'}>
+                                                    <PrimaryButton type="submit">
                                                         Submit
-                                                    </AppButton>
+                                                    </PrimaryButton>
                                                 </FormFooter>
                                             </form>
                                         )}

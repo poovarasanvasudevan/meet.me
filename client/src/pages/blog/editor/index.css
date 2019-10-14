@@ -1,9 +1,9 @@
 div.akEditor > div:first-child {
     height : 50px;
-    border-bottom: 1px solid #eaeaea;
-
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     padding-left: 10px;
     padding-right: 10px;
+    z-index: 1;
 }
 
 div.fabric-editor-popup-scroll-parent > div > div {
