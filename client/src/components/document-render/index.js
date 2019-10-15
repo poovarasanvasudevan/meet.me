@@ -10,10 +10,14 @@ import {
     ProviderFactory,
 } from '@atlaskit/editor-common';
 import {getEmojiResource} from "../data/emoji/story-data";
+import {storyContextIdentifierProviderFactory} from "../data/ContextIdentifier";
+import {autoformattingProvider} from "../data/AutoFormat";
 
 const providerFactory = ProviderFactory.create({
     resourceProvider,
     emojiProvider: getEmojiResource({}),
+    contextIdentifierProvider: storyContextIdentifierProviderFactory(),
+    autoformattingProvider: Promise.resolve(autoformattingProvider),
 });
 
 export default function (props) {

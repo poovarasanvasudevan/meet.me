@@ -7,17 +7,19 @@ import {ButtonGroup} from "@atlaskit/button";
 import {DefaultButton, PrimaryButton} from "office-ui-fabric-react";
 import {MLink} from "../../../../components/theme/link";
 
-import {resourceProvider} from '../../../../components/data/MentionResource'
-import {macroProvider} from '../../../../components/data/Macro'
-import {extensionHandlers} from '../../../../components/data/Extension'
-import {customInsertMenuItems} from '../../../../components/data/MenuItems'
-import {getEmojiResource} from '../../../../components/data/emoji/story-data'
+import {resourceProvider} from '../../../../components/data/MentionResource';
+import {macroProvider} from '../../../../components/data/Macro';
+import {extensionHandlers} from '../../../../components/data/Extension';
+import {customInsertMenuItems} from '../../../../components/data/MenuItems';
+import {getEmojiResource} from '../../../../components/data/emoji/story-data';
+import {storyContextIdentifierProviderFactory} from '../../../../components/data/ContextIdentifier';
 import AppContext from "../../../../module/AppContext";
+import {autoformattingProvider} from "../../../../components/data/AutoFormat";
 
 export default function (props) {
 
-    const [{appearence, formValues, post,title}, dispatch] = useStateValue();
-    const {Parse} = React.useContext(AppContext)
+    const [{appearence, formValues, post, title}, dispatch] = useStateValue();
+    const {Parse} = React.useContext(AppContext);
     React.useEffect(() => {
 
     }, [post]);
@@ -57,7 +59,7 @@ export default function (props) {
 
     const EditorWrapper = () => {
         return (
-           <div></div>
+            <div></div>
         );
     };
 
@@ -65,15 +67,16 @@ export default function (props) {
     const providers = {
         mentionProvider: Promise.resolve(resourceProvider(Parse)),
         macroProvider: Promise.resolve(macroProvider),
-        emojiProvider: getEmojiResource({
-        }),
+        contextIdentifierProvider: storyContextIdentifierProviderFactory(),
+        emojiProvider: getEmojiResource({}),
+        autoformattingProvider: Promise.resolve(autoformattingProvider),
     };
 
     return (
         <Editor
             allowAnalyticsGASV3={true}
             allowTextColor={true}
-            allowCodeBlocks={{ enableKeybindingsForIDE: true }}
+            allowCodeBlocks={{enableKeybindingsForIDE: true}}
             allowTables={{
                 advanced: true,
                 allowMergeCells: true,
@@ -115,7 +118,7 @@ export default function (props) {
                     render={actions => {
                         return (
                             <>
-                                <BreadcrumbsMiscActions />
+                                <BreadcrumbsMiscActions/>
                                 <TitleInput onChange={(e) => {
                                     dispatch({type: 'title', title: e.target.value});
                                 }} placeholder={'Give this post a title...'}/>

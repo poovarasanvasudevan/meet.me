@@ -69,6 +69,10 @@ const KBEditor = lazy(() => import('./pages/knowledgebase/editor'));
 const Connect = lazy(() => import('./pages/connect'));
 
 
+const Workflow = lazy(() => import('./pages/workflow'));
+const WorkflowNew = lazy(() => import('./pages/workflow/new'));
+
+
 const Error = lazy(() => import('./pages/500'));
 const Login = lazy(() => import('./pages/login'));
 const BasePage = lazy(() => import('./pages/base-page'));
@@ -163,6 +167,10 @@ function App() {
                             <PrivateRoute path='/blog' exact component={Blog}/>
                             <PrivateRoute path='/blog/new' exact component={BlogNew}/>
                             <PrivateRoute path='/blog/edit/:kb' exact component={BlogNew}/>
+
+
+                            <PrivateRoute path='/workflow' exact component={Workflow}/>
+                            <PrivateRoute path='/workflow/new' exact component={WorkflowNew}/>
 
 
                             <BaseRoute path='/blog/preview/:kb' component={BlogPreview}/>

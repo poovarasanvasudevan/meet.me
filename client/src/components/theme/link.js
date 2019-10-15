@@ -9,7 +9,7 @@ const MLink = styled(Link)`
     }
 `;
 
-const RouterLink = (props) => {
+const RouterLinker = (props) => {
 
     const {
         children,
@@ -31,6 +31,10 @@ const RouterLink = (props) => {
     );
 
 };
+
+const RouterLink = React.forwardRef((props, ref) => (
+    <RouterLinker {...props} innerRef={ref} />
+));
 
 export  {
     MLink,
