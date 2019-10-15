@@ -11,6 +11,7 @@ import {resourceProvider} from '../../../../components/data/MentionResource'
 import {macroProvider} from '../../../../components/data/Macro'
 import {extensionHandlers} from '../../../../components/data/Extension'
 import {customInsertMenuItems} from '../../../../components/data/MenuItems'
+import {getEmojiResource} from '../../../../components/data/emoji/story-data'
 import AppContext from "../../../../module/AppContext";
 
 export default function (props) {
@@ -64,6 +65,8 @@ export default function (props) {
     const providers = {
         mentionProvider: Promise.resolve(resourceProvider(Parse)),
         macroProvider: Promise.resolve(macroProvider),
+        emojiProvider: getEmojiResource({
+        }),
     };
 
     return (

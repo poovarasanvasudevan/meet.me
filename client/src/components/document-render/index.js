@@ -9,9 +9,11 @@ import {extensionHandlers} from '../../components/data/Extension'
 import {
     ProviderFactory,
 } from '@atlaskit/editor-common';
+import {getEmojiResource} from "../data/emoji/story-data";
 
 const providerFactory = ProviderFactory.create({
     resourceProvider,
+    emojiProvider: getEmojiResource({}),
 });
 
 export default function (props) {
