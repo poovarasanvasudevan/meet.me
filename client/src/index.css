@@ -34,3 +34,18 @@ h1 {
 .scrl::-webkit-scrollbar-thumb {
     background-color: #cccccc;
 }
+
+
+body::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+}
+
+body::-webkit-scrollbar {
+    width: 5px;
+    background-color: #F5F5F5;
+    border: 1px solid #000;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #cccccc;
+}

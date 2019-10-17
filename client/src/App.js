@@ -72,6 +72,11 @@ const Connect = lazy(() => import('./pages/connect'));
 const Workflow = lazy(() => import('./pages/workflow'));
 const WorkflowNew = lazy(() => import('./pages/workflow/new'));
 
+const RemoteMachines = lazy(() => import('./pages/remote-machines'));
+
+
+const UserManagement = lazy(() => import('./pages/user-management'));
+
 
 const Error = lazy(() => import('./pages/500'));
 const Login = lazy(() => import('./pages/login'));
@@ -140,7 +145,7 @@ function App() {
                 <IntlProvider locale="en">
                     <Router>
                         <Switch>
-                            <LoginRoute path='/' exact component={BasePage}/>
+                            <BaseRoute path='/' exact component={BasePage}/>
                             <LoginRoute path='/login' component={Login}/>
                             <LoginRoute path='/qr' component={QrCode}/>
                             <LoginRoute path='/2-step' component={TwoStep}/>
@@ -171,6 +176,12 @@ function App() {
 
                             <PrivateRoute path='/workflow' exact component={Workflow}/>
                             <PrivateRoute path='/workflow/new' exact component={WorkflowNew}/>
+
+
+                            <PrivateRoute path='/remote' exact component={RemoteMachines}/>
+
+
+                            <PrivateRoute path='/user-manage' exact component={UserManagement}/>
 
 
                             <BaseRoute path='/blog/preview/:kb' component={BlogPreview}/>

@@ -4,7 +4,7 @@ import styled, {css} from 'styled-components';
 import Base from '../../components/Base';
 import logo from '../../img/logo_black.svg';
 import AppContext from '../../module/AppContext';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import {Separator} from 'office-ui-fabric-react/lib/Separator';
 
 import Form, {
     FormFooter, Field,
@@ -15,10 +15,10 @@ import Color from "../../components/theme/color";
 import {FaFacebookSquare, FaGoogle, FaGithub, FaQrcode} from 'react-icons/fa';
 import Icon from '@atlaskit/icon';
 import {MLink} from "../../components/theme/link";
-import { FormFieldWithProps, MTextBox} from "../../components/util";
+import {FormFieldWithProps, MTextBox} from "../../components/util";
 import {Button} from "@atlaskit/button/dist/cjs/components/Button";
 import SectionMessage from '@atlaskit/section-message';
-import { PrimaryButton} from 'office-ui-fabric-react';
+import {PrimaryButton} from 'office-ui-fabric-react';
 
 const SocialButton = styled(ThemedButton)`
     
@@ -71,12 +71,17 @@ const Login = (props) => {
 
     return (
         <Base>
-            <style dangerouslySetInnerHTML={{__html: `body { background-color: ${Color.primaryColor}`}}/>
+            <style dangerouslySetInnerHTML={{__html: `body { background-color: #F8F8F8`}}/>
             <div>
                 <Flex>
                     <Box width={3.5 / 10}/>
-                    <Box width={3 / 10} p={2}>
-                        <Card elevation={1} style={{marginTop: '30%'}}>
+                    <Box width={3 / 10}>
+                        <Card elevation={1} style={{
+                            marginTop: '30%',
+                            paddingTop: '40px',
+                            paddingBottom: '40px',
+                            border: '1px solid #eaeaea'
+                        }}>
                             <Flex>
                                 <Box width={1.1 / 10}/>
                                 <Box width={7.8 / 10} p={2}>
@@ -117,14 +122,17 @@ const Login = (props) => {
                                     </Separator>
                                     <div>
                                         <center>
-                                            <SocialButton fgcolor={'#fff'} bgcolor={'#db3236'}
+                                            <SocialButton fgcolor={'#fff'}
+                                                          bgcolor={'#db3236'}
                                                           iconBefore={<Icon glyph={() => <FaGoogle/>}
                                                                             label="Custom icon"
-                                                                            size="small"/>}>Google</SocialButton>
+                                                                            size="small"/>}>Google
+                                            </SocialButton>
                                             <SocialButton fgcolor={'#fff'} bgcolor={'#3b5998'}
                                                           iconBefore={<Icon glyph={() => <FaFacebookSquare/>}
                                                                             label="Custom icon"
-                                                                            size="small"/>}>Facebook</SocialButton>
+                                                                            size="small"/>}>Facebook
+                                            </SocialButton>
                                             <SocialButton
                                                 iconBefore={<Icon glyph={() => <FaGithub/>} label="Custom icon"
                                                                   size="small"/>}> Github</SocialButton>

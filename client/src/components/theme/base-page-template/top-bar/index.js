@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import Color from '../../color';
-import logo from '../../../../img/logo.svg';
-import AppContext from "../../../../module/AppContext";
 import Avatar, {AvatarItem} from '@atlaskit/avatar';
 import {If, Then, Else} from 'react-if';
 import {Search} from '@atlaskit/atlassian-navigation';
 import {Flex, Box} from "@rebass/grid";
 import {IoMdHelpCircleOutline} from 'react-icons/io';
 import {useBaseStateValue} from "../../../context";
+import Logo from '../../../logo/new-logo';
+import {PrimaryButton} from "office-ui-fabric-react";
+import {MLink} from "../../link";
 
 const MainBar = styled.div`
     padding-left: 12px;
@@ -55,14 +56,23 @@ const TempBox = styled.div`
     }
    
 `;
+
+const CustomLogo = () => (
+    <span>
+        <Logo
+            width={172}
+            style={{paddingRight: 10, borderRight: "1px solid #222"}}
+            color={'#ffffff'}
+        />
+    </span>
+);
 export default function (props) {
 
-    const [user, setUser] = React.useState(null);
     const [{CurrentUser}, dispatch] = useBaseStateValue();
 
     return (
         <MainBar>
-            <img alt={'Logo'} src={logo} height={40}/>
+            <CustomLogo/>
 
             <MainBarAvatar>
                 <Flex>
@@ -83,11 +93,14 @@ export default function (props) {
                                 />
                             </MainAvatarOuter>
                         </Then>
+                        <Else>
+                            <MLink to={'/login'}>
+                                <PrimaryButton text={'Login'}/>
+                            </MLink>
+                        </Else>
                     </If>
                 </Flex>
             </MainBarAvatar>
-
-
         </MainBar>
     );
 }

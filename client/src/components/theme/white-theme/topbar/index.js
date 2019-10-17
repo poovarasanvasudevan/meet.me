@@ -17,6 +17,8 @@ import Dropdown, {DropdownItemGroup, DropdownItem} from '@atlaskit/dropdown-menu
 import {
     withRouter
 } from 'react-router-dom';
+import {MLink} from "../../link";
+import {PrimaryButton} from "office-ui-fabric-react";
 
 const MainBar = styled.div`
     padding-left: 12px;
@@ -179,7 +181,6 @@ const AppBar = withRouter( (props) =>  {
                         onBlur={() => console.log('onBlur called')}
                     />
 
-
                     <If condition={CurrentUser !== null}>
                         <Then>
                             <Dropdown position={'bottom right'} trigger={
@@ -197,6 +198,11 @@ const AppBar = withRouter( (props) =>  {
                             </Dropdown>
 
                         </Then>
+                        <Else>
+                            <MLink to={'/login'}>
+                                <PrimaryButton text={'Login'}/>
+                            </MLink>
+                        </Else>
                     </If>
                 </Flex>
             </MainBarAvatar>

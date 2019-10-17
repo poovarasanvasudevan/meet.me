@@ -107,7 +107,7 @@ const IApplicationLoader = withRouter((props) => {
         <SwitcherWrapper>
             <If condition={applications.length > 0}>
                 <Then>
-                    <Box p={'8px'}>
+                    <Box p={'8px'} className={'scrl'}>
                         <Section sectionId="application-section" title="Applications">
                             {applications.map((value, index) => (
 
