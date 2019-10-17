@@ -2,21 +2,8 @@ import React from 'react';
 import {Flex, Box} from "@rebass/grid";
 import styled, {css} from 'styled-components';
 import AppContext from '../../module/AppContext';
-import Color from "../../components/theme/color";
 import Page, {Grid, GridColumn} from '@atlaskit/page';
 import Avatar, {AvatarItem} from '@atlaskit/avatar';
-import {
-    FaTv,
-    FaChartLine,
-    FaDatabase,
-    FaHammer,
-    FaBell,
-    FaBusinessTime,
-    FaQuestionCircle,
-    FaCode,
-    FaMicroscope
-} from 'react-icons/fa';
-import {SquareIcon} from "../../components/util";
 import TemplateRendering from "../../components/template-rendering";
 
 const Card = styled.div`
