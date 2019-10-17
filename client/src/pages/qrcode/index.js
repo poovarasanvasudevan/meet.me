@@ -11,8 +11,14 @@ import {MLink} from '../../components/theme/link';
 
 const Card = styled.div`
     background-color : white;
-    padding : 20px;
     border-radius : 3px;
+    padding-left : 20px;
+    padding-right : 20px;
+    
+    padding-top : 30px;
+    padding-bottom : 30px;
+    
+    border : 1px solid #eaeaea;
 `;
 
 
@@ -35,7 +41,7 @@ const QRCode = (props) => {
 
     return (
         <Base>
-            <style dangerouslySetInnerHTML={{__html: `body { background-color: ${Color.primaryColor}`}}/>
+            <style dangerouslySetInnerHTML={{__html: `body { background-color: #f8f8f8;`}}/>
             <div>
                 <Flex>
                     <Box width={3.5 / 10}/>

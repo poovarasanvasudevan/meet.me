@@ -17,8 +17,14 @@ import {FormFieldWithProps} from "../../components/util";
 
 const Card = styled.div`
     background-color : white;
-    padding : 20px;
+    padding-left : 20px;
+    padding-right : 20px;
+    
+    padding-top : 30px;
+    padding-bottom : 30px;
     border-radius : 3px;
+    
+    border : 1px solid #eaeaea;
 `;
 
 const VCard  = styled.div`
@@ -43,7 +49,7 @@ const TwoStep = (props) => {
 
     return (
         <Base>
-            <style dangerouslySetInnerHTML={{__html: `body { background-color: ${Color.primaryColor}`}}/>
+            <style dangerouslySetInnerHTML={{__html: `body { background-color: #f8f8f8;`}}/>
             <div>
                 <Flex>
                     <Box width={3.5 / 10}/>
@@ -60,7 +66,9 @@ const TwoStep = (props) => {
                                         {({formProps}) => (
                                             <form {...formProps}>
 
-                                                <Field label={'2-step Password'} name="2steppassword" defaultValue=""
+                                                <Field label={'2-step Password'}
+                                                       name="2steppassword"
+                                                       defaultValue=""
                                                        isRequired
                                                        autoComplete={'off'}>
                                                     {({fieldProps, error, valid}) => <FormFieldWithProps fieldProps={fieldProps} error={error} valid={valid} helper={'Enter the Authentication code sent via email'} />}

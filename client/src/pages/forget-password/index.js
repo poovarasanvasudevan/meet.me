@@ -19,6 +19,7 @@ const Card = styled.div`
     background-color : white;
     padding : 20px;
     border-radius : 3px;
+    border : 1px solid #eaeaea;
 `;
 const ForgetPassword = (props) => {
     const {Parse} = React.useContext(AppContext);
@@ -29,7 +30,7 @@ const ForgetPassword = (props) => {
 
     return (
         <Base>
-            <style dangerouslySetInnerHTML={{__html: `body { background-color: ${Color.primaryColor}`}}/>
+            <style dangerouslySetInnerHTML={{__html: `body { background-color: #f8f8f8;`}}/>
             <div>
                 <Flex>
                     <Box width={3.5 / 10}/>

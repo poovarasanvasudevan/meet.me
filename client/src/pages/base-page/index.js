@@ -5,6 +5,7 @@ import AppContext from '../../module/AppContext';
 import Page, {Grid, GridColumn} from '@atlaskit/page';
 import Avatar, {AvatarItem} from '@atlaskit/avatar';
 import TemplateRendering from "../../components/template-rendering";
+import Base from "../forget-password";
 
 const Card = styled.div`
     background-color : white;
@@ -91,7 +92,7 @@ const BasePage = (props) => {
     return (
 
         <TemplateRendering template={'white'}>
-
+            <style dangerouslySetInnerHTML={{__html: `body { background-color: #f8f8f8;`}}/>
             <Page>
                 <Grid>
 

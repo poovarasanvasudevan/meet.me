@@ -71,7 +71,7 @@ const Login = (props) => {
 
     return (
         <Base>
-            <style dangerouslySetInnerHTML={{__html: `body { background-color: #F8F8F8`}}/>
+            <style dangerouslySetInnerHTML={{__html: `body { background-color: #F8F8F8;`}}/>
             <div>
                 <Flex>
                     <Box width={3.5 / 10}/>
