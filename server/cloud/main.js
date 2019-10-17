@@ -4,6 +4,7 @@ const are = require('iz/lib/are');
 const validators = require('iz/lib/validators');
 const _ = require('lodash');
 const {encrypt, decrypt} = require('./spec/crypto');
+const find = require('local-devices');
 
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
 iz.register(validators);
@@ -101,6 +102,13 @@ Parse.Cloud.define("requestInfo", (request) => {
     ];
 });
 
+
+Parse.Cloud.define('get-local-machines', async (request) => {
+
+    if (request.user) {
+        return await find();
+    }
+});
 
 Parse.Cloud.define('generateQR', async (request) => {
 
