@@ -4,10 +4,11 @@ import styled, {css} from 'styled-components';
 import Base from '../../components/Base';
 import logo from '../../img/logo_black.svg';
 import AppContext from '../../module/AppContext';
-import Color from "../../components/theme/color";
 import QR from 'qrcode.react';
 import {GooglePlayButton} from "../../components/util";
 import {MLink} from '../../components/theme/link';
+import {If, Then, Else} from "react-if";
+import PageSpinner from '../../components/page-spinner';
 
 const Card = styled.div`
     background-color : white;
@@ -25,17 +26,57 @@ const Card = styled.div`
 const QRCode = (props) => {
     const {Parse} = React.useContext(AppContext);
 
-    const [loginError, setLoginError] = React.useState({status: false, error: ""});
-    const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
+    const [loginDetected, setLoginDetected] = React.useState(false);
     const [qr, setQr] = React.useState(null);
+    const [session, setSession] = React.useState(null);
 
-    const loginHandler = async (data) => {
+
+    let sfun = null;
+
+
+    const subscriptionFun = (qr) => {
+        let query = new Parse.Query('QRLogin');
+
+        query.equalTo('code', qr.qrcode);
+
+        query.subscribe().then((sub) => {
+            sfun = sub;
+            sfun.on('update', (qdata) => {
+                setSession(qdata);
+
+                setLoginDetected(true);
+
+                Parse.Cloud.run('validate-qr-code', {qrid: qdata.id}).then((qrsession) => {
+                    if (qrsession.get('session') != null) {
+
+                        Parse
+                            .User
+                            .become(qrsession.get('session').get('sessionToken'))
+                            .then((user) => {
+                                localStorage.setItem('loggedUser', JSON.stringify(user));
+                                window.location.href = '/home';
+                            });
+                    }
+                });
+            });
+        });
 
     };
 
     React.useEffect(() => {
+
         Parse.Cloud.run('generateQR', {})
-            .then((data) => setQr(data));
+            .then((data) => {
+                setQr(data);
+                console.log(data);
+                subscriptionFun(data);
+            });
+
+        return () => {
+            if (sfun !== null) {
+                sfun.unsubscribe();
+            }
+        };
 
     }, []);
 
@@ -56,11 +97,16 @@ const QRCode = (props) => {
                                     <center style={{marginTop: '20px'}}>
                                         <p><b>Scan from your mobile</b></p>
                                         <div>
-                                            {qr &&
-                                                <QR value={qr.qrcode}
-                                                    size={256}
-                                                    level={'L'}
-                                                />
+                                            {qr && !loginDetected &&
+                                            <QR value={qr.qrcode}
+                                                size={256}
+                                                level={'L'}
+                                            />
+                                            }
+                                            {loginDetected &&
+                                            <div style={{margin: 30, padding: 30}}>
+                                                <PageSpinner/>
+                                            </div>
                                             }
                                         </div>
 
