@@ -129,3 +129,16 @@ Parse.Cloud.define('generateQR', async (request) => {
         time: qinfo.time
     };
 });
+
+
+Parse.Cloud.define('validate-qr-code', async (request) => {
+    const qrID = request.params.qrid;
+
+    const QR = Parse.Object.extend("QRLogin");
+    const QRquery = new Parse.Query(QR);
+    QRquery.include("session");
+
+    let qrData = await QRquery.get(qrID, {useMasterKey: true});
+
+    return qrData;
+});
