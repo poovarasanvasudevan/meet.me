@@ -49,7 +49,10 @@ const api = new ParseServer({
         maxPasswordHistory: 5,
     },
     liveQuery: {
-        classNames: ['User', 'QRLogin']
+        classNames: [
+            'User',
+            'QRLogin'
+        ]
     }
 });
 
