@@ -7,6 +7,7 @@ const FSFilesAdapter = require('@parse/fs-files-adapter');
 const ioServer = require('socket.io');
 const RTCMultiConnectionServer = require('rtcmulticonnection-server');
 var ParseSwagger = require('parse-server-swagger');
+const statusMonitor = require('express-status-monitor')();
 
 var http = require('http');
 
@@ -14,17 +15,11 @@ var http = require('http');
 const app = express();
 app.use(compression());
 app.use(helmet());
+app.use(statusMonitor);
+
+app.get('/server-status', statusMonitor.pageRoute);
 app.set('trust proxy', true);
 
-function getUserIP(request) {
-    var forwardedFor = req.header('x-forwarded-for') || req.connection.remoteAddress;
-
-    if (forwardedFor.indexOf(',') > -1) {
-        return forwardedFor.split(',')[0];
-    } else {
-        return forwardedFor;
-    }
-}
 
 app.use(function (req, res, next) {
     req.headers['x-real-ip'] = req.ip;
@@ -36,9 +31,7 @@ app.use(function (req, res, next) {
 //     next();
 // });
 
-var fsAdapter = new FSFilesAdapter({
-    "filesSubDirectory": "./files" // optional
-});
+
 const api = new ParseServer({
     databaseURI: 'mongodb://localhost:27017/meet', // Connection string for your MongoDB database
     cloud: './cloud/main.js', // Absolute path to your Cloud Code
@@ -54,6 +47,9 @@ const api = new ParseServer({
     passwordPolicy: {
         maxPasswordAge: 90,
         maxPasswordHistory: 5,
+    },
+    liveQuery: {
+        classNames: ['User', 'QRLogin']
     }
 });
 
@@ -129,3 +125,5 @@ ioServer(server).on('connection', function (socket) {
 server.listen(process.env.APP_PORT || 3001, '0.0.0.0', function () {
     console.log("App server started");
 });
+
+var parseLiveQueryServer = ParseServer.createLiveQueryServer(server);
