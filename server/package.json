@@ -11,6 +11,7 @@
     "dbrestore": "mongorestore -v --gzip --archive=db/dump.gz --db meet"
   },
   "dependencies": {
+    "@deepstream/server": "^4.2.5",
     "@parse/fs-files-adapter": "^1.0.1",
     "compression": "^1.7.4",
     "express": "^4.17.1",

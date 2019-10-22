@@ -8,6 +8,7 @@ const ioServer = require('socket.io');
 const RTCMultiConnectionServer = require('rtcmulticonnection-server');
 var ParseSwagger = require('parse-server-swagger');
 const statusMonitor = require('express-status-monitor')();
+const {Deepstream} = require('@deepstream/server');
 
 var http = require('http');
 
@@ -113,17 +114,23 @@ app.get("/", function (req, res) {
 
 
 var server = http.createServer(app);
-ioServer(server).on('connection', function (socket) {
-    RTCMultiConnectionServer.addSocket(socket, {
-        config: {
-            "socketURL": "/",
-            "socketMessageEvent": "RTCMultiConnection-Message",
-            "socketCustomEvent": "RTCMultiConnection-Custom-Message",
-            "port": "3001",
-        },
-        logs: 'logs.json'
-    });
-});
+// ioServer(server).on('connection', function (socket) {
+//     RTCMultiConnectionServer.addSocket(socket, {
+//         config: {
+//             "socketURL": "/",
+//             "socketMessageEvent": "RTCMultiConnection-Message",
+//             "socketCustomEvent": "RTCMultiConnection-Custom-Message",
+//             "port": "3001",
+//         },
+//         logs: 'logs.json'
+//     });
+// });
+
+// const dserver = new Deepstream({
+//     host: 'localhost',
+//     port: 6020
+// });
+// dserver.start();
 
 server.listen(process.env.APP_PORT || 3001, '0.0.0.0', function () {
     console.log("App server started");
