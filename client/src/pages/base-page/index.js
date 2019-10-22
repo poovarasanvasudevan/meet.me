@@ -84,6 +84,7 @@ const BasePage = (props) => {
     };
 
     React.useEffect(() => {
+
         const Application = Parse.Object.extend("Application");
         const query = new Parse.Query(Application);
         query.find().then((data) => setApplication(data));

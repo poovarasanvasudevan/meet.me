@@ -12,6 +12,11 @@ export default function (props) {
     const [{CurrentUser}, dispatch] = useBaseStateValue();
     const {Parse} = React.useContext(AppContext);
 
+    React.useEffect(() => {
+
+
+    }, []);
+
 
     return (
         <Base>
@@ -27,7 +32,6 @@ export default function (props) {
                                 {props.children}
 
                             </SkeletonV2>
-
                         </Then>
                         <Else>
                             {props.children}
