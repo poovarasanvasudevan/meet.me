@@ -95,11 +95,12 @@ export default function (props) {
         <div style={{display: 'flex'}}>
             <div style={{flex: '0 0 200px'}}>
                 <form className={'component-inline-search-form'} action="/search/" method="get">
-                    <MSearchTextBox type="text" name="query" placeholder="Search documentation"/>
+                    <MSearchTextBox type="text" name="query" placeholder="Search machine"/>
                 </form>
             </div>
         </div>
     );
+
     React.useEffect(() => {
         Parse
             .Cloud
