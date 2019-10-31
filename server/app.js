@@ -9,7 +9,7 @@ const RTCMultiConnectionServer = require('rtcmulticonnection-server');
 var ParseSwagger = require('parse-server-swagger');
 const statusMonitor = require('express-status-monitor')();
 const {Deepstream} = require('@deepstream/server');
-
+const path = require('path')
 var http = require('http');
 
 
@@ -108,23 +108,24 @@ app.get('/avatar', async function (req, res) {
     //     .pipe(res);
 
 });
-app.get("/", function (req, res) {
-    res.send("Hello");
+app.use(express.static(path.join(__dirname, 'static')));
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname+'/static/index.html'));
 });
 
 
 var server = http.createServer(app);
-// ioServer(server).on('connection', function (socket) {
-//     RTCMultiConnectionServer.addSocket(socket, {
-//         config: {
-//             "socketURL": "/",
-//             "socketMessageEvent": "RTCMultiConnection-Message",
-//             "socketCustomEvent": "RTCMultiConnection-Custom-Message",
-//             "port": "3001",
-//         },
-//         logs: 'logs.json'
-//     });
-// });
+ioServer(server).on('connection', function (socket) {
+    RTCMultiConnectionServer.addSocket(socket, {
+        config: {
+            "socketURL": "/socket.io",
+            "socketMessageEvent": "RTCMultiConnection-Message",
+            "socketCustomEvent": "RTCMultiConnection-Custom-Message",
+            "port": "3001",
+        },
+        logs: 'logs.json'
+    });
+});
 
 // const dserver = new Deepstream({
 //     host: 'localhost',
