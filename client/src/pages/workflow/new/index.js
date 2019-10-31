@@ -1,16 +1,25 @@
 import React from 'react';
-import {cloneDeep, mapValues} from 'lodash';
 import {BreadcrumbsStateless, BreadcrumbsItem} from '@atlaskit/breadcrumbs';
 import PageHeader from '@atlaskit/page-header';
 import {MLink, RouterLink} from "../../../components/theme/link";
 import TemplateRendering from '../../../components/template-rendering';
 import {useBaseStateValue} from "../../../components/context";
 import styled from "styled-components";
-import {FlowChartWithState, LinkDefault} from "@mrblenny/react-flow-chart";
 import Color from '../../../components/theme/color';
 import {ButtonGroup} from "@atlaskit/button";
-import {DefaultButton, PrimaryButton} from "office-ui-fabric-react";
+import {DefaultButton} from "office-ui-fabric-react";
 import {download} from "../../../components/util";
+
+import createEngine, {DiagramModel, DefaultNodeModel} from '@projectstorm/react-diagrams';
+import {CanvasWidget} from '@projectstorm/react-canvas-core';
+
+import {
+    RightSidePanel,
+    FlexContainer,
+    ContentWrapper,
+} from '@atlaskit/right-side-panel';
+import Help from '@atlaskit/help';
+
 
 const FullPage = styled.div`
     display : flex;
@@ -23,6 +32,7 @@ const Header = styled.div`
     flex: 0 0 auto;
     padding-left : 18px;
     padding-right : 18px;
+    border-bottom : 1px solid #eaeaea;
 `;
 
 const Body = styled.div`
@@ -178,142 +188,128 @@ const breadcrumbs = (
 );
 
 
+const Container = styled.div`
+	height: 100%;
+		background-color: #f8f8f8 !important;
+		background-size: 50px 50px;
+		display: flex;
+		> * {
+			height: 100%;
+			min-height: 100%;
+			width: 100%;
+		}
+		background-image: linear-gradient(
+				0deg,
+				transparent 24%,
+				${p => p.color} 25%,
+				${p => p.color} 26%,
+				transparent 27%,
+				transparent 74%,
+				${p => p.color} 75%,
+				${p => p.color} 76%,
+				transparent 77%,
+				transparent
+			),
+			linear-gradient(
+				90deg,
+				transparent 24%,
+				${p => p.color} 25%,
+				${p => p.color} 26%,
+				transparent 27%,
+				transparent 74%,
+				${p => p.color} 75%,
+				${p => p.color} 76%,
+				transparent 77%,
+				transparent
+			);
+
+`;
+
+const RightPanel = styled.div`
+    width : 390px !important;
+    height : 90% !important;
+    min-height : 90% !important;
+    margin : 20px !important;
+    background : #fff !important;
+    border: 1px solid #dadada !important;
+    border-radius : 5px;
+`;
+
 export default function (props) {
     const [{template}, dispatch] = useBaseStateValue();
+    const [engine, setEngine] = React.useState(null);
+    const [isOpen, setOpen] = React.useState(false);
 
-    const [node, setNode] = React.useState({
-        offset: {
-            x: 0,
-            y: 0,
-        },
-        nodes: {
-            node1: {
-                id: 'node1',
-                type: 'start',
-                position: {
-                    x: 300,
-                    y: 100,
-                },
-                ports: {
-                    port1: {
-                        id: 'port1',
-                        type: 'output',
-                    },
-                },
-            },
-            node2: {
-                id: 'node2',
-                type: 'input-output',
-                position: {
-                    x: 300,
-                    y: 300,
-                },
-                ports: {
-                    port1: {
-                        id: 'port1',
-                        type: 'input',
-                    },
-                    port2: {
-                        id: 'port2',
-                        type: 'output',
-                    },
-                    port3: {
-                        id: 'port3',
-                        type: 'output',
-                    },
-                },
-            },
-            node3: {
-                id: 'node3',
-                type: 'input-output',
-                position: {
-                    x: 100,
-                    y: 600,
-                },
-                ports: {
-                    port1: {
-                        id: 'port1',
-                        type: 'input',
-                    },
-                    port2: {
-                        id: 'port2',
-                        type: 'output',
-                    },
-                },
-            },
-            node4: {
-                id: 'node4',
-                type: 'input-output',
-                position: {
-                    x: 500,
-                    y: 600,
-                },
-                ports: {
-                    port1: {
-                        id: 'port1',
-                        type: 'input',
-                    },
-                    port2: {
-                        id: 'port2',
-                        type: 'output',
-                    },
-                },
-            },
-        },
-        links: {
-            link1: {
-                id: 'link1',
-                from: {
-                    nodeId: 'node1',
-                    portId: 'port1',
-                },
-                to: {
-                    nodeId: 'node2',
-                    portId: 'port1',
-                },
-                properties: {
-                    label: 'example link label',
-                },
-            },
-            link2: {
-                id: 'link2',
-                from: {
-                    nodeId: 'node2',
-                    portId: 'port2',
-                },
-                to: {
-                    nodeId: 'node3',
-                    portId: 'port1',
-                },
-                properties: {
-                    label: 'another example link label',
-                },
-            },
-            link3: {
-                id: 'link3',
-                from: {
-                    nodeId: 'node2',
-                    portId: 'port2',
-                },
-                to: {
-                    nodeId: 'node4',
-                    portId: 'port1',
-                },
-            },
-        },
-        selected: {},
-        hovered: {},
-    });
+
+    const selectionChanged = (node) => {
+        if (node.isSelected) {
+            setOpen(true);
+        } else {
+            setOpen(false);
+        }
+    };
+
+    const nodeSelected = (data) => {
+
+        switch (data.function) {
+            case "selectionChanged":
+                selectionChanged(data);
+                break;
+            default:
+                break;
+
+        }
+        console.log(data);
+    };
+
+    React.useEffect(() => {
+
+        var tempEngine = createEngine();
+
+        var model = new DiagramModel();
+
+        var node1 = new DefaultNodeModel('Node 1', '#0052cc');
+        var port1 = node1.addOutPort('Out');
+        node1.addInPort("Primary");
+        node1.addInPort("Secondary");
+        node1.setPosition(100, 100);
+
+
+        var node2 = new DefaultNodeModel('Node 2', 'rgb(192,255,0)');
+        var port2 = node2.addInPort('In');
+        node2.setPosition(400, 100);
+
+        var link1 = port1.link(port2);
+
+        const models = model.addAll(node1, node2, link1);
+
+
+        models.forEach(item => {
+            item.registerListener({
+                eventDidFire: nodeSelected
+            });
+        });
+
+
+        tempEngine.setModel(model);
+        setEngine(tempEngine);
+
+    }, []);
+
+
     const cactions = (
         <ButtonGroup>
             <DefaultButton
+                iconProps={{iconName: 'Zoom'}}
+                text={'Fit'}
+                onClick={() => engine.zoomToFit()}
+            />
+            <DefaultButton
                 iconProps={{iconName: 'Download'}}
-                onClick={() => download('export_' + Math.random() + '.json', JSON.stringify(node))}
+                onClick={() => download('export_' + Math.random() + '.wf', JSON.stringify(engine.getModel().serialize()))}
                 text={'Export'}/>
         </ButtonGroup>
     );
-
-    const stateActions = (actions) => mapValues(actions, (func: any) => (...args: any) => setNode(func(...args)));
 
     return (
         <TemplateRendering template={template}>
@@ -322,14 +318,30 @@ export default function (props) {
                     <PageHeader breadcrumbs={breadcrumbs} actions={cactions}>Workflow</PageHeader>
                 </Header>
                 <Body>
-                <FlowChartWithState
-                    callbacks={stateActions}
-                    Components={{
-                        Node: NodeCustom,
-                        NodeInner: NodeInnerCustom,
-                    }}
-                    initialValue={node}
-                />
+
+                <FlexContainer id="workflow" style={{height: '100%'}}>
+                    <ContentWrapper>
+
+                        <Container
+                            id={'canvas'}
+                            background={'rgb(60, 60, 60)'}
+                            color={'rgba(50,50,50, 0.05)'}>
+
+                            {engine && <CanvasWidget engine={engine}/>}
+
+                            <RightPanel style={{display : isOpen ? "block" : "none"}}>
+                                <h1>Hello</h1>
+                            </RightPanel>
+
+
+                        </Container>
+
+
+
+
+                    </ContentWrapper>
+                </FlexContainer>
+
                 </Body>
             </FullPage>
         </TemplateRendering>
