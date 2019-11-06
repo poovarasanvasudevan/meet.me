@@ -13,12 +13,15 @@ import {download} from "../../../components/util";
 import createEngine, {DiagramModel, DefaultNodeModel} from '@projectstorm/react-diagrams';
 import {CanvasWidget} from '@projectstorm/react-canvas-core';
 
+import TextField from '@atlaskit/textfield';
+import Form, {Field, FormFooter} from '@atlaskit/form';
 import {
-    RightSidePanel,
     FlexContainer,
     ContentWrapper,
 } from '@atlaskit/right-side-panel';
-import Help from '@atlaskit/help';
+import Tabs from '@atlaskit/tabs';
+
+import {Stack, IStackProps} from 'office-ui-fabric-react/lib/Stack';
 
 
 const FullPage = styled.div`
@@ -226,26 +229,29 @@ const Container = styled.div`
 `;
 
 const RightPanel = styled.div`
-    width : 390px !important;
+    width : 420px !important;
     height : 90% !important;
     min-height : 90% !important;
     margin : 20px !important;
     background : #fff !important;
     border: 1px solid #dadada !important;
-    border-radius : 5px;
+    border-radius : 2px;
 `;
 
 export default function (props) {
     const [{template}, dispatch] = useBaseStateValue();
     const [engine, setEngine] = React.useState(null);
     const [isOpen, setOpen] = React.useState(false);
+    const [activeNode, setActiveNode] = React.useState(null);
 
 
     const selectionChanged = (node) => {
         if (node.isSelected) {
             setOpen(true);
+            setActiveNode(node);
         } else {
             setOpen(false);
+            setActiveNode(null);
         }
     };
 
@@ -272,6 +278,7 @@ export default function (props) {
         var port1 = node1.addOutPort('Out');
         node1.addInPort("Primary");
         node1.addInPort("Secondary");
+
         node1.setPosition(100, 100);
 
 
@@ -311,6 +318,11 @@ export default function (props) {
         </ButtonGroup>
     );
 
+    const cProps = {
+        tokens: {childrenGap: 8},
+        styles: {root: {width: '100%', padding: '10px'}}
+    };
+
     return (
         <TemplateRendering template={template}>
             <FullPage>
@@ -329,14 +341,45 @@ export default function (props) {
 
                             {engine && <CanvasWidget engine={engine}/>}
 
-                            <RightPanel style={{display : isOpen ? "block" : "none"}}>
-                                <h1>Hello</h1>
+                            <RightPanel>
+                                <Tabs
+                                    tabs={[
+                                        {
+                                            label: 'Tasks',
+                                            defaultSelected: true,
+                                            content: <div>Content is here</div>,
+                                        },
+
+                                        isOpen && {
+                                            label: 'Attributes',
+                                            defaultSelected: true,
+                                            content: <Stack {...cProps}>
+
+                                                <Form onSubmit={data => console.log(data)}>
+                                                    {({formProps}) => (
+                                                        <form {...formProps} name="node-attributes">
+                                                            <Field name="node_id"
+                                                                   defaultValue={activeNode.entity.options.id}
+                                                                   isDisabled={true} label="Node ID" isRequired>
+                                                                {({fieldProps}) => <TextField {...fieldProps} />}
+                                                            </Field>
+
+                                                            <Field name="node_name"
+                                                                   defaultValue={activeNode.entity.options.name}
+                                                                   label="Name" isRequired>
+                                                                {({fieldProps}) => <TextField {...fieldProps} />}
+                                                            </Field>
+                                                        </form>
+                                                    )}
+                                                </Form>
+                                            </Stack>,
+                                        }
+                                    ]}
+                                />
                             </RightPanel>
 
 
                         </Container>
-
-
 
 
                     </ContentWrapper>
