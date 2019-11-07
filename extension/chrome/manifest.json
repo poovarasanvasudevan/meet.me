@@ -1,0 +1,28 @@
+{
+  "name": "meet.me",
+  "version": "1.0",
+  "description": "Chrome Extension for Extension!",
+  "permissions": [
+    "storage",
+    "tabs",
+    "webRequest",
+    "contentSettings"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://localhost/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "manifest_version": 2
+}
