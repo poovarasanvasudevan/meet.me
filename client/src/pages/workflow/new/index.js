@@ -20,9 +20,10 @@ import {
     ContentWrapper,
 } from '@atlaskit/right-side-panel';
 import Tabs from '@atlaskit/tabs';
+import {CompactPicker, TwitterPicker} from 'react-color';
 
 import {Stack, IStackProps} from 'office-ui-fabric-react/lib/Stack';
-
+import Flow from '../../../components/flow';
 
 const FullPage = styled.div`
     display : flex;
@@ -238,11 +239,26 @@ const RightPanel = styled.div`
     border-radius : 2px;
 `;
 
+
+const CompactPickerModified = styled(CompactPicker)`    
+    &.compact-picker {
+        width : 300px !important;
+        border : 1px solid #eaeaea;
+    }
+`;
+
+const ColorPanelDiv = styled.div`
+    &>div>div {
+        box-shadow : none !important;
+    }
+`;
+
 export default function (props) {
     const [{template}, dispatch] = useBaseStateValue();
     const [engine, setEngine] = React.useState(null);
     const [isOpen, setOpen] = React.useState(false);
     const [activeNode, setActiveNode] = React.useState(null);
+    const [model, setModel] = React.useState(null);
 
 
     const selectionChanged = (node) => {
@@ -271,26 +287,27 @@ export default function (props) {
     React.useEffect(() => {
 
         var tempEngine = createEngine();
+        tempEngine.getNodeFactories().registerFactory(new Flow.Start.Factory());
+        tempEngine.getNodeFactories().registerFactory(new Flow.Stop.Factory());
+        tempEngine.getNodeFactories().registerFactory(new Flow.Default.Factory());
+
 
         var model = new DiagramModel();
 
-        var node1 = new DefaultNodeModel('Node 1', '#0052cc');
-        var port1 = node1.addOutPort('Out');
-        node1.addInPort("Primary");
-        node1.addInPort("Secondary");
 
-        node1.setPosition(100, 100);
+        var node1 = new Flow.Start.Model();
+        node1.setPosition(50, 50);
 
 
-        var node2 = new DefaultNodeModel('Node 2', 'rgb(192,255,0)');
-        var port2 = node2.addInPort('In');
-        node2.setPosition(400, 100);
-
-        var link1 = port1.link(port2);
-
-        const models = model.addAll(node1, node2, link1);
+        var node2 = new Flow.Stop.Model();
+        node2.setPosition(250, 250);
 
 
+        var node3 = new Flow.Default.Model();
+        node3.setPosition(350, 350);
+
+
+        const models = model.addAll(node1, node2, node3);
         models.forEach(item => {
             item.registerListener({
                 eventDidFire: nodeSelected
@@ -301,6 +318,8 @@ export default function (props) {
         tempEngine.setModel(model);
         setEngine(tempEngine);
 
+        setModel(tempEngine.getModel().serialize())
+
     }, []);
 
 
@@ -309,11 +328,13 @@ export default function (props) {
             <DefaultButton
                 iconProps={{iconName: 'Zoom'}}
                 text={'Fit'}
+                key={'zoom'}
                 onClick={() => engine.zoomToFit()}
             />
             <DefaultButton
                 iconProps={{iconName: 'Download'}}
-                onClick={() => download('export_' + Math.random() + '.wf', JSON.stringify(engine.getModel().serialize()))}
+                key={'download'}
+                onClick={() => download('export_' + Math.random() + '.wf', JSON.stringify(model))}
                 text={'Export'}/>
         </ButtonGroup>
     );
@@ -359,16 +380,36 @@ export default function (props) {
                                                     {({formProps}) => (
                                                         <form {...formProps} name="node-attributes">
                                                             <Field name="node_id"
+                                                                   key={'node_id'}
                                                                    defaultValue={activeNode.entity.options.id}
                                                                    isDisabled={true} label="Node ID" isRequired>
                                                                 {({fieldProps}) => <TextField {...fieldProps} />}
                                                             </Field>
 
                                                             <Field name="node_name"
+                                                                   key={'node_name'}
                                                                    defaultValue={activeNode.entity.options.name}
                                                                    label="Name" isRequired>
                                                                 {({fieldProps}) => <TextField {...fieldProps} />}
                                                             </Field>
+
+                                                            <Field name="node_color"
+                                                                   key={'node_color'}
+                                                                   label="Color">
+                                                                {({fieldProps}) =>
+                                                                    <ColorPanelDiv style={{background: 'red'}}>
+                                                                        <CompactPickerModified
+                                                                            color={activeNode.entity.options.color}
+                                                                            onChangeComplete={(color) => {
+                                                                                console.log(color);
+                                                                                activeNode.entity.options.color = color.hex;
+                                                                                console.log(activeNode);
+                                                                            }}
+                                                                        />
+                                                                    </ColorPanelDiv>
+                                                                }
+                                                            </Field>
+
                                                         </form>
                                                     )}
                                                 </Form>
@@ -377,8 +418,6 @@ export default function (props) {
                                     ]}
                                 />
                             </RightPanel>
-
-
                         </Container>
 
 
