@@ -14,7 +14,7 @@ const OuterNode = styled.div`
 `;
 
 const InnerNode = styled.div`
-   
+    flex: 1;
 `;
 
 
@@ -25,7 +25,7 @@ const CPortArea = styled(PortWidget)`
     background: white;
     
     &:hover {
-        background: black;
+        background: #999;
     }
 `;
 
@@ -49,25 +49,27 @@ export default function (props) {
 
             <TopHeader>
 
-                <CPortArea engine={props.engine} port={props.node.getPort('default_in')}>
-                    <div/>
-                </CPortArea>
-
 
                 <span style={{flex: 1}}>
                     Hello
                 </span>
 
 
-                <CPortArea engine={props.engine} port={props.node.getPort('default_out')}>
-                    <div/>
-                </CPortArea>
-
             </TopHeader>
 
 
-            <div style={{flex: 1}}>
+            <div style={{flex: 1, display: 'flex', flexDirection: 'row'}}>
+
+                <CPortArea engine={props.engine} port={props.node.getPort('default_in')}>
+                    <div/>
+                </CPortArea>
+
                 <InnerNode/>
+
+
+                <CPortArea engine={props.engine} port={props.node.getPort('default_out')}>
+                    <div/>
+                </CPortArea>
             </div>
 
         </OuterNode>

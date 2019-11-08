@@ -5,6 +5,7 @@ import {FaFlag, FaFlagCheckered} from 'react-icons/fa';
 
 const OuterNode = styled.div`
     border: solid 2px #043B8D;
+    
     height: 30px;
     display: flex;
     align-items: flex-start;
@@ -21,28 +22,35 @@ const StopPort = styled(PortWidget)`
     width: 30px;
     cursor: pointer;
     
+    
+    
     border-right: 2px solid #043B8D;
 `;
 
 
 const CPortArea = styled.div`
     width: 80px;
-    padding: 8px;
-    
+ 
     font-weight: 600;
     font-size: 13px;
+   
+   top : 50%;
+   texxt-align : center;
+    
 `;
 export default function (props) {
 
     return (
         <OuterNode>
             <StopPort engine={props.engine} port={props.node.getPort('in')}>
-                IN
+                <div style={{background: "#043B8D", margin: 4, width: 'calc(100% - 8px)', height: 'calc(100% - 8px)'}}/>
             </StopPort>
 
             <CPortArea>
-                <FaFlagCheckered />
-                Stop
+                <div>
+                    <FaFlagCheckered/>
+                    <span style={{marginLeft: 5, marginBottom: -5}}>Stop</span>
+                </div>
             </CPortArea>
 
         </OuterNode>
