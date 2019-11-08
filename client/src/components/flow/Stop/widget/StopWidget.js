@@ -1,57 +1,50 @@
 import * as React from 'react';
 import {PortWidget} from '@projectstorm/react-diagrams';
 import styled from 'styled-components';
-
+import {FaFlag, FaFlagCheckered} from 'react-icons/fa';
 
 const OuterNode = styled.div`
-    border: solid 2px gray;
-    border-radius: 5px;
-    width: 50px;
-    height: 50px;
+    border: solid 2px #043B8D;
+    height: 30px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     position: relative;
     background: #fff;
+    
+    flex-direction: row;
 `;
 
-const InnerNode = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    transform: translate(-50%, -50%);
-    border-radius: 10px;
-    background: red;
-`;
 
-const CPort = styled.div`
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    background: green;
+const StopPort = styled(PortWidget)`
+    height: 100%;
+    width: 30px;
     cursor: pointer;
+    
+    border-right: 2px solid #043B8D;
 `;
 
 
 const CPortArea = styled.div`
-  padding : 2px;
+    width: 80px;
+    padding: 8px;
+    
+    font-weight: 600;
+    font-size: 13px;
 `;
 export default function (props) {
 
     return (
         <OuterNode>
+            <StopPort engine={props.engine} port={props.node.getPort('in')}>
+                IN
+            </StopPort>
 
             <CPortArea>
-                <PortWidget engine={props.engine} port={props.node.getPort('in')}>
-                    <CPort/>
-                </PortWidget>
+                <FaFlagCheckered />
+                Stop
             </CPortArea>
 
-            <div>
-                <InnerNode/>
-            </div>
         </OuterNode>
     );
 }

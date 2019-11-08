@@ -158,31 +158,6 @@ const NodeInnerCustom = ({node, config}: INodeInnerDefaultProps) => {
     }
 };
 
-
-const PortDefaultOuter = styled.div`
-  width: 12px;
-  height: 12px;
-  background: ${Color.primaryColor};
-  cursor: pointer;
-  display: flex;
-  padding : 4px;
-  justify-content: center;
-  align-items: center;
-  border-radius : 50%;
-`;
-const PortInner = styled.div`
- background: white;
- width: 100%
- border-radius : 50%;
- height : 100%;
-`;
-
-const PortCustom = (props) => (
-    <PortDefaultOuter>
-        <PortInner></PortInner>
-    </PortDefaultOuter>
-);
-
 const breadcrumbs = (
     <BreadcrumbsStateless onExpand={() => {
     }}>
@@ -318,7 +293,7 @@ export default function (props) {
         tempEngine.setModel(model);
         setEngine(tempEngine);
 
-        setModel(tempEngine.getModel().serialize())
+        setModel(tempEngine.getModel().serialize());
 
     }, []);
 
